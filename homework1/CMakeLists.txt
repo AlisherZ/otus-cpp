@@ -6,6 +6,7 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(helloworld VERSION ${PROJECT_VESRION})
 
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
+option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
 configure_file(version.h.in version.h)
 
@@ -54,15 +55,17 @@ if(WITH_BOOST_TEST)
     )
 endif()
 
-add_executable(
-  hello_test
-  hello_test.cc
-)
-target_link_libraries(
-  hello_test
-  GTest::gtest_main
-  helloworld
-)
+if(WITH_GOOGLE_TEST)
+    add_executable(
+        hello_test
+        hello_test.cc
+    )
+    target_link_libraries(
+        hello_test
+        GTest::gtest_main
+        helloworld
+    )
+endif()
 
 if (MSVC)
     target_compile_options(helloworld_cli PRIVATE
@@ -76,6 +79,11 @@ if (MSVC)
             /W4
         )
     endif()
+    if(WITH_GOOGLE_TEST)
+        target_compile_options(hello_test PRIVATE
+            /W4
+        )
+    endif()
 else ()
     target_compile_options(helloworld_cli PRIVATE
         -Wall -Wextra -pedantic -Werror
@@ -85,6 +93,11 @@ else ()
     )
     if(WITH_BOOST_TEST)
         target_compile_options(test_version PRIVATE
+            -Wall -Wextra -pedantic -Werror
+        )
+    endif()
+    if(WITH_GOOGLE_TEST)
+        target_compile_options(hello_test PRIVATE
             -Wall -Wextra -pedantic -Werror
         )
     endif()
@@ -104,6 +117,8 @@ if(WITH_BOOST_TEST)
     add_test(test_version test_version)
 endif()
 
-enable_testing()
-include(GoogleTest)
-gtest_discover_tests(hello_test)
+if(WITH_GOOGLE_TEST)
+    enable_testing()
+    include(GoogleTest)
+    gtest_discover_tests(hello_test)
+endif()
