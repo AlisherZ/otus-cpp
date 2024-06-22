@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.15.3)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VESRION})
 
-option(WITH_BOOST_TEST "Whether to build Boost test" ON)
+option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 
 configure_file(version.h.in version.h)
 
@@ -16,6 +16,15 @@ set_target_properties(helloworld_cli helloworld PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
 target_include_directories(helloworld
     PRIVATE "${CMAKE_BINARY_DIR}"
@@ -40,10 +49,20 @@ if(WITH_BOOST_TEST)
     )
 
     target_link_libraries(test_version
-        ${Boost_LIBRARIES}
+        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         helloworld
     )
 endif()
+
+add_executable(
+  hello_test
+  hello_test.cc
+)
+target_link_libraries(
+  hello_test
+  GTest::gtest_main
+  helloworld
+)
 
 if (MSVC)
     target_compile_options(helloworld_cli PRIVATE
@@ -84,3 +103,7 @@ if(WITH_BOOST_TEST)
     enable_testing()
     add_test(test_version test_version)
 endif()
+
+enable_testing()
+include(GoogleTest)
+gtest_discover_tests(hello_test)
