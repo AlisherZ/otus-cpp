@@ -8,8 +8,6 @@ project(helloworld VERSION ${PROJECT_VESRION})
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
-configure_file(version.h.in version.h)
-
 add_executable(ip_filter main.cpp)
 add_library(util util.cpp)
 
