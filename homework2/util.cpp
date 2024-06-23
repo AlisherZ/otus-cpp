@@ -2,6 +2,21 @@
 #include <vector>
 #include <string>
 
-auto filter_any(std::vector<std::vector<std::string> > s, int ) {
-	return s;
+template <typename T>
+auto filter_any(T ip_pool, int value) -> decltype(ip_pool) {
+	auto check = [value](decltype(ip_pool[0]) line) {
+		for(auto i : line) {
+			if(stoi(i) == value) {
+				return true;
+			}
+		}
+		return false;
+	}
+	T new_ip_pool;
+	for(auto ip : ip_pool) {
+		if(check(ip)) {
+			new_ip_pool.push_back(ip);
+		}
+	}
+	return new_ip_pool;
 }
