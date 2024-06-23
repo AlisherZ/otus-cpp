@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - homework2/**
+      - .github/workflows/**
 
 jobs:
   build:
@@ -19,8 +20,8 @@ jobs:
       - run: cmake --build .
       - run: cmake --build . --target test
       - run: cmake --build . --target package
-      - run: ls ./homework2/
-      - run: cat ./homework2/ip_filter.tsv | ./homework2/ip_filter | md5sum
+      - run: ls
+      - run: cat ./homework2/ip_filter.tsv | ip_filter | md5sum
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
