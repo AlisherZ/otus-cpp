@@ -4,7 +4,7 @@
 
 template <typename T>
 auto filter_any(T ip_pool, int value) -> decltype(ip_pool) {
-	auto check = [value](decltype(ip_pool[0]) line) {
+	auto check = [value](auto line) {
 		for(auto i : line) {
 			if(stoi(i) == value) {
 				return true;

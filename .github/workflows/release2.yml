@@ -19,7 +19,7 @@ jobs:
       - run: cmake --build .
       - run: cmake --build . --target test
       - run: cmake --build . --target package
-      - run: ls -a
+      - run: ls ./homework2/
       - run: cat ./homework2/ip_filter.tsv | ./homework2/ip_filter | md5sum
       - name: Create Release
         id: create_release
