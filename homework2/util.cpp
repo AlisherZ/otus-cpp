@@ -47,12 +47,9 @@ auto filter_any(T ip_pool, int value) -> decltype(ip_pool){
 
 template <typename T>
 void print_pool(T ip_pool) {
-	for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-	{
-		for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-		{
-			if (ip_part != ip->cbegin())
-			{
+	for(auto ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip) {
+		for(auto ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part) {
+			if (ip_part != ip->cbegin()) {
 				std::cout << ".";
 
 			}
@@ -60,4 +57,22 @@ void print_pool(T ip_pool) {
 		}
 		std::cout << std::endl;
 	}
+}
+
+template <typename T>
+bool comp_eq_pool(T ip_pool1, T ip_pool2) {
+	if(ip_pool1.size() != ip_pool2.size()) {
+		return false;
+	}
+	for(auto ip1 = ip_pool1.cbegin(), ip2 = ip_pool2.cbegin(); ip1 != ip_pool1.cend(); ++ip1, ++ip2) {
+		if(ip1->size() != ip2->size()) {
+			return false;
+		}
+		for(auto ip_part1 = ip1->cbegin(), ip_part2 = ip2->cbegin(); ip_part1 != ip1->cend(); ++ip_part1, ++ip_part2) {
+			if(std::stoi(*ip_part1) != std::stoi(*ip_part2)) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
