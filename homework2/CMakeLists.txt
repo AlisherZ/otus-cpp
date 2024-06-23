@@ -5,15 +5,15 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VESRION})
 
-option(WITH_BOOST_TEST "Whether to build Boost test" ON)
-option(WITH_GOOGLE_TEST "Whether to build Google test" OFF)
+option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
+option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
 configure_file(version.h.in version.h)
 
-add_executable(helloworld_cli main.cpp)
-add_library(helloworld lib.cpp)
+add_executable(ip_filter main.cpp)
+add_library(util util.cpp)
 
-set_target_properties(helloworld_cli helloworld PROPERTIES
+set_target_properties(ip_filter util PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
@@ -29,12 +29,12 @@ if(WITH_GOOGLE_TEST)
     FetchContent_MakeAvailable(googletest)
 endif()
 
-target_include_directories(helloworld
+target_include_directories(util
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
-target_link_libraries(helloworld_cli PRIVATE
-    helloworld
+target_link_libraries(ip_filter PRIVATE
+    util
 )
 
 if(WITH_BOOST_TEST)
@@ -53,7 +53,7 @@ if(WITH_BOOST_TEST)
 
     target_link_libraries(test_version
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-        helloworld
+        util
     )
 endif()
 
@@ -65,15 +65,15 @@ if(WITH_GOOGLE_TEST)
     target_link_libraries(
         hello_test
         GTest::gtest_main
-        helloworld
+        util
     )
 endif()
 
 if (MSVC)
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(ip_filter PRIVATE
         /W4
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(util PRIVATE
         /W4
     )
     if(WITH_BOOST_TEST)
@@ -87,10 +87,10 @@ if (MSVC)
         )
     endif()
 else ()
-    target_compile_options(helloworld_cli PRIVATE
+    target_compile_options(ip_filter PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(helloworld PRIVATE
+    target_compile_options(util PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(WITH_BOOST_TEST)
@@ -105,7 +105,7 @@ else ()
     endif()
 endif()
 
-install(TARGETS helloworld_cli RUNTIME DESTINATION bin)
+install(TARGETS ip_filter RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
