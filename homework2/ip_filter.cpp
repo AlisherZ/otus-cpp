@@ -42,7 +42,7 @@ int main(int, char **)
             ip_pool.push_back(split(v.at(0), '.'));
         }
 
-        auto greater = [](std::vector<std::string> a, std::vector<std::string> b){ return a.size() > b.size(); };
+        // auto greater = [](std::vector<std::string> a, std::vector<std::string> b){ return a.size() > b.size(); };
 
         for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
         {
