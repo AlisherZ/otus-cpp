@@ -45,7 +45,7 @@ int main(int, char **)
 
         auto greater = [](std::vector<std::string> a, std::vector<std::string> b) { 
             auto size = std::min(a.size(), b.size());
-            for(int i = 0;i < size;i++) {
+            for(size_t i = 0;i < size;i++) {
                 if(std::stoi(a[i]) != std::stoi(b[i])) {
                     return std::stoi(a[i]) > std::stoi(b[i]);
                 }
