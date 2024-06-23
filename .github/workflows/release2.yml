@@ -21,6 +21,7 @@ jobs:
       - run: cmake --build . --target test
       - run: cmake --build . --target package
       - run: ls
+      - run: ls ip_filter
       - run: cat ./homework2/ip_filter.tsv
       - name: Create Release
         id: create_release
