@@ -1,4 +1,7 @@
 #include "util.h"
+#include <vector>
+#include <string>
+#include <iostream>
 
 template <typename T, typename... Args>
 auto filter(T ip_pool, Args... value) -> decltype(ip_pool){
