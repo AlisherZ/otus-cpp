@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "util.h"
+#include "util.cpp"
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -55,19 +56,7 @@ int main(int, char **)
 
         std::sort(ip_pool.begin(), ip_pool.end(), greater);
 
-        for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-        {
-            for(std::vector<std::string>::const_iterator ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-            {
-                if (ip_part != ip->cbegin())
-                {
-                    std::cout << ".";
-
-                }
-                std::cout << *ip_part;
-            }
-            std::cout << std::endl;
-        }
+        // print_pool(ip_pool);
 
         // 222.173.235.246
         // 222.130.177.64
@@ -77,8 +66,8 @@ int main(int, char **)
         // 1.29.168.152
         // 1.1.234.8
 
-        // TODO filter by first byte and output
-        // ip = filter(1)
+        auto new_ip_pool = filter(ip_pool, 1);
+        print_pool(new_ip_pool);
 
         // 1.231.69.33
         // 1.87.203.225
@@ -86,16 +75,16 @@ int main(int, char **)
         // 1.29.168.152
         // 1.1.234.8
 
-        // TODO filter by first and second bytes and output
-        // ip = filter(46, 70)
+        new_ip_pool = filter(ip_pool, 46, 70);
+        print_pool(new_ip_pool);
 
         // 46.70.225.39
         // 46.70.147.26
         // 46.70.113.73
         // 46.70.29.76
 
-        // TODO filter by any byte and output
-        // ip = filter_any(46)
+        new_ip_pool = filter_any(ip_pool, 46);
+        //print_pool(new_ip_pool);
 
         // 186.204.34.46
         // 186.46.222.194
