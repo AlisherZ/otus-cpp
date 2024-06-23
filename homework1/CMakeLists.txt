@@ -5,8 +5,8 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
 project(helloworld VERSION ${PROJECT_VESRION})
 
-option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
-option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
+option(WITH_BOOST_TEST "Whether to build Boost test" ON)
+option(WITH_GOOGLE_TEST "Whether to build Google test" OFF)
 
 configure_file(version.h.in version.h)
 
@@ -18,14 +18,16 @@ set_target_properties(helloworld_cli helloworld PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+if(WITH_GOOGLE_TEST)
+    include(FetchContent)
+    FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+    )
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+endif()
 
 target_include_directories(helloworld
     PRIVATE "${CMAKE_BINARY_DIR}"
