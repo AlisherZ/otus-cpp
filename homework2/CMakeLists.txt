@@ -8,7 +8,7 @@ project(helloworld VERSION ${PROJECT_VESRION})
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
-add_executable(ip_filter main.cpp)
+add_executable(ip_filter ip_filter.cpp)
 add_library(util util.cpp)
 
 set_target_properties(ip_filter util PROPERTIES
