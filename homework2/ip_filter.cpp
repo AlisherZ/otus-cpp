@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
@@ -42,7 +43,17 @@ int main(int, char **)
             ip_pool.push_back(split(v.at(0), '.'));
         }
 
-        // auto greater = [](std::vector<std::string> a, std::vector<std::string> b){ return a.size() > b.size(); };
+        auto greater = [](std::vector<std::string> a, std::vector<std::string> b) { 
+            auto size = std::min(a.size(), b.size());
+            for(int i = 0;i < size;i++) {
+                if(std::stoi(a[i]) != std::stoi(b[i])) {
+                    return std::stoi(a[i]) > std::stoi(b[i]);
+                }
+            }
+            return a.size() > b.size();
+        };
+
+        std::sort(ip_pool.begin(), ip_pool.end(), greater);
 
         for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
         {
