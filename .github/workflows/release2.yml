@@ -22,7 +22,7 @@ jobs:
       - run: cmake --build . --target package
       - run: ls
       - run: ls ip_filter
-      - run: cat ./homework2/ip_filter.tsv | ..\ip_filter
+      - run: cat ./homework2/ip_filter.tsv | ip_filter
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
