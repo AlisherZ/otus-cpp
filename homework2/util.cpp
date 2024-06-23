@@ -11,7 +11,7 @@ auto filter_any(T ip_pool, int value) -> decltype(ip_pool) {
 			}
 		}
 		return false;
-	}
+	};
 	T new_ip_pool;
 	for(auto ip : ip_pool) {
 		if(check(ip)) {
