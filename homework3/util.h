@@ -11,7 +11,7 @@ struct pool_allocator {
 
     using value_type = T;
 
-    int last_allocated = 0;
+    std::size_t last_allocated = 0;
     static constexpr int size = sizeof(T) * (N + ADDITIONAL_ALLOCATION);
     uint8_t *data;
 
