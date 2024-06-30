@@ -16,18 +16,26 @@ struct pool_allocator {
 
     using value_type = T;
 
+    std::size_t* free_chunks = static_cast<std::size_t*>(::operator new(size_chunks));
+    std::size_t chunk_count_to_allocate = 1;
+    std::size_t free_chunks_count = (N + ADDITIONAL_ALLOCATION) / chunk_count_to_allocate;
     std::size_t last_allocated = 0;
+    static constexpr int size_chunks = sizeof(T*) * (N + ADDITIONAL_ALLOCATION);
     static constexpr int size = sizeof(T) * (N + ADDITIONAL_ALLOCATION);
-    uint8_t *data;
+    uint8_t *data = static_cast<uint8_t*>(::operator new(size));
 
     pool_allocator () noexcept
     {
-        data = static_cast<uint8_t*>(::operator new(size));
+        //data = static_cast<uint8_t*>(::operator new(size));
+        for(int i = 0;i < N + ADDITIONAL_ALLOCATION;i++) {
+            free_chunks[i] = reinterpret_cast<size_t>(data + i * sizeof(T));
+        }
     }
 
     template <class U> pool_allocator(const pool_allocator <U>& a) noexcept {
         data = a.data;
         last_allocated = a.last_allocated;
+        free_chunks = a.free_chunks;
     }
 
     pool_allocator select_on_container_copy_construction() const
@@ -37,20 +45,25 @@ struct pool_allocator {
 
     T* allocate (std::size_t n)
     {
-        assert(last_allocated + n <= N + ADDITIONAL_ALLOCATION);
-        T* addr = reinterpret_cast<T*>(data) + last_allocated;
-        last_allocated+= n;
-        return addr;
+        std::cout << "Try allocate " << n << std::endl;
+        assert(n == chunk_count_to_allocate);
+        assert(free_chunks_count > 0);
+        free_chunks_count--;
+        std::cout << "Allocate " << n << std::endl;
+        return reinterpret_cast<T*>(free_chunks[free_chunks_count]);
     }
 
     void deallocate (T* p, std::size_t n)
     {
-        assert(last_allocated >= n);
+        std::cout << "Try deallocate " << n << std::endl;
+        assert(n == chunk_count_to_allocate);
+        assert(free_chunks_count < (N + ADDITIONAL_ALLOCATION) / chunk_count_to_allocate);
         assert(p >= reinterpret_cast<T*>(data));
-        assert(p + n <= reinterpret_cast<T*>(data) + last_allocated);
-        assert((reinterpret_cast<uint8_t*>(p) - data) % sizeof(T) == 0);
-        last_allocated-= n;
-        std::memmove(p, reinterpret_cast<T*>(data) + last_allocated, n * sizeof(T));
+        assert(p + n <= reinterpret_cast<T*>(data) + size);
+        assert((reinterpret_cast<uint8_t*>(p) - data) % (sizeof(T) * chunk_count_to_allocate) == 0);
+        free_chunks[free_chunks_count] = reinterpret_cast<std::size_t>(p);
+        free_chunks_count++;
+        std::cout << "Deallocate " << n << std::endl;
     }
 
     template< class U >
@@ -61,7 +74,7 @@ struct pool_allocator {
 
     using propagate_on_container_copy_assignment = std::true_type;
     using propagate_on_container_move_assignment = std::true_type;
-    using propagate_on_container_swap = std::true_type; //UB if std::false_type and a1 != a2;
+    using propagate_on_container_swap = std::true_type;
 };
 
 template <class T, class U, std::size_t N1 = 10, std::size_t N2 = 10>
