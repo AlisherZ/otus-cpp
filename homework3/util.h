@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring>
+
 #if defined(_MSC_VER) && !defined(__clang__) && !defined(__INTEL_COMPILER)
     #define ADDITIONAL_ALLOCATION 1
 #else
@@ -62,11 +64,11 @@ struct pool_allocator {
 template <class T, class U, std::size_t N1 = 10, std::size_t N2 = 10>
 constexpr bool operator== (const pool_allocator<T, N1>& a1, const pool_allocator<U, N2>& a2) noexcept
 {
-    return (a1.data == a2.data)
+    return (a1.data == a2.data);
 }
 
 template <class T, class U, std::size_t N1 = 10, std::size_t N2 = 10>
 constexpr bool operator!= (const pool_allocator<T, N1>& a1, const pool_allocator<U, N2>& a2) noexcept
 {
-    return (a1.data != a2.data)
+    return (a1.data != a2.data);
 }
