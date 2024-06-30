@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <memory>
 
 #if defined(_MSC_VER) && !defined(__clang__) && !defined(__INTEL_COMPILER)
     #define ADDITIONAL_ALLOCATION 1
