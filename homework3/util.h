@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <cstring>
 
 #if defined(_MSC_VER) && !defined(__clang__) && !defined(__INTEL_COMPILER)
