@@ -26,7 +26,6 @@ struct pool_allocator {
 
     pool_allocator () noexcept
     {
-        //data = static_cast<uint8_t*>(::operator new(size));
         for(std::size_t i = 0;i < N + ADDITIONAL_ALLOCATION;i++) {
             free_chunks[i] = reinterpret_cast<size_t>(data + i * sizeof(T));
         }
@@ -45,17 +44,14 @@ struct pool_allocator {
 
     T* allocate (std::size_t n)
     {
-        std::cout << "Try allocate " << n << std::endl;
         assert(n == chunk_count_to_allocate);
         assert(free_chunks_count > 0);
         free_chunks_count--;
-        std::cout << "Allocate " << n << std::endl;
         return reinterpret_cast<T*>(free_chunks[free_chunks_count]);
     }
 
     void deallocate (T* p, std::size_t n)
     {
-        std::cout << "Try deallocate " << n << std::endl;
         assert(n == chunk_count_to_allocate);
         assert(free_chunks_count < (N + ADDITIONAL_ALLOCATION) / chunk_count_to_allocate);
         assert(p >= reinterpret_cast<T*>(data));
@@ -63,7 +59,6 @@ struct pool_allocator {
         assert((reinterpret_cast<uint8_t*>(p) - data) % (sizeof(T) * chunk_count_to_allocate) == 0);
         free_chunks[free_chunks_count] = reinterpret_cast<std::size_t>(p);
         free_chunks_count++;
-        std::cout << "Deallocate " << n << std::endl;
     }
 
     template< class U >
