@@ -27,7 +27,7 @@ struct pool_allocator {
     pool_allocator () noexcept
     {
         //data = static_cast<uint8_t*>(::operator new(size));
-        for(int i = 0;i < N + ADDITIONAL_ALLOCATION;i++) {
+        for(std::size_t i = 0;i < N + ADDITIONAL_ALLOCATION;i++) {
             free_chunks[i] = reinterpret_cast<size_t>(data + i * sizeof(T));
         }
     }
