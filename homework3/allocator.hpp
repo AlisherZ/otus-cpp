@@ -91,7 +91,6 @@ struct pool_allocator {
 
     void deallocate (T* p, std::size_t n)
     {
-        std::cout << "Deallocate " << n << std::endl;
         assert(n == N);
         assert(free_chunks_count < current_capacity / N);
         assert(in_pool(p, n));
