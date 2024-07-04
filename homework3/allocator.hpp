@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <cstring>
 #include <memory>
+#include <cstdlib>
+#include <iostream>
 
 template <class T, std::size_t N = 1, std::size_t POOL_SIZE = 10>
 struct pool_allocator {
@@ -13,7 +15,7 @@ struct pool_allocator {
     std::size_t current_capacity = 0;
     std::size_t num_pools = 0;
     std::size_t MAX_NUM_POOL = 100;
-    T **data = static_cast<T**>(malloc(sizeof(T *) * MAX_NUM_POOL));//static_cast<uint8_t**>(::operator new(MAX_NUM_POOL));
+    T **data = static_cast<T**>(malloc(sizeof(T *) * MAX_NUM_POOL));
 
     std::size_t free_chunks_count = 0;
     void **free_chunks = nullptr;
@@ -30,9 +32,6 @@ struct pool_allocator {
         std::cout << "State of data: " << std::endl;
         for(std::size_t i = 0;i < num_pools;i++) {
             std::cout << "Address " << static_cast<void *>(data[i]) << " Object Address " << (data[i]) << std::endl;
-            for(std::size_t j = 0;j < sizeof(T) * POOL_SIZE;j++) {
-                //std::cout << "Value " << data[i][j] << " ";
-            }
             std::cout << std::endl;
         }
         std::cout << "State of chunks: " << std::endl;
@@ -52,10 +51,10 @@ struct pool_allocator {
         current_capacity+= POOL_SIZE;
         num_pools++;
         T* _pool = static_cast<T*>(malloc(sizeof(T) * POOL_SIZE));
-        data[num_pools - 1] = _pool;//static_cast<T*>(_pool);//static_cast<uint8_t*>(malloc(sizeof(T) * POOL_SIZE));//static_cast<uint8_t*>(::operator new(size));
+        data[num_pools - 1] = _pool;
 
         free_chunks_count+= POOL_SIZE / N;
-        void **new_free_chunks = static_cast<void **>(malloc(sizeof(T *) * current_capacity));//static_cast<std::size_t*>(::operator new(size_chunks));
+        void **new_free_chunks = static_cast<void **>(malloc(sizeof(T *) * current_capacity));
         if(old_current_capacity > 0) {
             std::memcpy(new_free_chunks, free_chunks, sizeof(T *) * old_current_capacity);
             delete(free_chunks);
@@ -92,7 +91,6 @@ struct pool_allocator {
         current_capacity = a.current_capacity;
         num_pools = a.num_pools;
         MAX_NUM_POOL = a.MAX_NUM_POOL;
-        //data = static_cast<T**>(a.data);
         data = static_cast<T**>(malloc(sizeof(T *) * MAX_NUM_POOL));
         std::memcpy(data, a.data, sizeof(T *) * MAX_NUM_POOL);
 
@@ -107,25 +105,16 @@ struct pool_allocator {
 
     T* allocate (std::size_t n)
     {
-        //std::cout << "Try allocate " << n << std::endl;
-        //print_state();
         assert(n == N);
         if(free_chunks_count == 0) {
             add_new_pool();
         }
         free_chunks_count--;
-        //print_state();
-        //std::cout << "Allocate " << n << std::endl;
-        //T *test = static_cast<T*>(free_chunks[free_chunks_count]);
-        //*test = test1;
-        //T test2 = *test;
         return static_cast<T*>(free_chunks[free_chunks_count]);
-        //return static_cast<T*>(::operator new(n * sizeof(T)));
     }
 
     void deallocate (T* p, std::size_t n)
     {
-        //std::cout << "Deallocate " << n << std::endl;
         assert(n == N);
         assert(free_chunks_count < current_capacity / N);
         assert(in_pool(p, n));
