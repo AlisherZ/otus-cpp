@@ -26,21 +26,22 @@ int main(int, char **)
         std::cout << it.first << ' ' << it.second << std::endl;
     }
     //m1.clear(); // TODO something wrong(???)
+    //m1.erase(9);
 
     MyContainer<int> c;
     for(int i = 0;i < 10;i++) {
         c.push_back(i);
     }
-    for(int i = 0;i < 10;i++) {
-        std::cout << c[i] << std::endl;
+    for(auto i : c) {
+        std::cout << i << std::endl;
     }
 
     MyContainer<int, pool_allocator<int> > c1;
     for(int i = 0;i < 10;i++) {
         c1.push_back(i);
     }
-    for(int i = 0;i < 10;i++) {
-        std::cout << c1[i] << std::endl;
+    for(auto i : c1) {
+        std::cout << i << std::endl;
     }
     return 0;
 }
