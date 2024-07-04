@@ -18,7 +18,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
       - run: cmake ./homework3/ -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
       - run: cmake --build .
-      - run: cmake --build . --target test --output-on-failure
+      - run: cmake --build . --target test --verbose
       - run: cmake --build . --target package 
       - run: cat /home/runner/work/otus-cpp/otus-cpp/Testing/Temporary/LastTest.log
       - name: Create Release
