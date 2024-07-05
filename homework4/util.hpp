@@ -4,6 +4,7 @@
 #include <list>
 #include <iostream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 template <class T1>
