@@ -13,7 +13,7 @@ template <class T1>
 struct is_std_vector<std::vector<T1> > { static const bool value=true; };
 
 template<class T1>
-constexpr bool is_std_vector_v = is_std_vector<T>::value;
+constexpr bool is_std_vector_v = is_std_vector<T1>::value;
 
 template <class T1>
 struct is_std_list { static const bool value=false; };
@@ -22,7 +22,7 @@ template <class T1>
 struct is_std_list<std::list<T1> > { static const bool value=true; };
 
 template<class T1>
-constexpr bool is_std_list_v = is_std_list<T>::value;
+constexpr bool is_std_list_v = is_std_list<T1>::value;
 
 template <typename T>
 typename std::enable_if_t<std::is_integral_v<std::decay_t<T> > > print_ip(T ip_address)
