@@ -11,7 +11,7 @@ option(WITH_GOOGLE_TEST "Whether to build Google test" OFF)
 add_executable(print_ip print_ip.cpp)
 
 set_target_properties(print_ip PROPERTIES
-    CXX_STANDARD 14
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
@@ -31,7 +31,7 @@ if(WITH_BOOST_TEST)
     add_executable(test_version test_version.cpp)
 
     set_target_properties(test_version PROPERTIES
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
     )
 
