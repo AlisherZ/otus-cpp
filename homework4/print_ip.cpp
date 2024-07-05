@@ -1,11 +1,11 @@
 #include <algorithm>
+#include <utility>
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <tuple>
 #include <vector>
-#include <utility>
 #include "util.hpp"
 
 int main(int, char **)
