@@ -1,11 +1,11 @@
-name: 'C++ CI homework3'
+name: 'C++ CI homework4'
 
 on:
   push:
     branches:
       - main
     paths:
-      - homework3/**
+      - homework4/**
       - .github/workflows/**
 
 jobs:
@@ -16,10 +16,10 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
-      - run: cmake ./homework3/ -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
+      - run: cmake ./homework4/ -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
       - run: cmake --build . --target test
-      - run: cmake --build . --target package
+      - run: cmake --build . --target package 
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
