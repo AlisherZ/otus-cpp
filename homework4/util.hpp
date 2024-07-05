@@ -12,20 +12,14 @@ struct is_std_vector { static const bool value=false; };
 template <class T1>
 struct is_std_vector<std::vector<T1> > { static const bool value=true; };
 
-template<class T1>
-constexpr bool is_std_vector_v = is_std_vector<T1>::value;
-
 template <class T1>
 struct is_std_list { static const bool value=false; };
 
 template <class T1>
 struct is_std_list<std::list<T1> > { static const bool value=true; };
 
-template<class T1>
-constexpr bool is_std_list_v = is_std_list<T1>::value;
-
 template <typename T>
-typename std::enable_if_t<std::is_integral_v<std::decay_t<T> > > print_ip(T ip_address)
+typename std::enable_if_t<std::is_integral<std::decay_t<T> >::value> print_ip(T ip_address)
 {
     std::size_t num_bytes = sizeof(T);
     constexpr uint8_t extract_byte = (uint8_t)-1;
@@ -37,13 +31,13 @@ typename std::enable_if_t<std::is_integral_v<std::decay_t<T> > > print_ip(T ip_a
 }
 
 template <typename T>
-typename std::enable_if_t<std::is_same_v<std::decay_t<T>, std::string>> print_ip(T ip_address)
+typename std::enable_if_t<std::is_same<std::decay_t<T>, std::string>::value> print_ip(T ip_address)
 {
     std::cout << ip_address << std::endl;
 }
 
 template <typename T>
-typename std::enable_if_t<std::disjunction_v<is_std_vector<std::decay_t<T> >, is_std_list<std::decay_t<T> > > > print_ip(T ip_address)
+typename std::enable_if_t<std::disjunction<is_std_vector<std::decay_t<T> >, is_std_list<std::decay_t<T> > >::value> print_ip(T ip_address)
 {
     bool first = true;
     for(int ip : ip_address) {
