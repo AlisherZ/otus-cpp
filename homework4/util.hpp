@@ -7,39 +7,69 @@
 #include <tuple>
 #include <vector>
 
+/// <summary>
+/// Type traits. Checks whether value is std::vector.
+/// </summary>
 template <class T1>
 struct is_std_vector { static const bool value = false; };
 
+/// <summary>
+/// Type traits. Checks whether value is std::vector.
+/// </summary>
 template <class T1>
 struct is_std_vector<std::vector<T1> > { static const bool value = true; };
 
+/// <summary>
+/// AdditionalType traits for value is std::vector.
+/// </summary>
 template<class T1>
 inline constexpr bool is_std_vector_v = is_std_vector<T1>::value;
 
+/// <summary>
+/// Type traits. Checks whether value is std::list.
+/// </summary>
 template <class T1>
 struct is_std_list { static const bool value = false; };
 
+/// <summary>
+/// Type traits. Checks whether value is std::list.
+/// </summary>
 template <class T1>
 struct is_std_list<std::list<T1> > { static const bool value = true; };
 
 template<class T1>
 inline constexpr bool is_std_list_v = is_std_list<T1>::value;
 
+/// <summary>
+/// Type traits. Checks whether value is std::tuple.
+/// </summary>
 template <class T1>
 struct is_std_tuple { static const bool value = false; };
 
+/// <summary>
+/// Type traits. Checks whether value is std::tuple.
+/// </summary>
 template <class... T1>
 struct is_std_tuple<std::tuple<T1 ...> > { static const bool value = true; };
 
 template<class T1>
 inline constexpr bool is_std_tuple_v = is_std_list<T1>::value;
 
+/// <summary>
+/// Type traits. Checks whether value is std::tuple with same type of elements.
+/// </summary>
 template <class T1>
 struct is_same_type_tuple { static const bool value = false; };
 
+/// <summary>
+/// Type traits. Checks whether value is std::tuple with same type of elements.
+/// </summary>
 template <>
 struct is_same_type_tuple<std::tuple<> > { static const bool value = true; };
 
+/// <summary>
+/// Type traits. Checks whether value is std::tuple with same type of elements.
+/// </summary>
 template <class T1, class... U1>
 struct is_same_type_tuple<std::tuple<T1, U1...> > : std::conjunction<std::is_same<T1, U1> ...> {};
 
