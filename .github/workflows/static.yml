@@ -29,10 +29,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - run: ls -a
-      - run: cd ./homework4/
       - name: Checkout
         uses: actions/checkout@v4
+      - run: ls -a
+      - run: cd ./homework4/
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
