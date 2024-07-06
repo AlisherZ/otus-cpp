@@ -151,6 +151,10 @@ typename std::enable_if_t<std::conjunction_v<is_std_tuple<std::decay_t<T> >, is_
     std::cout << std::endl;
 }
 
+/// <summary>
+/// Print all elements of std::tuple separated by '.'.
+/// </summary>
+/// <param name="ip_address">std tuple.</param>
 template<std::size_t I = 0, typename... T>
 void for_each_print(std::tuple<T...>& t) {
     if constexpr(I > 0) {
