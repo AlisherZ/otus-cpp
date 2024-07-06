@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15.3)
 
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
-set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(allocators VERSION ${PROJECT_VESRION})
+project(allocators VERSION ${PROJECT_VERSION})
 
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" OFF)
