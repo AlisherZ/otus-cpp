@@ -31,7 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: cd ./homework4/
       - name: Setup Pages
         uses: actions/configure-pages@v5
       # Install Doxygen
@@ -39,6 +38,8 @@ jobs:
         run: sudo apt install doxygen && doxygen --version
       - name: Install Graphviz
         run: sudo apt install graphviz
+      - run: ls -a
+      - run: cd ./homework4/
       - run: ls -a
       # Create documentation   
       - name: Create documentation     
