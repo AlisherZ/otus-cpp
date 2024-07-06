@@ -28,6 +28,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./homework4
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,7 +47,6 @@ jobs:
       # Create documentation   
       - name: Create documentation     
         run: doxygen
-        working-directory: ./hometask4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
