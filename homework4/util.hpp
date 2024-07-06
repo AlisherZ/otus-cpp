@@ -47,9 +47,9 @@ template <class T1>
 inline constexpr bool is_same_type_tuple_v = is_same_type_tuple<T1>::value;
 
 /// <summary>
-/// Extract the byte representation of a structure from the memory stream.
+/// Print ip address in console. All parts are separated by '.'.
 /// </summary>
-/// <param name="ip_address">The location of the structure in the memory stream.</param>
+/// <param name="ip_address">Integer representation of ip address. Each byte is byte of ip</param>
 template <typename T>
 typename std::enable_if_t<std::is_integral_v<std::decay_t<T> > > print_ip(T ip_address)
 {
@@ -63,9 +63,9 @@ typename std::enable_if_t<std::is_integral_v<std::decay_t<T> > > print_ip(T ip_a
 }
 
 /// <summary>
-/// Extract the byte representation of a structure from the memory stream.
+/// Print ip address in console. All parts are separated by '.'.
 /// </summary>
-/// <param name="ip_address">The location of the structure in the memory stream.</param>
+/// <param name="ip_address">String representation of ip address.</param>
 template <typename T>
 typename std::enable_if_t<std::is_same_v<std::decay_t<T>, std::string>> print_ip(T ip_address)
 {
@@ -73,9 +73,9 @@ typename std::enable_if_t<std::is_same_v<std::decay_t<T>, std::string>> print_ip
 }
 
 /// <summary>
-/// Extract the byte representation of a structure from the memory stream.
+/// Print ip address in console. All parts are separated by '.'.
 /// </summary>
-/// <param name="ip_address">The location of the structure in the memory stream.</param>
+/// <param name="ip_address">std container as ip address. Each element is byte of ip.</param>
 template <typename T>
 typename std::enable_if_t<std::disjunction_v<is_std_vector<std::decay_t<T> >, is_std_list<std::decay_t<T> > > > print_ip(T ip_address)
 {
@@ -93,9 +93,9 @@ typename std::enable_if_t<std::disjunction_v<is_std_vector<std::decay_t<T> >, is
 }
 
 /// <summary>
-/// Extract the byte representation of a structure from the memory stream.
+/// Print ip address in console. All parts are separated by '.'.
 /// </summary>
-/// <param name="ip_address">The location of the structure in the memory stream.</param>
+/// <param name="ip_address">std tuple as ip address. Each element is byte of ip. All elements must be same type</param>
 template <typename T>
 typename std::enable_if_t<std::conjunction_v<is_std_tuple<std::decay_t<T> >, is_std_list<std::decay_t<T> > > > print_ip(T ip_address)
 {
