@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <stdexcept>
 #include <tuple>
 #include <utility>
 #include "pen.h"
@@ -11,6 +12,7 @@ std::string LineTypeString(line_type type)
         case line_type::dashed : return "dashed";
         case line_type::dotted : return "dotted";
     };
+    throw std::invalid_argument( "received non-existent type of line" );
 }
 
 template<std::size_t I = 0, typename... T>
