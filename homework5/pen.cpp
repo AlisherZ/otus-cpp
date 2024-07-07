@@ -1,8 +1,8 @@
 #include <cstdint>
 #include <stdexcept>
 #include <tuple>
-#include <utility>
 #include "pen.h"
+#include "util.hpp"
 
 std::string LineTypeString(line_type type)
 {
@@ -13,16 +13,6 @@ std::string LineTypeString(line_type type)
         case line_type::dotted : return "dotted";
     };
     throw std::invalid_argument( "received non-existent type of line" );
-}
-
-template<std::size_t I = 0, typename... T>
-std::uint32_t sum_elements(std::tuple<T...>& t) {
-    if constexpr(I + 1 < sizeof...(T)) {
-        return (sum_elements<I + 1>(t) << 8) + std::get<sizeof...(T) - I - 1>(t);
-    }
-    else {
-        return static_cast<std::uint32_t>(std::get<0>(t));
-    }
 }
 
 ColorRGB Pen::getColorRGB(std::uint32_t color) {

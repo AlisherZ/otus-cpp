@@ -1,3 +1,4 @@
+#include "util.hpp"
 
 #include <gtest/gtest.h>
 
