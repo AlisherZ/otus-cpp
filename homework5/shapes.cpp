@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include "pen.h"
 #include "shapes.h"
 
 double Point::get(std::size_t i) {
