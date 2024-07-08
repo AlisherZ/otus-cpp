@@ -53,6 +53,16 @@ target_link_libraries(painter PRIVATE
     controller
 )
 
+target_link_libraries(shapes PRIVATE
+    pen
+)
+
+target_link_libraries(controller PRIVATE
+    pen
+    shapes
+    image
+)
+
 if(WITH_BOOST_TEST)
     find_package(Boost COMPONENTS unit_test_framework REQUIRED)
     add_executable(test_version test_version.cpp)
