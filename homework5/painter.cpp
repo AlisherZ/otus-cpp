@@ -3,6 +3,7 @@
 #include <string>
 #include "pen.h"
 #include "shapes.h"
+#include "image.h"
 
 int main(int, char **)
 {
@@ -32,6 +33,11 @@ int main(int, char **)
     sh3.draw(gc, pen);
     sh4.draw(gc, pen);
     sh5.draw(gc, pen);
+
+    ImageDocument img;
+    img.readImage("C:\\file.png");
+    std::cout << img.getGraphicalContext() << std::endl;
+    img.writeImage("C:\\file.png");
 
     return 0;
 }
