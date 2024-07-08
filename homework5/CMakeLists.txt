@@ -10,8 +10,9 @@ option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
 add_executable(painter painter.cpp)
 add_library(pen pen.cpp)
+add_library(shapes shapes.cpp)
 
-set_target_properties(painter pen PROPERTIES
+set_target_properties(painter pen shapes PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
@@ -31,8 +32,13 @@ target_include_directories(pen
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
+target_include_directories(shapes
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+
 target_link_libraries(painter PRIVATE
     pen
+    shapes
 )
 
 if(WITH_BOOST_TEST)
@@ -52,6 +58,7 @@ if(WITH_BOOST_TEST)
     target_link_libraries(test_version
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
         pen
+        shapes
     )
 endif()
 
@@ -64,6 +71,7 @@ if(WITH_GOOGLE_TEST)
         hello_test
         GTest::gtest_main
         pen
+        shapes
     )
 endif()
 
@@ -72,6 +80,9 @@ if (MSVC)
         /W4
     )
     target_compile_options(pen PRIVATE
+        /W4
+    )
+    target_compile_options(shapes PRIVATE
         /W4
     )
     if(WITH_BOOST_TEST)
@@ -89,6 +100,9 @@ else ()
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(pen PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(shapes PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(WITH_BOOST_TEST)

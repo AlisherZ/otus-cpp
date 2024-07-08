@@ -1,5 +1,8 @@
 #include <cstdint>
 #include <tuple>
+#include <string>
+
+using GraphicalContext = std::string; // TODO GraphicalContext for form
 
 template<std::size_t I = 0, typename... T>
 std::uint32_t sum_elements(std::tuple<T...>& t) {
