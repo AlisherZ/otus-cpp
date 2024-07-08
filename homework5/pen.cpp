@@ -55,7 +55,7 @@ ColorRGB Pen::getFillColor() {
     return getColorRGB(fillColor);
 }
 
-void Pen::setLineColor(std::int32_t newLineColor) {
+void Pen::setLineColor(std::uint32_t newLineColor) {
     lineColor = newLineColor;
 }
 
@@ -67,7 +67,7 @@ void Pen::setLineColor(color color) {
     lineColor = static_cast<std::uint32_t>(color);
 }
 
-void Pen::setThickness(std::int16_t newThickness) {
+void Pen::setThickness(std::uint16_t newThickness) {
     thickness = newThickness;
 }
 

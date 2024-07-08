@@ -21,8 +21,8 @@ Point Point::shift(Point &p) {
     return res;
 }
 
-void Point::draw(std::shared_ptr<GraphicalContext> gc, Pen p) {
-    std::cout << "Draw point: " << toString() << ", Graphical context: " << *gc << ", selected pen: " << p.toString() << std::endl;
+void Point::draw(GraphicalContext &gc, std::shared_ptr<Pen> &p) {
+    std::cout << "Draw point: " << toString() << ", Graphical context: " << gc << ", selected pen: " << p->toString() << std::endl;
 } 
 
 std::string Point::toString() {
@@ -37,24 +37,24 @@ Point Point::operator+(Point p) {
     return shift(p);
 }
 
-void Line::draw(std::shared_ptr<GraphicalContext> gc, Pen p) {
-    std::cout << "Draw line: " << toString() << ", Graphical context: " << *gc << ", selected pen: " << p.toString() << std::endl;
+void Line::draw(GraphicalContext &gc, std::shared_ptr<Pen> &p) {
+    std::cout << "Draw line: " << toString() << ", Graphical context: " << gc << ", selected pen: " << p->toString() << std::endl;
 }
 
 std::string Line::toString() {
     return "Line: " + first.toString() + "-" + second.toString();
 }
 
-void Rectangle::draw(std::shared_ptr<GraphicalContext> gc, Pen p) {
-    std::cout << "Draw rectangle: " << toString() << ", Graphical context: " << *gc << ", selected pen: " << p.toString() << std::endl;
+void Rectangle::draw(GraphicalContext &gc, std::shared_ptr<Pen> &p) {
+    std::cout << "Draw rectangle: " << toString() << ", Graphical context: " << gc << ", selected pen: " << p->toString() << std::endl;
 }
 
 std::string Rectangle::toString() {
     return "Rectangle: " + corner.toString() + "->(+" + std::to_string(w) + ", +" + std::to_string(h) + ")";
 }
 
-void Ellipse::draw(std::shared_ptr<GraphicalContext> gc, Pen p) {
-    std::cout << "Draw ellipse: " << toString() << ", Graphical context: " << *gc << ", selected pen: " << p.toString() << std::endl;
+void Ellipse::draw(GraphicalContext &gc, std::shared_ptr<Pen> &p) {
+    std::cout << "Draw ellipse: " << toString() << ", Graphical context: " << gc << ", selected pen: " << p->toString() << std::endl;
 }
 
 std::string Ellipse::toString() {

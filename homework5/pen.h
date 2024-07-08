@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <tuple>
 #include <string>
+#include "util.hpp"
 
 enum class color
 {
@@ -23,20 +24,17 @@ enum class line_type
     dotted
 };
 
-using ColorRGB = std::tuple<std::uint8_t, std::uint8_t, std::uint8_t>;
-
 class Pen
 {
 public:
-    
     Pen() {};
     Pen(Pen &pen) : lineColor(pen.lineColor), thickness(pen.thickness), type(pen.type), isFill(pen.isFill), fillColor(pen.fillColor){};
     ColorRGB getLineColor();
-    void setLineColor(std::int32_t lineColor);
+    void setLineColor(std::uint32_t lineColor);
     void setLineColor(ColorRGB color);
     void setLineColor(color color);
     std::int16_t getThickness();
-    void setThickness(std::int16_t thickness);
+    void setThickness(std::uint16_t thickness);
     line_type getType();
     void setType(line_type type);
     bool getIsFill();
@@ -47,8 +45,8 @@ public:
     void setFillColor(color color);
     std::string toString();
 private:
-    std::int32_t lineColor = 0;
-    std::int16_t thickness = 1;
+    std::uint32_t lineColor = 0;
+    std::uint16_t thickness = 1;
     line_type type = line_type::solid;
     bool isFill = false;
     std::int32_t fillColor = 0;
