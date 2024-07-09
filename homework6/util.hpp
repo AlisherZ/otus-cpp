@@ -51,7 +51,7 @@ public:
 		using pointer           = std::shared_ptr<Node>;  // or also value_type*
 		using reference         = std::pair<std::size_t, T>&;  // or also value_type&
 		Iterator(pointer ptr) : m_ptr(std::move(ptr)) {};
-		reference operator*() const { return m_ptr->value; }
+		reference operator*() const { return m_ptr->iter; }
 		pointer operator->() { return m_ptr; }
 		Iterator& operator++() { if(m_ptr->hasNext()) m_ptr->next(); return *this; }
 		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
