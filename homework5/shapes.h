@@ -17,7 +17,7 @@ class Shape
 public:
     virtual void draw(GraphicalContext &gc, std::shared_ptr<Pen> &p) = 0;
     virtual std::string toString() = 0;
-    virtual ~Shape(){};
+    virtual ~Shape() = default;
 };
 
 class Point : public Shape
