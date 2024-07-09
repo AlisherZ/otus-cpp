@@ -11,14 +11,14 @@ public:
 	{
 		Node(Row* enc, std::size_t i, T val) {
 			enclosure = enc;
-			value->first = i;
-			value->second = val;
+			iter.first = i;
+			iter.second = val;
 		}
 		Node(Row* enc, bool isFinal = false) {
 			enclosure = enc;
 			if(auto it = enc->cells.begin(); (it != enc->cells.end()) && !isFinal) {
-				value.first = it->first;
-				value.second = it->second;
+				iter.first = it->first;
+				iter.second = it->second;
 			}
 			else {
 				isEnd = true;
@@ -31,8 +31,8 @@ public:
 			auto it = enclosure->cells.find(value.first);
 			it++;
 			if(it != enclosure->cells.end()) {
-				value.first = it->first;
-				value.second = it->second;
+				iter.first = it->first;
+				iter.second = it->second;
 			}
 			else {
 				isEnd = true;
@@ -40,7 +40,7 @@ public:
 			return *this;
 		}
 		Row* enclosure;
-		std::pair<std::size_t, T> value;
+		std::pair<std::size_t, T> iter;
 		bool isEnd = false;
 	};
 	struct Iterator
