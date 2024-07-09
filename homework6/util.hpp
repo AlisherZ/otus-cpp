@@ -39,6 +39,30 @@ public:
 			}
 			return *this;
 		}
+		bool operator==(const Node& rhs) const {
+			if(isEnd && rhs.isEnd) {
+				return true;
+			}
+			if(rhs.isEnd) {
+				return false;
+			}
+			if(isEnd) {
+				return false;
+			}
+			return iter.first == rhs.iter.first;
+		}
+		bool operator!=(const Node& rhs) const {
+			if(isEnd && rhs.isEnd) {
+				return false;
+			}
+			if(rhs.isEnd) {
+				return true;
+			}
+			if(isEnd) {
+				return true;
+			}
+			return iter.first != rhs.iter.first;
+		}
 		Row* enclosure;
 		std::pair<std::size_t, T> iter;
 		bool isEnd = false;
@@ -55,8 +79,8 @@ public:
 		pointer operator->() { return m_ptr; }
 		Iterator& operator++() { if(m_ptr->hasNext()) m_ptr->next(); return *this; }
 		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
-		friend bool operator== (const Iterator& a, const Iterator& b) { if(a.m_ptr->isEnd && b.m_ptr->isEnd) return true; return a.m_ptr == b.m_ptr; };
-		friend bool operator!= (const Iterator& a, const Iterator& b) { if(a.m_ptr->isEnd && b.m_ptr->isEnd) return false; return a.m_ptr != b.m_ptr; };
+		friend bool operator== (const Iterator& a, const Iterator& b) { return *(a.m_ptr) == *(b.m_ptr); };
+		friend bool operator!= (const Iterator& a, const Iterator& b) { return *(a.m_ptr) != *(b.m_ptr); };
 
 	private:
 		pointer m_ptr;
@@ -86,12 +110,22 @@ public:
 		}
 	}
 	void invalidate() {
-
+		for (auto it = cells.cbegin(); it != cells.cend();)
+		{
+			if ((*it).second == -1)
+			{
+				it = cells.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
 	}
 	
-    Iterator begin() { return Iterator(std::make_shared<Node>(Node(this))); }
+    Iterator begin() { invalidate(); return Iterator(std::make_shared<Node>(Node(this))); }
 
-    Iterator end()   { return Iterator(std::make_shared<Node>(Node(this, true))); }
+    Iterator end()   { invalidate(); return Iterator(std::make_shared<Node>(Node(this, true))); }
 private:
 	std::map<std::size_t, T> cells;
 };

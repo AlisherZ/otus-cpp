@@ -25,6 +25,7 @@ int main(int, char **)
         std::cout << it.first << ' ' << it.second << std::endl;
     }
     std::cout << row[3] << std::endl;
+    row[34] = -1;
     for(auto it : row) {
         std::cout << it.first << ' ' << it.second << std::endl;
     }
