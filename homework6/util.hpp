@@ -28,7 +28,7 @@ public:
 			return !isEnd;
 		}
 		Node& next() {
-			auto it = enclosure->cells.find(value.first);
+			auto it = enclosure->cells.find(iter.first);
 			it++;
 			if(it != enclosure->cells.end()) {
 				iter.first = it->first;
