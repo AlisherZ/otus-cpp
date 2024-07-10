@@ -77,7 +77,6 @@ class MatrixBase
 public:
 	MatrixBase() {};
 	std::size_t size() {
-		//invalidate();
 		if constexpr(std::is_same_v<T, LevelType>) {
 			return rows.size();
 		}
@@ -139,35 +138,51 @@ public:
 			}
 		}
 	}
+	
+	Iterator begin() { return rows.begin(); }
+
+	Iterator end()   { return rows.end(); }
+protected:
+	std::map<std::size_t, LevelType> rows;
+};
+
+template <typename LevelType, typename T, T value>
+class MatrixZip : public MatrixBase<LevelType, T, value>
+{
+public:
 	void invalidate() {
-		/*for (auto it = cells.cbegin(); it != cells.cend();)
+		for (auto it = rows.begin(); it != rows.end();)
 		{
-			if ((*it).second == -1)
+			bool need_erase;
+			if constexpr(!std::is_same_v<T, LevelType>) {
+				it->second.invalidate();
+				need_erase = (it->second.size() == 0);
+			}
+			else {
+				need_erase = (it->second == value);
+			}
+			if (need_erase)
 			{
-				it = cells.erase(it);
+				it = rows.erase(it);
 			}
 			else
 			{
 				++it;
 			}
-		}*/
+		}
+	}
+	std::size_t size() {
+		invalidate();
+		return MatrixBase<LevelType, T, value>::size();
 	}
 	
-	Iterator begin() { invalidate(); return rows.begin(); }
+	auto begin() { invalidate(); return MatrixBase<LevelType, T, value>::begin(); }
 
-	Iterator end()   { invalidate(); return rows.end(); }
-private:
-	std::map<std::size_t, LevelType> rows;
+	auto end()   { invalidate(); return MatrixBase<LevelType, T, value>::end(); }
 };
 
+template <typename T, T value>
+using Row = MatrixZip<T, T, value>;
 
 template <typename T, T value>
-using Row = MatrixBase<T, T, value>;
-
-template <typename T, T value>
-using Matrix2D = MatrixBase<Row<T, value>, T, value>;
-
-template <typename T, T value>
-class Matrix : Matrix2D<T, value>
-{
-};
+using Matrix2D = MatrixZip<Row<T, value>, T, value>;

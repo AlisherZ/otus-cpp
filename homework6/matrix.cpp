@@ -9,6 +9,7 @@ int main(int, char **)
     ((matrix[100][100] = 114) = -1);
     std::cout << matrix[100][100] << std::endl;
     std::cout << matrix.size() << std::endl;*/
+    std::cout << "Start" << std::endl;
 
     Row<int, -1> row;
     row[100] = 314;
