@@ -116,20 +116,27 @@ public:
 	}
 	template <typename ...Args>
 	typename std::enable_if_t<is_idx_type_v<Args...>, bool> contain(std::tuple<Args...> id) {
-		if(!contain(std::get<0>(id))) {
-			return false;
-		}
-		if constexpr(sizeof...(T) > 0) {
-			return rows[std::get<0>(id)].contain(tuple_tail(id));
+		if(auto it = rows.find(std::get<0>(id)); it != rows.end()) {
+			if constexpr(sizeof...(Args) > 1) {
+				it->second.contain(tuple_tail(id));
+			}
+			else {
+				return true;
+			}
 		}
 		else {
-			return true;
+			return false;
 		}
 	}
 	template <typename ...Args>
 	typename std::enable_if_t<is_idx_type_v<Args...>, bool> erase(std::tuple<Args...> id) {
-		if(auto it = rows.find(idx); it != rows.end()) {
-			rows.erase(it);
+		if(auto it = rows.find(std::get<0>(id)); it != rows.end()) {
+			if constexpr(sizeof...(Args) > 1) {
+				it->second.erase(tuple_tail(id));
+			}
+			else {
+				rows.erase(std::get<0>(id))
+			}
 		}
 	}
 	void invalidate() {
