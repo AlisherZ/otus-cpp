@@ -135,7 +135,7 @@ public:
 				it->second.erase(tuple_tail(id));
 			}
 			else {
-				rows.erase(std::get<0>(id))
+				rows.erase(std::get<0>(id));
 			}
 		}
 	}
