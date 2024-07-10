@@ -149,9 +149,10 @@ protected:
 template <typename LevelType, typename T, T value>
 class MatrixZip : public MatrixBase<LevelType, T, value>
 {
+	using BaseClass = MatrixBase<LevelType, T, value>;
 public:
 	void invalidate() {
-		for (auto it = MatrixBase<LevelType, T, value>::rows.begin(); it != MatrixBase<LevelType, T, value>::rows.end();)
+		for (auto it = BaseClass::rows.begin(); it != BaseClass::rows.end();)
 		{
 			bool need_erase;
 			if constexpr(!std::is_same_v<T, LevelType>) {
@@ -161,12 +162,10 @@ public:
 			else {
 				need_erase = (it->second == value);
 			}
-			if (need_erase)
-			{
-				it = rows.erase(it);
+			if (need_erase) {
+				it = BaseClass::rows.erase(it);
 			}
-			else
-			{
+			else {
 				++it;
 			}
 		}
@@ -180,8 +179,6 @@ public:
 
 	auto end()   { invalidate(); return MatrixBase<LevelType, T, value>::end(); }
 };
-
-
 
 template <typename T, T value>
 using Row = MatrixZip<T, T, value>;
