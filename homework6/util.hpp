@@ -3,90 +3,29 @@
 #include <string>
 #include <vector>
 
+template <class... U1>
+struct is_idx_type : std::conjunction<std::is_same<std::size_t, U1> ...> {};
+
+template <class... U1>
+inline constexpr bool is_idx_type_v = is_idx_type<U1...>::value;
+
+template <typename Head, typename... Tail>
+std::tuple<Tail...> tuple_tail(const std::tuple<Head, Tail...>& t)
+{
+    return std::apply([](auto head, auto... tail) {
+        return std::make_tuple(tail...);
+    }, t);
+}
+
+/*
 template <typename T, T value>
 class Row
 {
+	using Iterator = typename std::map<std::size_t, T>::iterator;
 public:
-	struct Node
-	{
-		Node(Row* enc, std::size_t i, T val) {
-			enclosure = enc;
-			iter.first = i;
-			iter.second = val;
-		}
-		Node(Row* enc, bool isFinal = false) {
-			enclosure = enc;
-			if(auto it = enc->cells.begin(); (it != enc->cells.end()) && !isFinal) {
-				iter.first = it->first;
-				iter.second = it->second;
-			}
-			else {
-				isEnd = true;
-			}
-		}
-		bool hasNext() {
-			return !isEnd;
-		}
-		Node& next() {
-			auto it = enclosure->cells.find(iter.first);
-			it++;
-			if(it != enclosure->cells.end()) {
-				iter.first = it->first;
-				iter.second = it->second;
-			}
-			else {
-				isEnd = true;
-			}
-			return *this;
-		}
-		bool operator==(const Node& rhs) const {
-			if(isEnd && rhs.isEnd) {
-				return true;
-			}
-			if(rhs.isEnd) {
-				return false;
-			}
-			if(isEnd) {
-				return false;
-			}
-			return iter.first == rhs.iter.first;
-		}
-		bool operator!=(const Node& rhs) const {
-			if(isEnd && rhs.isEnd) {
-				return false;
-			}
-			if(rhs.isEnd) {
-				return true;
-			}
-			if(isEnd) {
-				return true;
-			}
-			return iter.first != rhs.iter.first;
-		}
-		Row* enclosure;
-		std::pair<std::size_t, T> iter;
-		bool isEnd = false;
-	};
-	struct Iterator
-	{
-		using iterator_category = std::forward_iterator_tag;
-		using difference_type   = std::ptrdiff_t;
-		using value_type        = Node;
-		using pointer           = std::shared_ptr<Node>;  // or also value_type*
-		using reference         = std::pair<std::size_t, T>&;  // or also value_type&
-		Iterator(pointer ptr) : m_ptr(std::move(ptr)) {};
-		reference operator*() const { return m_ptr->iter; }
-		pointer operator->() { return m_ptr; }
-		Iterator& operator++() { if(m_ptr->hasNext()) m_ptr->next(); return *this; }
-		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
-		friend bool operator== (const Iterator& a, const Iterator& b) { return *(a.m_ptr) == *(b.m_ptr); };
-		friend bool operator!= (const Iterator& a, const Iterator& b) { return *(a.m_ptr) != *(b.m_ptr); };
-
-	private:
-		pointer m_ptr;
-	};
 	Row() {};
 	std::size_t size() {
+		//invalidate();
 		return cells.size();
 	}
 	T& operator [](std::size_t idx) {
@@ -105,7 +44,7 @@ public:
 		return cells.find(idx) != cells.end();
 	}
 	void erase(std::size_t idx) {
-		if(auto it = cells.find(idx); cells.find(idx) != cells.end()) {
+		if(auto it = cells.find(idx); it != cells.end()) {
 			cells.erase(it);
 		}
 	}
@@ -123,9 +62,105 @@ public:
 		}
 	}
 	
-    Iterator begin() { invalidate(); return Iterator(std::make_shared<Node>(Node(this))); }
+	Iterator begin() { invalidate(); return cells.begin(); }
 
-    Iterator end()   { invalidate(); return Iterator(std::make_shared<Node>(Node(this, true))); }
+	Iterator end()   { invalidate(); return cells.end(); }
 private:
 	std::map<std::size_t, T> cells;
+};
+*/
+
+template <typename LevelType, typename T, T value>
+class MatrixBase
+{
+	using Iterator = typename std::map<std::size_t, LevelType>::iterator;
+public:
+	MatrixBase() {};
+	std::size_t size() {
+		//invalidate();
+		if constexpr(std::is_same_v<T, LevelType>) {
+			return rows.size();
+		}
+		else {
+			std::size_t sz = 0;
+			for(auto it = rows.begin();it != rows.end();it++) {
+				sz+= it->second.size();
+			}
+			return sz;
+		}
+	}
+	auto& operator [](std::size_t idx) {
+		if(!contain(idx)){
+			if constexpr(!std::is_same_v<T, LevelType>) {
+				rows[idx] = LevelType();
+			}
+			else {
+				rows[idx] = value;
+			}
+		}
+		return rows[idx];
+	}
+	auto operator [](std::size_t idx) const {
+		if(!contain(idx)){
+			if constexpr(!std::is_same_v<T, LevelType>) {
+				rows[idx] = LevelType();
+			}
+			else {
+				rows[idx] = value;
+			}
+		}
+		return rows[idx];
+	}
+	bool contain(std::size_t idx) {
+		return rows.find(idx) != rows.end();
+	}
+	template <typename ...Args>
+	typename std::enable_if_t<is_idx_type_v<Args...>, bool> contain(std::tuple<Args...> id) {
+		if(!contain(std::get<0>(id))) {
+			return false;
+		}
+		if constexpr(sizeof...(T) > 0) {
+			return rows[std::get<0>(id)].contain(tuple_tail(id));
+		}
+		else {
+			return true;
+		}
+	}
+	template <typename ...Args>
+	typename std::enable_if_t<is_idx_type_v<Args...>, bool> erase(std::tuple<Args...> id) {
+		if(auto it = rows.find(idx); it != rows.end()) {
+			rows.erase(it);
+		}
+	}
+	void invalidate() {
+		/*for (auto it = cells.cbegin(); it != cells.cend();)
+		{
+			if ((*it).second == -1)
+			{
+				it = cells.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}*/
+	}
+	
+	Iterator begin() { invalidate(); return rows.begin(); }
+
+	Iterator end()   { invalidate(); return rows.end(); }
+private:
+	std::map<std::size_t, LevelType> rows;
+};
+
+
+template <typename T, T value>
+using Row = MatrixBase<T, T, value>;
+
+template <typename T, T value>
+using Matrix2D = MatrixBase<Row<T, value>, T, value>;
+
+template <typename T, T value>
+class Matrix : Matrix2D<T, value>
+{
 };

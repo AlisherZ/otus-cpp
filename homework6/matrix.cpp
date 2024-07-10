@@ -30,5 +30,48 @@ int main(int, char **)
         std::cout << it.first << ' ' << it.second << std::endl;
     }
 
+    Matrix2D<int, -1> matrix;
+    matrix[100][100] = 314;
+    matrix[34][23] = 14;
+    std::cout << matrix[100][100] << std::endl;
+    std::cout << matrix[34][23] << std::endl;
+    std::cout << matrix.size() << std::endl;
+    for(auto it : matrix) {
+        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
+        for(auto it1 : it.second) {
+            std::cout << it1.first << ' ' << it1.second << std::endl;
+        }
+    }
+    ((matrix[100][100] = 114) = -1);
+    std::cout << matrix[34][23] << std::endl;
+    std::cout << matrix[100][100] << std::endl;
+    std::cout << matrix.size() << std::endl;
+    for(auto it : matrix) {
+        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
+        for(auto it1 : it.second) {
+            std::cout << it1.first << ' ' << it1.second << std::endl;
+        }
+    }
+    matrix[0][0] = -1;
+    std::cout << matrix[34][23] << std::endl;
+    std::cout << matrix[0][0] << std::endl;
+    std::cout << matrix.size() << std::endl;
+    for(auto it : matrix) {
+        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
+        for(auto it1 : it.second) {
+            std::cout << it1.first << ' ' << it1.second << std::endl;
+        }
+    }
+    ((matrix[1][1] = 12) = -1) = 37;
+    std::cout << matrix[34][23] << std::endl;
+    std::cout << matrix[1][1] << std::endl;
+    std::cout << matrix.size() << std::endl;
+    for(auto it : matrix) {
+        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
+        for(auto it1 : it.second) {
+            std::cout << it1.first << ' ' << it1.second << std::endl;
+        }
+    }
+
     return 0;
 }
