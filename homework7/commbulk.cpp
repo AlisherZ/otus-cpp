@@ -1,5 +1,3 @@
-#pragma once
-
 #include "commbulk.h"
 
 CommandBulk::timestamp CommandBulk::getTimeCreated() {
