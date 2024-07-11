@@ -91,7 +91,9 @@ int main(int, char **)
     auto m_n = matrix.getFirst();
     auto m_n1 = matrix.getLast();
     for(;m_n != m_n1;m_n.next()) {
-        std::cout << m_n.getValue() << std::endl;
+        std::size_t x, y;
+        std::tie(x, y) = m_n.getIters();
+        std::cout << x << ":" << y << ":" << m_n.getValue() << std::endl;
     }
     for(auto it : matrix) {
         std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;

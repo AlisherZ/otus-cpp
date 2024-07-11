@@ -139,116 +139,113 @@ public:
 	auto end()   { invalidate(); return BaseClass::end(); }
 };
 
-template <typename T, T value, typename LevelType>
+template <typename T, T value, typename LevelType = T>
 class MatrixLineIterator : public MatrixZip<T, value, LevelType>
 {
 	using BaseClass = MatrixZip<T, value, LevelType>;
 public:
-	auto getFirst();
-	auto getLast();
+	class Node
+	{
+		using NextLevelType = MatrixLineIterator<T, value, LevelType>;
+		using CurrentIterator = typename std::map<std::size_t, LevelType>::iterator;
+	public:
+		Node() {};
+		Node(NextLevelType* ctx) : context(ctx), it(ctx->curBegin()) {};
+		Node(NextLevelType* ctx, CurrentIterator it_1) : context(ctx), it(it_1) {};
+		bool hasNext() {
+			return it != context->curEnd();
+		}
+		void next() {
+			if(hasNext()) {
+				it++;
+			}
+		}
+		auto getIters() {
+			return std::tie(it->first);
+		}
+		T& getValue() {
+			return it->second;
+		}
+		bool operator==(const Node& rhs) const {
+			return it == rhs.it;
+		}
+		bool operator!=(const Node& rhs) const {
+			return it != rhs.it;
+		}
+	private:
+		CurrentIterator it;
+		NextLevelType* context;
+	};
+	auto getFirst() { return Node(this); };
+	auto getLast() { return Node(this, curEnd()); };
 	auto curBegin() { return BaseClass::begin(); };
 	auto curEnd()   { return BaseClass::end(); };
 };
 
-template <typename T, T value, typename LevelType = T>
-class Node
-{
-	using NextLevelType = MatrixLineIterator<T, value, LevelType>;
-	using CurrentIterator = typename std::map<std::size_t, LevelType>::iterator;
-public:
-	Node() {};
-	Node(NextLevelType* ctx) : context(ctx), it(ctx->curBegin()) {};
-	Node(NextLevelType* ctx, CurrentIterator it_1) : context(ctx), it(it_1) {};
-	bool hasNext() {
-		return it != context->curEnd();
-	}
-	void next() {
-		if(hasNext()) {
-			it++;
-		}
-	}
-	auto getIters() {
-		return std::tie(it->first);
-	}
-	T& getValue() {
-		return it->second;
-	}
-	bool operator==(const Node& rhs) const {
-		return it == rhs.it;
-	}
-	bool operator!=(const Node& rhs) const {
-		return it != rhs.it;
-	}
-private:
-	CurrentIterator it;
-	NextLevelType* context;
-};
-
 template <typename T, T value, typename PrevLevelType>
-class Node<T, value, MatrixLineIterator<T, value, PrevLevelType> >
+class MatrixLineIterator<T, value, MatrixLineIterator<T, value, PrevLevelType> > : public MatrixZip<T, value, MatrixLineIterator<T, value, PrevLevelType> >
 {
-	using LevelType = MatrixLineIterator<T, value, PrevLevelType>;
-	using NextLevelType = MatrixLineIterator<T, value, LevelType>;
-	using CurrentIterator = typename std::map<std::size_t, LevelType>::iterator;
-public:
-	Node() {};
-	Node(NextLevelType* ctx) : context(ctx), it(ctx->curBegin()) {
-		if(ctx->curBegin() != ctx->curEnd()) {
-			it1 = ctx->curBegin()->second.getFirst();
+	class Node
+	{
+		using LevelType = MatrixLineIterator<T, value, PrevLevelType>;
+		using NextLevelType = MatrixLineIterator<T, value, LevelType>;
+		using CurrentIterator = typename std::map<std::size_t, LevelType>::iterator;
+	public:
+		Node() {};
+		Node(NextLevelType* ctx) : context(ctx), it(ctx->curBegin()) {
+			if(ctx->curBegin() != ctx->curEnd()) {
+				it1 = ctx->curBegin()->second.getFirst();
+			}
+		};
+		Node(NextLevelType* ctx, CurrentIterator it_1) : context(ctx), it(it_1) {
+			if(it_1 != ctx->curEnd()) {
+				it1 = ctx->curBegin()->second.getFirst();
+			}
+		};
+		bool hasNext() const {
+			return it != context->curEnd();
 		}
-	};
-	Node(NextLevelType* ctx, CurrentIterator it_1) : context(ctx), it(it_1) {
-		if(it_1 != ctx->curEnd()) {
-			it1 = ctx->curBegin()->second.getFirst();
-		}
-	};
-	bool hasNext() const {
-		return it != context->curEnd();
-	}
-	void next() {
-		if(hasNext()) {
-			it1.next();
-			if(!it1.hasNext()) {
-				it++;
-				if(hasNext()) {
-					it1 = it->second.getFirst();
+		void next() {
+			if(hasNext()) {
+				it1.next();
+				if(!it1.hasNext()) {
+					it++;
+					if(hasNext()) {
+						it1 = it->second.getFirst();
+					}
 				}
 			}
 		}
-	}
-	auto getIters() {
-		return std::tuple_cat(std::tie(it->first), it1.getIters());
-	}
-	T& getValue() {
-		return it1.getValue();
-	}
-	bool operator==(const Node& rhs) const {
-		if((!hasNext()) && (!rhs.hasNext())) {
-			return true;
+		auto getIters() {
+			return std::tuple_cat(std::tie(it->first), it1.getIters());
 		}
-		return (it == rhs.it) && (it1 == rhs.it1);
-	}
-	bool operator!=(const Node& rhs) const {
-		if((!hasNext()) && (!rhs.hasNext())) {
-			return false;
+		T& getValue() {
+			return it1.getValue();
 		}
-		return (it != rhs.it) || (it1 != rhs.it1);
-	}
-private:
-	CurrentIterator it;
-	Node<T, value, PrevLevelType> it1;
-	NextLevelType* context;
+		bool operator==(const Node& rhs) const {
+			if((!hasNext()) && (!rhs.hasNext())) {
+				return true;
+			}
+			return (it == rhs.it) && (it1 == rhs.it1);
+		}
+		bool operator!=(const Node& rhs) const {
+			if((!hasNext()) && (!rhs.hasNext())) {
+				return false;
+			}
+			return (it != rhs.it) || (it1 != rhs.it1);
+		}
+	private:
+		CurrentIterator it;
+		typename LevelType::Node it1;
+		NextLevelType* context;
+	};
+	using BaseClass = MatrixZip<T, value, MatrixLineIterator<T, value, PrevLevelType>>;
+public:
+	auto getFirst() { return Node(this); };
+	auto getLast() { return Node(this, curEnd()); };
+	auto curBegin() { return BaseClass::begin(); };
+	auto curEnd()   { return BaseClass::end(); };
 };
-
-template <typename T, T value, typename LevelType>
-auto MatrixLineIterator<T, value, LevelType>::getFirst() {
-	return Node<T, value, LevelType>(this);
-}
-
-template <typename T, T value, typename LevelType>
-auto MatrixLineIterator<T, value, LevelType>::getLast() {
-	return Node<T, value, LevelType>(this, curEnd());
-}
 
 template <typename T, T value>
 using Row = MatrixLineIterator<T, value, T>;
