@@ -1,113 +1,47 @@
+#include <cassert>
 #include <iostream>
 #include "util.hpp"
 
 int main(int, char **)
 {
-    /*Matrix<int, -1> matrix;
+    /*
+    Matrix<int, -1> matrix;
+    assert(matrix.size() == 0);
+    auto a = matrix[0][0];
+    assert(a == -1);
+    assert(matrix.size() == 0);
     matrix[100][100] = 314;
-    std::cout << matrix[100][100] << std::endl;
-    ((matrix[100][100] = 114) = -1);
-    std::cout << matrix[100][100] << std::endl;
-    std::cout << matrix.size() << std::endl;*/
-    std::cout << "Start" << std::endl;
-
-    Row<int, -1> row;
-    row[100] = 314;
-    row[34] = 73;
-    row[0] = 33;
-    std::cout << row.size() << std::endl;
-    for(auto it : row) {
-        std::cout << it.first << ' ' << it.second << std::endl;
+    assert(matrix.size() == 1);
+    for(auto c : matrix) {
+        std::size_t x;
+        std::size_t y;
+        int v;
+        std::tie(x, y, v) = c;
+        std::cout << x << y << v << std::endl;
     }
-    row[1] = -1;
-    ((row[0] = -1) = 9);
-    std::cout << row.size() << std::endl;
-    for(auto it : row) {
-        std::cout << it.first << ' ' << it.second << std::endl;
+    */
+    Matrix<int, 0> matrix;
+    for(std::size_t i = 0;i < 10;i++) {
+        matrix[i][i] = (int)i;
     }
-    std::cout << row[3] << std::endl;
-    row[34] = -1;
-    for(auto it : row) {
-        std::cout << it.first << ' ' << it.second << std::endl;
+    for(std::size_t i = 0;i < 10;i++) {
+        matrix[9 - i][i] = (int)i;
     }
-
-    Matrix2D<int, -1> matrix;
-    matrix[100][100] = 314;
-    matrix[34][23] = 14;
-    std::cout << matrix[100][100] << std::endl;
-    std::cout << matrix[34][23] << std::endl;
+    for(std::size_t i = 1;i < 9;i++) {
+        for(std::size_t j = 1;j < 9;j++) {
+            std::cout << matrix[i][j] << ' ';
+        }
+        std::cout << std::endl;
+    }
     std::cout << matrix.size() << std::endl;
     for(auto it : matrix) {
-        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
-        for(auto it1 : it.second) {
-            std::cout << it1.first << ' ' << it1.second << std::endl;
-        }
+        std::size_t x;
+        std::size_t y;
+        int v;
+        std::tie(x, y, v) = it;
+        std::cout << "(" << x << ";" << y << "):" << v << std::endl;
     }
-    ((matrix[100][100] = 114) = -1);
-    std::cout << matrix[34][23] << std::endl;
-    std::cout << matrix[100][100] << std::endl;
-    std::cout << matrix.size() << std::endl;
-    for(auto it : matrix) {
-        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
-        for(auto it1 : it.second) {
-            std::cout << it1.first << ' ' << it1.second << std::endl;
-        }
-    }
-    matrix[0][0] = -1;
-    std::cout << matrix[34][23] << std::endl;
-    std::cout << matrix[0][0] << std::endl;
-    std::cout << matrix.size() << std::endl;
-    for(auto it : matrix) {
-        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
-        for(auto it1 : it.second) {
-            std::cout << it1.first << ' ' << it1.second << std::endl;
-        }
-    }
-    ((matrix[1][1] = 12) = -1) = 37;
-    std::cout << matrix[34][23] << std::endl;
-    std::cout << matrix[1][1] << std::endl;
-    std::cout << matrix.size() << std::endl;
-    for(auto it : matrix) {
-        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
-        for(auto it1 : it.second) {
-            std::cout << it1.first << ' ' << it1.second << std::endl;
-        }
-    }
-
-    auto n = row.getFirst();
-    auto n1 = row.getLast();
-    for(;n != n1;n.next()) {
-        std::cout << n.getValue() << std::endl;
-    }
-    for(auto it : row) {
-        std::cout << it.first << ' ' << it.second << std::endl;
-    }
-    row.getFirst().getValue() = 1;
-    for(auto it : row) {
-        std::cout << it.first << ' ' << it.second << std::endl;
-    }
-
-    std::cout << matrix.size() << std::endl;
-    auto m_n = matrix.getFirst();
-    auto m_n1 = matrix.getLast();
-    for(;m_n != m_n1;m_n.next()) {
-        std::size_t x, y;
-        std::tie(x, y) = m_n.getIters();
-        std::cout << x << ":" << y << ":" << m_n.getValue() << std::endl;
-    }
-    for(auto it : matrix) {
-        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
-        for(auto it1 : it.second) {
-            std::cout << it1.first << ' ' << it1.second << std::endl;
-        }
-    }
-    matrix.getFirst().getValue() = 1;
-    for(auto it : matrix) {
-        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
-        for(auto it1 : it.second) {
-            std::cout << it1.first << ' ' << it1.second << std::endl;
-        }
-    }
+    //((matrix[100][100] = 314) = 0) = 217;
 
     return 0;
 }

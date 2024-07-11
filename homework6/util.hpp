@@ -176,10 +176,30 @@ public:
 		CurrentIterator it;
 		NextLevelType* context;
 	};
+	struct Iterator
+	{
+		using iterator_category = std::forward_iterator_tag;
+		using difference_type   = std::ptrdiff_t;
+		using value_type        = Node;
+		using pointer           = std::shared_ptr<Node>;  // or also value_type*
+		using reference         = std::pair<std::size_t, T>&;  // or also value_type&
+		Iterator(pointer ptr) : m_ptr(ptr) {};
+		auto operator*() const { return std::tuple_cat(m_ptr->getIters(), std::tie(m_ptr->getValue())); };
+		pointer operator->() { return m_ptr; };
+		Iterator& operator++() { m_ptr->next(); return *this; };
+		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; };
+		friend bool operator== (const Iterator& a, const Iterator& b) { return *(a.m_ptr) == *(b.m_ptr); };
+		friend bool operator!= (const Iterator& a, const Iterator& b) { return *(a.m_ptr) != *(b.m_ptr); };
+
+	private:
+		pointer m_ptr;
+	};
 	auto getFirst() { return Node(this); };
 	auto getLast() { return Node(this, curEnd()); };
 	auto curBegin() { return BaseClass::begin(); };
 	auto curEnd()   { return BaseClass::end(); };
+	Iterator begin() { return Iterator(std::make_shared<Node>(this)); }
+	Iterator end()   { return Iterator(std::make_shared<Node>(this, curEnd())); }
 };
 
 template <typename T, T value, typename PrevLevelType>
@@ -239,16 +259,36 @@ class MatrixLineIterator<T, value, MatrixLineIterator<T, value, PrevLevelType> >
 		typename LevelType::Node it1;
 		NextLevelType* context;
 	};
+	struct Iterator
+	{
+		using iterator_category = std::forward_iterator_tag;
+		using difference_type   = std::ptrdiff_t;
+		using value_type        = Node;
+		using pointer           = std::shared_ptr<Node>;  // or also value_type*
+		using reference         = std::pair<std::size_t, T>&;  // or also value_type&
+		Iterator(pointer ptr) : m_ptr(ptr) {};
+		auto operator*() const { return std::tuple_cat(m_ptr->getIters(), std::tie(m_ptr->getValue())); };
+		pointer operator->() { return m_ptr; };
+		Iterator& operator++() { m_ptr->next(); return *this; };
+		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; };
+		friend bool operator== (const Iterator& a, const Iterator& b) { return *(a.m_ptr) == *(b.m_ptr); };
+		friend bool operator!= (const Iterator& a, const Iterator& b) { return *(a.m_ptr) != *(b.m_ptr); };
+
+	private:
+		pointer m_ptr;
+	};
 	using BaseClass = MatrixZip<T, value, MatrixLineIterator<T, value, PrevLevelType>>;
 public:
 	auto getFirst() { return Node(this); };
 	auto getLast() { return Node(this, curEnd()); };
 	auto curBegin() { return BaseClass::begin(); };
 	auto curEnd()   { return BaseClass::end(); };
+	Iterator begin() { return Iterator(std::make_shared<Node>(this)); }
+	Iterator end()   { return Iterator(std::make_shared<Node>(this, curEnd())); }
 };
 
 template <typename T, T value>
 using Row = MatrixLineIterator<T, value, T>;
 
 template <typename T, T value>
-using Matrix2D = MatrixLineIterator<T, value, Row<T, value> >;
+using Matrix = MatrixLineIterator<T, value, Row<T, value> >;
