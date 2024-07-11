@@ -74,5 +74,38 @@ int main(int, char **)
         }
     }
 
+    auto n = row.getFirst();
+    auto n1 = row.getLast();
+    for(;n != n1;n.next()) {
+        std::cout << n.getValue() << std::endl;
+    }
+    for(auto it : row) {
+        std::cout << it.first << ' ' << it.second << std::endl;
+    }
+    row.getFirst().getValue() = 1;
+    for(auto it : row) {
+        std::cout << it.first << ' ' << it.second << std::endl;
+    }
+
+    std::cout << matrix.size() << std::endl;
+    auto m_n = matrix.getFirst();
+    auto m_n1 = matrix.getLast();
+    for(;m_n != m_n1;m_n.next()) {
+        std::cout << m_n.getValue() << std::endl;
+    }
+    for(auto it : matrix) {
+        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
+        for(auto it1 : it.second) {
+            std::cout << it1.first << ' ' << it1.second << std::endl;
+        }
+    }
+    matrix.getFirst().getValue() = 1;
+    for(auto it : matrix) {
+        std::cout << it.first << ' ' << it.second.size() << ':' << std::endl;
+        for(auto it1 : it.second) {
+            std::cout << it1.first << ' ' << it1.second << std::endl;
+        }
+    }
+
     return 0;
 }
