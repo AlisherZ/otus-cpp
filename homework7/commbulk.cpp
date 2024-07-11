@@ -4,15 +4,7 @@ CommandBulk::timestamp CommandBulk::getTimeCreated() {
     return timeCreated;
 }
 
-void CommandBulk::clear() {
-    commands.clear();
-}
-
-std::size_t CommandBulk::size() {
-    return commands.size();
-}
-
-void StaticCommandBulk::AddCommand(std::string comm) {
+void CommandBulk::AddCommand(std::string comm) {
     if(IsFull()) {
         return;
     }
@@ -22,6 +14,18 @@ void StaticCommandBulk::AddCommand(std::string comm) {
     commands.push_back(comm);
 }
 
+void CommandBulk::clear() {
+    commands.clear();
+}
+
+std::size_t CommandBulk::size() {
+    return commands.size();
+}
+
 bool StaticCommandBulk::IsFull() {
     return commands.size() == max_capacity;
+}
+
+bool DynamicCommandBulk::IsFull() {
+    return false;
 }
