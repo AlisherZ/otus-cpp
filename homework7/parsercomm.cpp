@@ -1,5 +1,3 @@
-#pragma once
-
 #include "parsercomm.h"
 
 void ParserCommands::ParseCommand(std::string command) {

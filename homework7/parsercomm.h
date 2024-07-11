@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "printer.h"
 
 class ParserCommands
