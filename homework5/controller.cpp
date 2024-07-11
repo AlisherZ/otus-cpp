@@ -84,8 +84,8 @@ void Controller::clear() {
     invalidate();
 }
 
-void Controller::addShape(std::unique_ptr<Shape> s) {
-    shapes.push_back(std::move(s));
+void Controller::addShape(std::shared_ptr<Shape> s) {
+    shapes.push_back(s);
     invalidate();
 }
 

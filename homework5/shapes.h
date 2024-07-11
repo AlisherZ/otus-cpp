@@ -84,17 +84,17 @@ private:
 };
 
 template<shape_type type, typename ...Args>
-std::unique_ptr<Shape> make_shape(Args... data) {
+std::shared_ptr<Shape> make_shape(Args... data) {
     if constexpr(type == shape_type::point) {
-        return std::unique_ptr<Point>(new Point(data...));
+        return std::shared_ptr<Point>(new Point(data...));
     }
     if constexpr(type == shape_type::line) {
-        return std::unique_ptr<Line>(new Line(data...));
+        return std::shared_ptr<Line>(new Line(data...));
     }
     if constexpr(type == shape_type::rectangle) {
-        return std::unique_ptr<Rectangle>(new Rectangle(data...));
+        return std::shared_ptr<Rectangle>(new Rectangle(data...));
     }
     if constexpr(type == shape_type::ellipse) {
-        return std::unique_ptr<Ellipse>(new Ellipse(data...));
+        return std::shared_ptr<Ellipse>(new Ellipse(data...));
     }
 }

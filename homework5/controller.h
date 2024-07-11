@@ -23,7 +23,7 @@ public:
     void deleteShape(int i);
     void clear();
     void invalidate();
-    void addShape(std::unique_ptr<Shape> s);
+    void addShape(std::shared_ptr<Shape> s);
     template<shape_type type, typename ...Args>
     void addShape(Args... args) {
         shapes.push_back(make_shape<type>(args...));
