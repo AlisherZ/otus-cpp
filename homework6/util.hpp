@@ -149,9 +149,9 @@ public:
 		using NextLevelType = MatrixLineIterator<T, value, LevelType>;
 		using CurrentIterator = typename std::map<std::size_t, LevelType>::iterator;
 	public:
-		Node() {};
-		Node(NextLevelType* ctx) : context(ctx), it(ctx->curBegin()) {};
-		Node(NextLevelType* ctx, CurrentIterator it_1) : context(ctx), it(it_1) {};
+		Node() : context(nullptr) {};
+		Node(NextLevelType* ctx) : it(ctx->curBegin()), context(ctx) {};
+		Node(NextLevelType* ctx, CurrentIterator it_1) : it(it_1), context(ctx) {};
 		bool hasNext() {
 			return it != context->curEnd();
 		}
@@ -191,13 +191,13 @@ class MatrixLineIterator<T, value, MatrixLineIterator<T, value, PrevLevelType> >
 		using NextLevelType = MatrixLineIterator<T, value, LevelType>;
 		using CurrentIterator = typename std::map<std::size_t, LevelType>::iterator;
 	public:
-		Node() {};
-		Node(NextLevelType* ctx) : context(ctx), it(ctx->curBegin()) {
+		Node() : context(nullptr) {};
+		Node(NextLevelType* ctx) : it(ctx->curBegin()), context(ctx) {
 			if(ctx->curBegin() != ctx->curEnd()) {
 				it1 = ctx->curBegin()->second.getFirst();
 			}
 		};
-		Node(NextLevelType* ctx, CurrentIterator it_1) : context(ctx), it(it_1) {
+		Node(NextLevelType* ctx, CurrentIterator it_1) : it(it_1), context(ctx) {
 			if(it_1 != ctx->curEnd()) {
 				it1 = ctx->curBegin()->second.getFirst();
 			}
