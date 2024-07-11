@@ -9,10 +9,11 @@ option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
 add_executable(bulk bulk.cpp)
+add_library(parsercomm parsercomm.cpp)
 add_library(printer printer.cpp)
 add_library(commbulk commbulk.cpp)
 
-set_target_properties(bulk printer commbulk PROPERTIES
+set_target_properties(bulk printer commbulk parsercomm PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
@@ -28,6 +29,10 @@ if(WITH_GOOGLE_TEST)
     FetchContent_MakeAvailable(googletest)
 endif()
 
+target_include_directories(parsercomm
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+
 target_include_directories(printer
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
@@ -37,6 +42,12 @@ target_include_directories(commbulk
 )
 
 target_link_libraries(bulk PRIVATE
+    parsercomm
+    printer
+    commbulk
+)
+
+target_link_libraries(parsercomm PRIVATE
     printer
     commbulk
 )
@@ -61,6 +72,7 @@ if(WITH_BOOST_TEST)
 
     target_link_libraries(test_version
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+        parsercomm
         printer
         commbulk
     )
@@ -74,6 +86,7 @@ if(WITH_GOOGLE_TEST)
     target_link_libraries(
         hello_test
         GTest::gtest_main
+        parsercomm
         printer
         commbulk
     )
@@ -81,6 +94,9 @@ endif()
 
 if (MSVC)
     target_compile_options(bulk PRIVATE
+        /W4
+    )
+    target_compile_options(parsercomm PRIVATE
         /W4
     )
     target_compile_options(printer PRIVATE
@@ -101,6 +117,9 @@ if (MSVC)
     endif()
 else ()
     target_compile_options(bulk PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(parsercomm PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(printer PRIVATE
