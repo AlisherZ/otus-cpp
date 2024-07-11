@@ -16,8 +16,8 @@ int main(int, char **)
     for(int i = 0;i < 10;i++) {
         m[i] = factorial(i);
     }
-    m.clear();
 
+    /*
     std::map<int, int, std::less<int>, pool_allocator<std::pair<const int, int> > > m1;
     for(int i = 0;i < 10;i++) {
         m1[i] = factorial(i);
@@ -25,8 +25,13 @@ int main(int, char **)
     for(auto it : m1) {
         std::cout << it.first << ' ' << it.second << std::endl;
     }
-    //m1.clear(); // TODO something wrong(???)
-    //m1.erase(9);
+    m1.erase(9);
+    for(auto it : m1) {
+        std::cout << it.first << ' ' << it.second << std::endl;
+    }
+    m1.clear();
+    std::cout << "Size: " << m1.size() << std::endl;
+    */
 
     MyContainer<int> c;
     for(int i = 0;i < 10;i++) {
@@ -43,6 +48,11 @@ int main(int, char **)
     for(auto i : c1) {
         std::cout << i << std::endl;
     }
+    c1.eraseByIndex(1);
+    for(auto i : c1) {
+        std::cout << i << std::endl;
+    }
+
     return 0;
 }
 

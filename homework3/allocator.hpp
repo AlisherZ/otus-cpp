@@ -2,45 +2,28 @@
 
 #include <assert.h>
 #include <cstdint>
-#include <cstring>
-#include <memory>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <utility>
 
-template <class T, std::size_t N = 1, std::size_t POOL_SIZE = 10>
-struct pool_allocator {
-
+template <class T, std::size_t CHUNK_SIZE = 1, std::size_t POOL_SIZE = 10>
+struct pool_allocator
+{
+    using pool_type = std::shared_ptr<T[]>;
+    using chunk_type = T*;
     using value_type = T;
 
     std::size_t current_capacity = 0;
     std::size_t num_pools = 0;
     std::size_t MAX_NUM_POOL = 100;
-    T **data = static_cast<T**>(malloc(sizeof(T *) * MAX_NUM_POOL));
+    std::shared_ptr<pool_type[]> data = std::shared_ptr<pool_type[]>(new pool_type[MAX_NUM_POOL]);
 
     std::size_t free_chunks_count = 0;
-    void **free_chunks = nullptr;
-
-    void print_state()
-    {
-        std::cout << "State of Allocator: " << std::endl;
-        std::cout << current_capacity << std::endl;
-        std::cout << num_pools << std::endl;
-        std::cout << free_chunks_count << std::endl;
-        std::cout << sizeof(free_chunks[0]) << std::endl;
-        std::cout << sizeof(T) << std::endl;
-        std::cout << sizeof(T*) << std::endl;
-        std::cout << "State of data: " << std::endl;
-        for(std::size_t i = 0;i < num_pools;i++) {
-            std::cout << "Address " << static_cast<void *>(data[i]) << " Object Address " << (data[i]) << std::endl;
-            std::cout << std::endl;
-        }
-        std::cout << "State of chunks: " << std::endl;
-        for(std::size_t i = 0;i < free_chunks_count;i++) {
-            std::cout << "Address " << free_chunks[i] << " Object Address " << static_cast<T*>(free_chunks[i]) << std::endl;
-            std::cout << "Value " << (int)(*(reinterpret_cast<uint8_t *>(free_chunks[i]))) << std::endl;
-        }
-        std::cout << "_________________________________" << std::endl;
-    }
+    std::size_t chunks_capacity = 0;
+    std::shared_ptr<chunk_type[]> free_chunks;
 
     void add_new_pool()
     {
@@ -50,27 +33,25 @@ struct pool_allocator {
         
         current_capacity+= POOL_SIZE;
         num_pools++;
-        T* _pool = static_cast<T*>(malloc(sizeof(T) * POOL_SIZE));
-        data[num_pools - 1] = _pool;
+        data[num_pools - 1] = std::shared_ptr<T[]>(new T[POOL_SIZE]);
 
-        free_chunks_count+= POOL_SIZE / N;
-        void **new_free_chunks = static_cast<void **>(malloc(sizeof(T *) * current_capacity));
+        free_chunks_count+= POOL_SIZE / CHUNK_SIZE;
+        chunks_capacity+= POOL_SIZE / CHUNK_SIZE;
+        auto new_free_chunks = std::shared_ptr<chunk_type[]>(new chunk_type[chunks_capacity]);
         if(old_current_capacity > 0) {
-            std::memcpy(new_free_chunks, free_chunks, sizeof(T *) * old_current_capacity);
-            delete(free_chunks);
+            std::memcpy(new_free_chunks.get(), free_chunks.get(), sizeof(chunk_type) * old_free_chunks_count);
         }
         free_chunks = new_free_chunks;
-        for(std::size_t i = 0;i < POOL_SIZE;i++) {
-            free_chunks[old_free_chunks_count + i] = (data[num_pools - 1] + i);
+        for(std::size_t i = 0, j = 0;j < POOL_SIZE;i++,j+= CHUNK_SIZE) {
+            free_chunks[old_free_chunks_count + i] = &data[num_pools - 1][j];
         }
-        //print_state();
     }
 
     bool in_pool(T* p, std::size_t n)
     {
         for(std::size_t i = 0;i < num_pools;i++) {
-            if((p >= data[i]) && (p + n <= data[i] + POOL_SIZE)) {
-                if((reinterpret_cast<uint8_t*>(p) - reinterpret_cast<uint8_t*>(data[i])) % (sizeof(T) * N) == 0) {
+            if((p >= &data[i][0]) && ((p + n) <= (&data[i][0] + POOL_SIZE))) {
+                if((reinterpret_cast<uint8_t*>(p) - reinterpret_cast<uint8_t*>(&data[i][0])) % (sizeof(T) * CHUNK_SIZE) == 0) {
                     return true;
                 }
                 else {
@@ -81,9 +62,9 @@ struct pool_allocator {
         return false;
     }
 
-    pool_allocator () noexcept
+    pool_allocator() noexcept
     {
-        assert(POOL_SIZE % N == 0);
+        assert(POOL_SIZE % CHUNK_SIZE == 0);
         add_new_pool();
     }
 
@@ -91,11 +72,10 @@ struct pool_allocator {
         current_capacity = a.current_capacity;
         num_pools = a.num_pools;
         MAX_NUM_POOL = a.MAX_NUM_POOL;
-        data = static_cast<T**>(malloc(sizeof(T *) * MAX_NUM_POOL));
-        std::memcpy(data, a.data, sizeof(T *) * MAX_NUM_POOL);
-
+        data.reset(a.data.get());
         free_chunks_count = a.free_chunks_count;
-        free_chunks = a.free_chunks;
+        chunks_capacity = a.chunks_capacity;
+        free_chunks.reset(a.free_chunks.get());
     }
 
     pool_allocator select_on_container_copy_construction() const
@@ -105,22 +85,21 @@ struct pool_allocator {
 
     T* allocate (std::size_t n)
     {
-        assert(n == N);
+        assert(n == CHUNK_SIZE);
         if(free_chunks_count == 0) {
             add_new_pool();
         }
         free_chunks_count--;
-        return static_cast<T*>(free_chunks[free_chunks_count]);
+        return free_chunks[free_chunks_count];
     }
 
     void deallocate (T* p, std::size_t n)
     {
-        assert(n == N);
-        assert(free_chunks_count < current_capacity / N);
+        assert(n == CHUNK_SIZE);
+        assert(free_chunks_count < chunks_capacity);
         assert(in_pool(p, n));
-        free_chunks[free_chunks_count] = static_cast<void *>(p);
+        free_chunks[free_chunks_count] = p;
         free_chunks_count++;
-        //delete(p);
     }
 
     template< class U >
@@ -134,14 +113,14 @@ struct pool_allocator {
     using propagate_on_container_swap = std::true_type;
 };
 
-template <class T, class U, std::size_t N = 1, std::size_t POOL_SIZE = 10>
-constexpr bool operator== (const pool_allocator<T, N, POOL_SIZE>& a1, const pool_allocator<U, N, POOL_SIZE>& a2) noexcept
+template <class T, class U, std::size_t CHUNK_SIZE = 1, std::size_t POOL_SIZE = 10>
+constexpr bool operator== (const pool_allocator<T, CHUNK_SIZE, POOL_SIZE>& a1, const pool_allocator<U, CHUNK_SIZE, POOL_SIZE>& a2) noexcept
 {
-    return (a1.data == a2.data);
+    return (a1.data.get() == a2.data.get());
 }
 
-template <class T, class U, std::size_t N = 1, std::size_t POOL_SIZE = 10>
-constexpr bool operator!= (const pool_allocator<T, N, POOL_SIZE>& a1, const pool_allocator<U, N, POOL_SIZE>& a2) noexcept
+template <class T, class U, std::size_t CHUNK_SIZE = 1, std::size_t POOL_SIZE = 10>
+constexpr bool operator!= (const pool_allocator<T, CHUNK_SIZE, POOL_SIZE>& a1, const pool_allocator<U, CHUNK_SIZE, POOL_SIZE>& a2) noexcept
 {
-    return (a1.data != a2.data);
+    return (a1.data.get() != a2.data.get());
 }

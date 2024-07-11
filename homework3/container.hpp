@@ -21,6 +21,7 @@ class MyContainer
         using reference         = T&;  // or also value_type&
         Iterator(pointer ptr) : m_ptr(ptr) {};
         reference operator*() const { return (*m_ptr).val; }
+        pointer operator->() { return m_ptr; }
         Iterator& operator++() { m_ptr = m_ptr->next; return *this; }
         Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
         Iterator& operator--() { m_ptr = m_ptr->prev; return *this; }
@@ -38,10 +39,12 @@ public:
     {
         Node* newNode = std::allocator_traits<RebindAlloc>::allocate(nodeAlloc, 1);
         newNode->val = val;
+        newNode->is_nil = false;
         if(head == nullptr) {
             head = newNode;
             tail = std::allocator_traits<RebindAlloc>::allocate(nodeAlloc, 1);
             tail->is_nil = true;
+            tail->prev = nullptr;
         }
         else {
             tail->prev->next = newNode;
@@ -69,6 +72,19 @@ public:
     T operator [](std::size_t idx) const {
         
         return getByIndex(idx)->val;
+    }
+
+    void eraseByIndex(std::size_t idx)
+    {
+        Node* tmp = getByIndex(idx);
+        if(tmp->next != nullptr) {
+            tmp->next->prev = tmp->prev;
+        }
+        if(tmp->prev != nullptr) {
+            tmp->prev->next = tmp->next;
+        }
+        std::allocator_traits<RebindAlloc>::deallocate(nodeAlloc, tmp, 1);
+        _size--;
     }
 
     Iterator begin() { return Iterator(head); }

@@ -6,12 +6,12 @@ set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 project(allocators VERSION ${PROJECT_VERSION})
 
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
-option(WITH_GOOGLE_TEST "Whether to build Google test" OFF)
+option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
 add_executable(allocators allocators.cpp)
 
 set_target_properties(allocators PROPERTIES
-    CXX_STANDARD 14
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
@@ -31,7 +31,7 @@ if(WITH_BOOST_TEST)
     add_executable(test_version test_version.cpp)
 
     set_target_properties(test_version PROPERTIES
-        CXX_STANDARD 14
+        CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
     )
 
@@ -46,6 +46,10 @@ if(WITH_GOOGLE_TEST)
     add_executable(
         hello_test
         hello_test.cc
+    )
+    set_target_properties(hello_test PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
     )
     target_link_libraries(
         hello_test

@@ -20,12 +20,24 @@ TEST(MapTest, DeleteAssertions) {
 */
 
 TEST(MyAllocatorTest, DeleteAllocatorAssertions) {
-  pool_allocator<int> alloc;
-  /*int *t = alloc.allocate(1);
-  std::cout << "Allocated value " << *t << std::endl;
-  alloc.deallocate(t, 1);*/
-  EXPECT_TRUE(alloc.num_pools == 0);
+  pool_allocator<int, 2> alloc;
+  std::shared_ptr<int[]> tmp = std::shared_ptr<int[]>(new int[10]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9});
+  std::cout << tmp[0] << std::endl;
+  int *t = alloc.allocate(2);
+  std::cout << "Allocated address " << t << ", Allocated value " << *t << std::endl;
+  t[0] = 1;
+  alloc.deallocate(t, 2);
+  EXPECT_TRUE(alloc.num_pools == 1);
 }
+
+/*
+TEST(MyAllocatorTest, DeleteAllocatorAssertions) {
+  std::shared_ptr<int[]> tmp;
+  auto t = std::make_shared<int*>(new int[10]);
+  std::cout << t.get()[0] << std::endl;
+  EXPECT_TRUE(0 == 0);
+}
+*/
 
 /*
 TEST(MyContainerTest, DeleteAllocatorAssertions) {
