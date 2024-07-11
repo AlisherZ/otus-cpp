@@ -24,12 +24,6 @@ int main(int, char **)
     for(auto it : m1) {
         std::cout << it.first << ' ' << it.second << std::endl;
     }
-    m1.erase(9);
-    for(auto it : m1) {
-        std::cout << it.first << ' ' << it.second << std::endl;
-    }
-    m1.clear();
-    std::cout << "Size: " << m1.size() << std::endl;
 
     MyContainer<int> c;
     for(int i = 0;i < 10;i++) {
