@@ -10,7 +10,11 @@ int main(int argc, char ** argv)
 {
     try
     {
-        ParserCommands parser(3);
+        if(argc < 2) {
+            std::cout << "Too few arguments." << std::endl;
+            throw std::invalid_argument( "Needed maximum capacity of bulk." );
+        }
+        ParserCommands parser(std::atoi(argv[1]));
         parser.AddPrinter(std::make_shared<ConsolePrinter>());
         parser.AddPrinter(std::make_shared<FilePrinter>());
 
