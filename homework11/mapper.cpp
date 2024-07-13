@@ -11,7 +11,7 @@ int main(int, char **)
     {
         auto row = split(line, '"');
         if(row.size() > 1) {
-            for(int i = 1;i < row.size();i+= 2) {
+            for(std::size_t i = 1;i < row.size();i+= 2) {
                 std::replace(row[i].begin(), row[i].end(), ',', ';');
             }
             line = std::accumulate(
