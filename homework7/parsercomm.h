@@ -11,9 +11,6 @@ public:
     void ParseCommand(std::string command);
     bool isStatic();
     void ExecuteBulk();
-    void ExecuteBulk(CommandBulk& bulk);
-    void ExecuteStatBulk();
-    void ExecuteDynBulk();
     void clear();
     void AddPrinter(std::shared_ptr<Printer> p);
     ~ParserCommands();
@@ -22,4 +19,7 @@ private:
     DynamicCommandBulk dynBulk;
     std::uint64_t isDynamic;
     std::vector<std::shared_ptr<Printer> > printers;
+    void ExecuteBulk(CommandBulk& bulk);
+    void ExecuteStatBulk();
+    void ExecuteDynBulk();
 };
