@@ -6,7 +6,7 @@
 class ParserCommands
 {
 public:
-    ParserCommands() : statBulk(), dynBulk(), isDynamic(), printers() {};
+    ParserCommands() : statBulk(), dynBulk(), isDynamic(false), printers() {};
     ParserCommands(std::size_t capacity) : statBulk(capacity), dynBulk(), isDynamic(false), printers() {};
     void ParseCommand(std::string command);
     bool isStatic();
