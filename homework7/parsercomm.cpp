@@ -65,3 +65,8 @@ void ParserCommands::clear() {
 void ParserCommands::AddPrinter(std::shared_ptr<Printer> p) {
     printers.push_back(p);
 }
+
+ParserCommands::~ParserCommands() {
+    ExecuteStatBulk();
+    clear();
+}

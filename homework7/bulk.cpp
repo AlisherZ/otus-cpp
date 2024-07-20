@@ -22,8 +22,6 @@ int main(int argc, char ** argv)
         {
             parser.ParseCommand(line);
         }
-        parser.ExecuteStatBulk();
-        parser.clear();
     }
     catch(const std::exception &e)
     {

@@ -16,6 +16,7 @@ public:
     void ExecuteDynBulk();
     void clear();
     void AddPrinter(std::shared_ptr<Printer> p);
+    ~ParserCommands();
 private:
     StaticCommandBulk statBulk;
     DynamicCommandBulk dynBulk;
