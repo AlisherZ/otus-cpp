@@ -38,10 +38,10 @@ namespace async {
     class StaticCommandBulk : public CommandBulk<T>
     {
     public:
-        StaticCommandBulk() : CommandBulk(), max_capacity(1) {};
-        StaticCommandBulk(std::size_t capacity) : CommandBulk(), max_capacity(capacity) {};
+        StaticCommandBulk() : CommandBulk<T>(), max_capacity(1) {};
+        StaticCommandBulk(std::size_t capacity) : CommandBulk<T>(), max_capacity(capacity) {};
         bool IsFull() override { return commands.size() == max_capacity; };
-        CommandBulk* clone() const { return new StaticCommandBulk(*this); };
+        CommandBulk<T>* clone() const { return new StaticCommandBulk<T>(*this); };
     private:
         std::size_t max_capacity;
     };
@@ -51,7 +51,7 @@ namespace async {
     {
     public:
         bool IsFull() override { return false; };
-        CommandBulk* clone() const { return new DynamicCommandBulk(*this); };
+        CommandBulk<T>* clone() const { return new DynamicCommandBulk<T>(*this); };
     };
 
 }
