@@ -88,54 +88,28 @@ namespace async {
         }
         void ExecuteStatBulk() { ExecuteBulk(statBulk); };
         void ExecuteDynBulk() { ExecuteBulk(dynBulk); };
-        void AddPrinter(printer_type type) {
-            auto func = [this](printer_type type) {
+        template<typename ...Args>
+        void AddPrinter(printer_type type, WaitingQueue<std::shared_ptr<CommandBulk<T> > >& queue, Args... args) {
+            auto func = [this](printer_type type, WaitingQueue<std::shared_ptr<CommandBulk<T> > >& queue, Args... args) {
                 std::shared_ptr<CommandBulk<T> > value;
-                auto printer = getPrinter<T>(type);
+                auto printer = getPrinter<T>(type, args...);
                 // make a waiting pop from the queue
-                while(this->consoleQueue.pop(value)) {
+                while(queue.pop(value)) {
                     printer->print(*value);
                 }
-                while(this->consoleQueue.tryPop(value)) {
+                while(queue.tryPop(value)) {
                     printer->print(*value);
                 }
             };
             
-            auto future = std::async(std::launch::async, func, type);
+            auto future = std::async(std::launch::async, func, type, std::ref(queue), args...);
             printers.emplace_back(std::move(future));
         }
         void AddConsolePrinter() {
-            AddPrinter(printer_type::console);
-            /*
-            auto func = [this](Printer<T>& printer) {
-                std::shared_ptr<CommandBulk<T> > value;
-                // make a waiting pop from the queue
-                while(this->consoleQueue.pop(value)) {
-                    printer.print(*value);
-                }
-                while(this->consoleQueue.tryPop(value)) {
-                    printer.print(*value);
-                }
-            };
-            auto future = std::async(std::launch::async, func, printer);
-            printers.emplace_back(std::move(future));
-            */
+            AddPrinter(printer_type::console, consoleQueue);
         };
         void AddFilePrinter() {
-
-            auto func = [this]() {
-                FilePrinter<T> printer(id, id_file++);
-                std::shared_ptr<CommandBulk<T> > value;
-                // make a waiting pop from the queue
-                while(this->fileQueue.pop(value)) {
-                    printer.print(*value);
-                }
-                while(this->fileQueue.tryPop(value)) {
-                    printer.print(*value);
-                }
-            };
-            auto future = std::async(std::launch::async, func);
-            printers.emplace_back(std::move(future));
+            AddPrinter(printer_type::file, fileQueue, id, id_file++);
         };
         std::uint64_t id;
         std::uint64_t id_file = 0;

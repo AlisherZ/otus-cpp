@@ -74,8 +74,22 @@ namespace async {
     {
         switch (type)
         {
-            case printer_type::console : return std::make_unique<ConsolePrinter<T> >(args...) ;
-            case printer_type::file : return std::make_unique<FilePrinter<T> >(args...);
+            case printer_type::console : {
+                if constexpr(std::is_constructible_v<ConsolePrinter<T>, Args...>) {
+                    return std::make_unique<ConsolePrinter<T> >(args...) ;
+                }
+                else {
+                    throw std::invalid_argument( "received non-existent type of printer" );
+                }
+            }
+            case printer_type::file : {
+                if constexpr(std::is_constructible_v<FilePrinter<T>, Args...>) {
+                    return std::make_unique<FilePrinter<T> >(args...) ;
+                }
+                else {
+                    throw std::invalid_argument( "received non-existent type of printer" );
+                }
+            }
         };
         throw std::invalid_argument( "received non-existent type of printer" );
     };
