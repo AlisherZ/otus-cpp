@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(async ${PROJECT_VERSION})
+project(async VERSION ${PROJECT_VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 
