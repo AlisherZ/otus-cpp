@@ -123,8 +123,8 @@ namespace async {
         };
         void AddFilePrinter() {
 
-            FilePrinter<T> printer(id, id_file++);
-            auto func = [this](Printer<T>& printer) {
+            auto func = [this]() {
+                FilePrinter<T> printer(id, id_file++);
                 std::shared_ptr<CommandBulk<T> > value;
                 // make a waiting pop from the queue
                 while(this->fileQueue.pop(value)) {
@@ -134,7 +134,7 @@ namespace async {
                     printer.print(*value);
                 }
             };
-            auto future = std::async(std::launch::async, func, printer);
+            auto future = std::async(std::launch::async, func);
             printers.emplace_back(std::move(future));
         };
         std::uint64_t id;
