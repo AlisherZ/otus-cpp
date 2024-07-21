@@ -40,7 +40,7 @@ namespace async {
         void print(CommandBulk<T>& bulk) override {
             if(bulk.size() > 0) {
                 std::unique_lock<std::mutex> lck{m_console};
-                printToStream(bulk, std::cout);
+                this->printToStream(bulk, std::cout);
             }
         }
     };
@@ -55,7 +55,7 @@ namespace async {
             if(bulk.size() > 0) {
                 std::string name = "bulk\\bulk" + std::to_string(bulk.getTimeCreated().count()) + "_" + std::to_string(thread_id) + "_" + std::to_string(file_id) + ".txt";
                 std::ofstream fout(name);
-                printToStream(bulk, fout);
+                this->printToStream(bulk, fout);
             }
         }
     private:

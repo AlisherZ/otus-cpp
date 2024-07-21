@@ -40,7 +40,7 @@ namespace async {
     public:
         StaticCommandBulk() : CommandBulk<T>(), max_capacity(1) {};
         StaticCommandBulk(std::size_t capacity) : CommandBulk<T>(), max_capacity(capacity) {};
-        bool IsFull() override { return size() == max_capacity; };
+        bool IsFull() override { return this->size() == max_capacity; };
         CommandBulk<T>* clone() const { return new StaticCommandBulk<T>(*this); };
     private:
         std::size_t max_capacity;
