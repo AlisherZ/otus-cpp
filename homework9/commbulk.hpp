@@ -29,7 +29,7 @@ namespace async {
         auto begin() { return commands.begin(); };
         auto end() { return commands.end(); };
         virtual CommandBulk* clone() const = 0;
-    protected:
+    private:
         timestamp timeCreated;
         std::vector<T> commands;
     };
@@ -40,7 +40,7 @@ namespace async {
     public:
         StaticCommandBulk() : CommandBulk<T>(), max_capacity(1) {};
         StaticCommandBulk(std::size_t capacity) : CommandBulk<T>(), max_capacity(capacity) {};
-        bool IsFull() override { return commands.size() == max_capacity; };
+        bool IsFull() override { return size() == max_capacity; };
         CommandBulk<T>* clone() const { return new StaticCommandBulk<T>(*this); };
     private:
         std::size_t max_capacity;
