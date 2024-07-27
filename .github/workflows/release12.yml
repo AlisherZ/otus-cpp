@@ -1,11 +1,11 @@
-name: 'C++ CI homework11'
+name: 'C++ CI homework12'
 
 on:
   push:
     branches:
       - main
     paths:
-      - homework11/**
+      - homework12/**
       - .github/workflows/**
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./homework11
+        working-directory: ./homework12
     steps:
       - uses: actions/checkout@v2
         with:
@@ -40,6 +40,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./homework11/mapreduce-0.0.${{ github.run_number }}-Linux.deb
+          asset_path: ./homework12/mapreduce-0.0.${{ github.run_number }}-Linux.deb
           asset_name: mapreduce-0.0.${{ github.run_number }}-Linux.deb
           asset_content_type: application/vnd.debian.binary-package
