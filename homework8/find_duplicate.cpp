@@ -16,6 +16,10 @@ void FinderDuplicate::addExcludedDirectories(list_paths paths) {
     excluded_directories.insert(excluded_directories.end(), paths.begin(), paths.end());
 }
 
+void FinderDuplicate::setMask(std::string mask) {
+    regex_mask = mask;
+}
+
 void FinderDuplicate::setHash(HashType new_type) {
     type = new_type;
 }
@@ -34,7 +38,7 @@ void FinderDuplicate::setMinSize(std::size_t new_min_size) {
 
 std::vector<list_paths> FinderDuplicate::findDuplicates() {
     set_paths excluded_directories1(excluded_directories.begin(), excluded_directories.end());
-    auto paths = getFiles(included_directories, excluded_directories1, level, min_size);
+    auto paths = getFiles(included_directories, excluded_directories1, regex_mask, level, min_size);
     auto files = toFileReader(paths);
     auto grouppedFiles = groupByContent(files);
     auto duplicateFiles = filterUniqueFiles(grouppedFiles);

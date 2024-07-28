@@ -6,11 +6,12 @@
 
 class FinderDuplicate {
 public:
-    FinderDuplicate() : type(HashType::None), block_size(1), level(0), min_size(1) {};
+    FinderDuplicate() : regex_mask(".*"), type(HashType::None), block_size(1), level(0), min_size(1) {};
     void addIncludedDirectories(boost::filesystem::path path);
     void addIncludedDirectories(list_paths paths);
     void addExcludedDirectories(boost::filesystem::path path);
     void addExcludedDirectories(list_paths paths);
+    void setMask(std::string mask);
     void setHash(HashType new_type);
     void setBlockSize(std::size_t new_block_size);
     void setLevel(std::size_t new_level);

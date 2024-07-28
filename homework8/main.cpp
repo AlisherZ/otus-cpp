@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
         ("help,h", "produce help message")
         ("included_directories,i", po::value<std::vector<std::string> >(), "include directories for scan")
         ("excluded_directories,e", po::value<std::vector<std::string> >(), "exclude directories for scan")
+        ("mask,M", po::value<std::string>(), "set regex mask")
         ("hash,H", po::value<std::string>(), "select hash function (md5|sha1|crc32|none)")
         ("block,b", po::value<std::size_t>(), "set size for block reading")
         ("level,l", po::value<std::size_t>(), "set level for scan")
@@ -57,6 +58,9 @@ int main(int argc, char* argv[])
     fd.addIncludedDirectories(getPaths(vm["included_directories"].as<std::vector<std::string> >()));
     if (vm.count("excluded_directories")) {
         fd.addExcludedDirectories(getPaths(vm["excluded_directories"].as<std::vector<std::string> >()));
+    }
+    if (vm.count("mask")) {
+        fd.setMask(getPaths(vm["mask"].as<std::string>()));
     }
     fd.setHash(getHashType(vm["hash"].as<std::string>()));
     fd.setBlockSize(vm["block"].as<std::size_t>());
