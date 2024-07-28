@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
         fd.addExcludedDirectories(getPaths(vm["excluded_directories"].as<std::vector<std::string> >()));
     }
     if (vm.count("mask")) {
-        fd.setMask(getPaths(vm["mask"].as<std::string>()));
+        fd.setMask(vm["mask"].as<std::string>());
     }
     fd.setHash(getHashType(vm["hash"].as<std::string>()));
     fd.setBlockSize(vm["block"].as<std::size_t>());
