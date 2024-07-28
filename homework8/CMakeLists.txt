@@ -30,7 +30,19 @@ if(WITH_GOOGLE_TEST)
     FetchContent_MakeAvailable(googletest)
 endif()
 
-target_include_directories(hash file_reader util find_duplicate
+target_include_directories(hash
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+
+target_include_directories(file_reader
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+
+target_include_directories(util
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+
+target_include_directories(find_duplicate
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
