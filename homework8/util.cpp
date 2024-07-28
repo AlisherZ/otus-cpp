@@ -1,5 +1,3 @@
-#pragma once
-
 #include "util.h"
 
 list_paths getFiles(list_paths dir_include, set_paths dir_exclude, std::size_t level, std::size_t min_size) {
@@ -10,7 +8,7 @@ list_paths getFiles(list_paths dir_include, set_paths dir_exclude, std::size_t l
             if((is_regular_file(dir->path())) && (boost::filesystem::file_size(dir->path()) > min_size)) {
                 result.push_back(dir->path());
             }
-            if ((dir.depth() == level) || (dir_exclude.find(dir->path()) != dir_exclude.end())) {
+            if (((std::size_t)dir.depth() == level) || (dir_exclude.find(dir->path()) != dir_exclude.end())) {
                 dir.disable_recursion_pending();
             }
             ++dir;
