@@ -46,17 +46,6 @@ target_include_directories(find_duplicate
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
-if (MSVC)
-    set (BOOST_ROOT "C:/Program Files/Boost/boost_1_85_0/") # Путь к библиотеке Boost
-    
-    set (CMAKE_CXX_STANDARD 17) 
-    set (Boost_NO_SYSTEM_PATHS ON)
-    set (Boost_USE_MULTITHREADED ON)
-    set (Boost_USE_STATIC_LIBS ON)
-    set (Boost_USE_STATIC_RUNTIME OFF)
-    set (BOOST_ALL_DYN_LINK OFF)
-endif()
-
 find_package (Boost REQUIRED COMPONENTS program_options filesystem regex REQUIRED) 
 
 include_directories (SYSTEM ${Boost_INCLUDE_DIR})
