@@ -1,5 +1,3 @@
-#pragma once
-
 #include "find_duplicate.h"
 
 void FinderDuplicate::addIncludedDirectories(boost::filesystem::path path) {

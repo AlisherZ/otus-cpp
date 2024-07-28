@@ -1,5 +1,3 @@
-#pragma once
-
 #include <boost/algorithm/hex.hpp>
 #include <boost/compute/detail/sha1.hpp>
 #include <boost/crc.hpp>
