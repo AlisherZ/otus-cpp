@@ -57,7 +57,7 @@ if (MSVC)
     set (BOOST_ALL_DYN_LINK OFF)
 endif()
 
-find_package (Boost REQUIRED COMPONENTS program_options filesystem REQUIRED) 
+find_package (Boost REQUIRED COMPONENTS program_options filesystem regex REQUIRED) 
 
 include_directories (SYSTEM ${Boost_INCLUDE_DIR})
 
