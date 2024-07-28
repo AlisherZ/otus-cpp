@@ -11,7 +11,7 @@
 
 class FileReader {
 public:
-    FileReader(boost::filesystem::path ph1, std::size_t block_size1, HashType type1 = HashType::None) : ph(ph1), block_size(block_size1), type(type1), offset(0) {
+    FileReader(boost::filesystem::path ph1, std::size_t block_size1, HashType type1 = HashType::None) : ph(ph1), offset(0), block_size(block_size1), type(type1) {
         const boost::interprocess::mode_t mode = boost::interprocess::read_only;
         boost::interprocess::file_mapping fm(ph1.c_str(), mode);
         file_size = boost::filesystem::file_size(ph1);
