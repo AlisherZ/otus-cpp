@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VERSION 0.0.${PATCH_VERSION})
 
-project(bayan VERSION ${PROJECT_VERSION})
+project(bulk_server VERSION ${PROJECT_VERSION})
 
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
