@@ -9,6 +9,7 @@
 
 namespace bulk_server {
 
+  template<>
   std::mutex ConsolePrinter<std::string>::m_console;
 
   void session::start()
