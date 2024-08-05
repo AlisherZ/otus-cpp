@@ -47,6 +47,9 @@ namespace bulk_server {
     };
 
     template<typename T>
+    std::mutex ConsolePrinter<T>::m_console;
+
+    template<typename T>
     class FilePrinter : public Printer<T>
     {
     public:
