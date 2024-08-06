@@ -33,21 +33,24 @@ namespace bulk_server {
   {
   public:
     server(boost::asio::io_context& io_context, short port) 
-      : acceptor_(io_context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)), parser(3) 
+      : acceptor_(io_context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)), parser() 
       {
         parser.AddConsolePrinters();
+        parser.AddFilePrinters();
         do_accept();
       }
     server(boost::asio::io_context& io_context, short port, std::size_t capacity) 
       : acceptor_(io_context, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)), parser(capacity) 
       {
         parser.AddConsolePrinters();
+        parser.AddFilePrinters();
         do_accept();
       }
 
   private:
     void do_accept();
 
+    
     boost::asio::ip::tcp::acceptor acceptor_;
     ParserCommands<std::string> parser;
   };

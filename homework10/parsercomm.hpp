@@ -24,6 +24,7 @@ namespace bulk_server {
             std::size_t id = last_connection++;
             isDynamic[id] = 0;
             dynBulk[id].clear();
+            dynBulk[id].setId(id + 1);
             return id;
         }
         void ParseCommand(T command, std::size_t id) {
@@ -134,7 +135,7 @@ namespace bulk_server {
             AddPrinter(printer_type::console, consoleQueue);
         };
         void AddFilePrinter() {
-            AddPrinter(printer_type::file, fileQueue, 0, id_file++);
+            AddPrinter(printer_type::file, fileQueue, id_file++);
         };
         std::mutex m_statBulk;
         std::mutex m_connection;
