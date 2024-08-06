@@ -16,8 +16,8 @@ namespace bulk_server {
     class ParserCommands
     {
     public:
-        ParserCommands() : statBulk(), dynBulk(), isDynamic(), printers(), id_thread(0) {};
-        ParserCommands(std::size_t capacity) : statBulk(capacity), dynBulk(), isDynamic(), printers(), id_thread(0) {};
+        ParserCommands() : statBulk(), dynBulk(), isDynamic(), printers() {};
+        ParserCommands(std::size_t capacity) : statBulk(capacity), dynBulk(), isDynamic(), printers() {};
         std::uint64_t getId() { return id_thread; };
         void setId(std::uint64_t new_id) { id_thread = new_id; };
         size_t openConnection() {
@@ -144,7 +144,7 @@ namespace bulk_server {
         std::size_t last_connection = 0;
         std::size_t num_connection = 0;
         std::size_t last_printer = 0;
-        std::uint64_t id_thread;
+        std::uint64_t id_thread = 0;
         std::uint64_t id_file = 0;
         StaticCommandBulk<T> statBulk;
         std::map<std::size_t, DynamicCommandBulk<T> > dynBulk;
