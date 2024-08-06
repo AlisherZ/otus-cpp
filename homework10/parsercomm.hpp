@@ -16,15 +16,16 @@ namespace bulk_server {
     class ParserCommands
     {
     public:
-        ParserCommands() : statBulk(), dynBulk(), isDynamic(), printers() {};
-        ParserCommands(std::size_t capacity) : statBulk(capacity), dynBulk(), isDynamic(), printers() {};
+        ParserCommands() : statBulk(), dynBulk(), isDynamic(), printers(), id_thread(0) {};
+        ParserCommands(std::size_t capacity) : statBulk(capacity), dynBulk(), isDynamic(), printers(), id_thread(0) {};
+        std::uint64_t getId() { return id_thread; };
+        void setId(std::uint64_t new_id) { id_thread = new_id; };
         size_t openConnection() {
             std::unique_lock<std::mutex> lck{m_connection};
             num_connection++;
             std::size_t id = last_connection++;
             isDynamic[id] = 0;
             dynBulk[id].clear();
-            dynBulk[id].setId(id + 1);
             return id;
         }
         void ParseCommand(T command, std::size_t id) {
@@ -135,13 +136,15 @@ namespace bulk_server {
             AddPrinter(printer_type::console, consoleQueue);
         };
         void AddFilePrinter() {
-            AddPrinter(printer_type::file, fileQueue, id_file++);
+            AddPrinter(printer_type::file, fileQueue, id_thread, id_file++);
         };
         std::mutex m_statBulk;
         std::mutex m_connection;
         std::mutex m_console;
         std::size_t last_connection = 0;
         std::size_t num_connection = 0;
+        std::size_t last_printer = 0;
+        std::uint64_t id_thread;
         std::uint64_t id_file = 0;
         StaticCommandBulk<T> statBulk;
         std::map<std::size_t, DynamicCommandBulk<T> > dynBulk;

@@ -53,16 +53,17 @@ namespace bulk_server {
     class FilePrinter : public Printer<T>
     {
     public:
-        FilePrinter() : file_id(1) {};
-        FilePrinter(std::uint64_t file) : file_id(file) {};
+        FilePrinter() : thread_id(1), file_id(1) {};
+        FilePrinter(std::uint64_t thread, std::uint64_t file) : thread_id(thread), file_id(file) {};
         void print(CommandBulk<T>& bulk) override {
             if(bulk.size() > 0) {
-                std::string name = "bulk\\bulk" + std::to_string(bulk.getTimeCreated().count()) + "_" + std::to_string(bulk.getId()) + "_" + std::to_string(file_id) + ".txt";
+                std::string name = "bulk\\bulk" + std::to_string(bulk.getTimeCreated().count()) + "_" + std::to_string(thread_id) + "_" + std::to_string(file_id) + ".txt";
                 std::ofstream fout(name);
                 this->printToStream(bulk, fout);
             }
         }
     private:
+        std::uint64_t thread_id;
         std::uint64_t file_id;
     };
 

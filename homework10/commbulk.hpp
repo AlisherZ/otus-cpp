@@ -29,7 +29,6 @@ namespace bulk_server {
         auto begin() { return commands.begin(); };
         auto end() { return commands.end(); };
         virtual CommandBulk* clone() const = 0;
-        virtual std::size_t getId() = 0;
     private:
         timestamp timeCreated;
         std::vector<T> commands;
@@ -43,7 +42,6 @@ namespace bulk_server {
         StaticCommandBulk(std::size_t capacity) : CommandBulk<T>(), max_capacity(capacity) {};
         bool IsFull() override { return this->size() == max_capacity; };
         CommandBulk<T>* clone() const { return new StaticCommandBulk<T>(*this); };
-        std::size_t getId() override { return 0; };
     private:
         std::size_t max_capacity;
     };
@@ -54,10 +52,6 @@ namespace bulk_server {
     public:
         bool IsFull() override { return false; };
         CommandBulk<T>* clone() const { return new DynamicCommandBulk<T>(*this); };
-        std::size_t getId() override { return id; };
-        void setId(std::size_t new_id) { id = new_id; };
-    private:
-        std::size_t id;
     };
 
 }
