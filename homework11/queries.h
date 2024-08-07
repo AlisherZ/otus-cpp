@@ -52,7 +52,6 @@ namespace join_server {
   {
   public:
     Params() {};
-    Params(std::string t) {};
   };
 
   class InsertParams : Params
