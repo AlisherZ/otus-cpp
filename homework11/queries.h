@@ -24,7 +24,7 @@ namespace join_server {
     Request() : id(0), type(query_type::intersection), params() {};
     Request(std::size_t new_id, query_type new_type, std::string new_params) : id(new_id), type(new_type), params(new_params) {};
     Request(std::size_t new_id, std::string request);
-    Request(const Request& req) : id(req.id), type(req.type), params(req.params) {};
+    //Request(const Request& req) : id(req.id), type(req.type), params(req.params) {};
     std::size_t getId();
     query_type getType();
     std::string getParams();
@@ -40,7 +40,7 @@ namespace join_server {
     Response() : id(0), message() {};
     Response(std::size_t new_id) : id(new_id), message() {};
     Response(std::size_t new_id, std::string new_message) : id(new_id), message(new_message) {};
-    Response(const Response& resp) : id(resp.id), message(resp.message) {};
+    //Response(const Response& resp) : id(resp.id), message(resp.message) {};
     std::size_t getId();
     std::string getMessage();
   private:
