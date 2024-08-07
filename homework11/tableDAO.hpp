@@ -22,7 +22,7 @@ namespace join_server {
         }
       }
     };
-    int insert(T row) {
+    int insert(T new_row) {
       for(auto row : table) {
         if(row.getId() == row.getId()) {
           return 0;
@@ -31,7 +31,7 @@ namespace join_server {
       table.emplace_back(new_row);
       return 1;
     }
-    int update(T row) {
+    int update(T new_row) {
       int cnt = 0;
       for(auto row : table) {
         if(row.update(new_row)) {
