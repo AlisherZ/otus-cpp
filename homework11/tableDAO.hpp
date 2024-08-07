@@ -11,9 +11,7 @@ namespace join_server {
   public:
     Table<T>() {};
     auto get() {
-      std::array<Row, table.size()> res;
-      std::copy(table.begin(), table.begin() + n, res.begin());
-      return res;
+      return table;
     };
     T get(int id) {
       for(auto row : table) {
