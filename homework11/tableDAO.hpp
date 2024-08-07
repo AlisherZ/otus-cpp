@@ -9,7 +9,7 @@ namespace join_server {
   class Table
   {
   public:
-    Table<T>() : {};
+    Table<T>() {};
     auto get() {
       std::array<Row, table.size()> res;
       std::copy(table.begin(), table.begin() + n, res.begin());
