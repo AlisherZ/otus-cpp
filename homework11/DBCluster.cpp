@@ -6,6 +6,12 @@ namespace join_server {
     static DBCluster instance;
     return instance;
   }
+
+  Response DBCluster::executeQuery(Request req) {
+    std::size_t id = req.getId();
+    addQuery(req);
+    return getAnswerQuery(id);
+  }
   
   void DBCluster::addQuery(Request req) {
     queries.push(req);
@@ -56,6 +62,16 @@ namespace join_server {
     };
     
     connectionDB = std::async(std::launch::async, func);
+  }
+
+  std::string DBCluster::get(TruncateParams params) {
+    if(params.getName() == "A") {
+      tableA.get();
+    }
+    if(params.getName() == "B") {
+      tableB.get();
+    }
+    return "";
   }
 
 }

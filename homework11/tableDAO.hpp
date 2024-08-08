@@ -55,4 +55,16 @@ namespace join_server {
     std::vector<T> table;
   };
 
+  template<typename T>
+  std::string rowsToString(std::vector<T> rows) {
+    if(rows.size() == 0) {
+      return "";
+    }
+    std::string res = rows[0].getTitles() + "\n" + rows[0].getDivider() + "\n";
+    for(auto row : rows) {
+      res+= row.getValues() + "\n";
+    }
+    return res;
+  }
+
 }

@@ -18,8 +18,7 @@ namespace join_server {
           std::cout << "receive " << length << "=" << query << std::endl;
           Request req(id, query);
           std::cout << "Start " << req.getId() << " request" << std::endl;
-          DBCluster::Instance().addQuery(req);
-          Response resp = DBCluster::Instance().getAnswerQuery(id);
+          Response resp = DBCluster::Instance().executeQuery(req);
           std::size_t length1 = resp.getMessage().size();
           resp.getMessage().copy(data_, length1);
           std::cout << "Finish " << resp.getId() << " request" << std::endl;

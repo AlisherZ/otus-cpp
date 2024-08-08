@@ -17,17 +17,21 @@ namespace join_server {
   {
   public:
     static DBCluster& Instance();
-    void addQuery(Request req);
-    Response getAnswerQuery(std::size_t id);
+    Response executeQuery(Request req);
     size_t openConnection();
     ~DBCluster();
   private:
+    void addQuery(Request req);
+    Response getAnswerQuery(std::size_t id);
+    std::string get(TruncateParams params);
     DBCluster();
     WaitingQueue<Request> queries;
     WaitingQueue<Response> answers;
     std::future<void> connectionDB;
     std::mutex m_connection;
     std::size_t last_connection = 0;
+    TableA tableA;
+    TableB tableB;
   };
 
 }
