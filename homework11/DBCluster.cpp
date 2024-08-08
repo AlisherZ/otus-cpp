@@ -45,17 +45,18 @@ namespace join_server {
     connectionDB.get();
   }
 
-  DBCluster::DBCluster() : queries(), answers() {
+  DBCluster::DBCluster() {
     auto func = [this]() {
         Request value;
         // make a waiting pop from the queue
         while(queries.pop(value)) {
-          
-          Response rp(value.getId(), "OK");
+          std::string res = query(value) + "\n";
+          Response rp(value.getId(), res);
           answers.push(rp);
         }
         while(queries.tryPop(value)) {
-          Response rp(value.getId(), "OK");
+          std::string res = query(value) + "\n";
+          Response rp(value.getId(), res);
           answers.push(rp);
         }
         answers.stop();
@@ -64,14 +65,47 @@ namespace join_server {
     connectionDB = std::async(std::launch::async, func);
   }
 
-  std::string DBCluster::get(TruncateParams params) {
+  std::string DBCluster::query(Request req) {
+    switch(req.getType()) {
+      case query_type::insert: {
+        InsertParams params(req.getParams());
+        return insert(params);
+      }
+      case query_type::get: {
+        TruncateParams params(req.getParams());
+        return get(params);
+      }
+    }
+    return "Err incomplete operation";
+  }
+
+  std::string DBCluster::insert(InsertParams params) {
     if(params.getName() == "A") {
-      tableA.get();
+      return insert(tableA, params);
     }
     if(params.getName() == "B") {
-      tableB.get();
+      return insert(tableB, params);
     }
-    return "";
+    return "ERR no table " + params.getName();
+  }
+
+  std::string DBCluster::insert(Table<Row>& table, InsertParams params) {
+    if(table.insert(params.getRow()) == 1) {
+      return "OK";
+    }
+    else {
+      return "ERR duplicate " + std::to_string(params.getRow().getId());
+    }
+  }
+
+  std::string DBCluster::get(TruncateParams params) {
+    if(params.getName() == "A") {
+      return rowsToString<Row>(tableA.get());
+    }
+    if(params.getName() == "B") {
+      return rowsToString<Row>(tableB.get());
+    }
+    return "ERR no table " + params.getName();
   }
 
 }

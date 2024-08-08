@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "row.h"
+#include "util.h"
 
 namespace join_server {
 

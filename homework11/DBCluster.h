@@ -20,9 +20,12 @@ namespace join_server {
     Response executeQuery(Request req);
     size_t openConnection();
     ~DBCluster();
-  private:
+  public:
     void addQuery(Request req);
     Response getAnswerQuery(std::size_t id);
+    std::string query(Request req);
+    std::string insert(InsertParams params);
+    std::string insert(Table<Row>& table, InsertParams params);
     std::string get(TruncateParams params);
     DBCluster();
     WaitingQueue<Request> queries;

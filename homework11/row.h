@@ -12,7 +12,7 @@ namespace join_server {
     RowBase() {};
     RowBase(std::map<std::string, std::string> new_row) : row(new_row) {};
     std::string getTitles();
-    std::string getDivider();
+    std::string getLine();
     std::string getValues();
   protected:
     std::string getValue(std::string key);
@@ -21,7 +21,7 @@ namespace join_server {
     std::map<std::string, std::string> row;
   };
 
-  class Row : RowBase
+  class Row : public RowBase
   {
   public:
     Row() : RowBase({{"id", "0"}, {"name", ""}}) {};
@@ -33,7 +33,7 @@ namespace join_server {
     bool update(Row row);
   };
 
-  class UnionRow : RowBase
+  class UnionRow : public RowBase
   {
   public:
     UnionRow() : RowBase({{"id", "0"}, {"A", ""}, {"B", ""}}) {};

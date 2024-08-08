@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "queries.h"
-#include "util.h"
 
 namespace join_server {
 

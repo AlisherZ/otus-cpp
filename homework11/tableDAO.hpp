@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include <iostream>
+
 namespace join_server {
 
   template<typename T>
@@ -11,7 +13,8 @@ namespace join_server {
   public:
     Table<T>() {};
     auto get() {
-      return table;
+      std::vector<T> result(table);
+      return result;
     };
     T get(int id) {
       for(auto row : table) {
@@ -22,11 +25,11 @@ namespace join_server {
     };
     int insert(T new_row) {
       for(auto row : table) {
-        if(row.getId() == row.getId()) {
+        if(row.getId() == new_row.getId()) {
           return 0;
         }
       }
-      table.emplace_back(new_row);
+      table.push_back(new_row);
       return 1;
     }
     int update(T new_row) {
@@ -51,18 +54,18 @@ namespace join_server {
       }
       return cnt;
     }
-  private:
+  public:
     std::vector<T> table;
   };
 
   template<typename T>
   std::string rowsToString(std::vector<T> rows) {
     if(rows.size() == 0) {
-      return "";
+      return "The table was empty";
     }
-    std::string res = rows[0].getTitles() + "\n" + rows[0].getDivider() + "\n";
+    std::string res = rows[0].getTitles() + "\n" + rows[0].getLine();
     for(auto row : rows) {
-      res+= row.getValues() + "\n";
+      res+= "\n" + row.getValues();
     }
     return res;
   }

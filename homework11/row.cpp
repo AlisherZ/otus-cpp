@@ -22,7 +22,7 @@ namespace join_server {
     return res;
   }
 
-  std::string RowBase::getDivider() {
+  std::string RowBase::getLine() {
     if(row.size() == 0) {
       return "";
     }
