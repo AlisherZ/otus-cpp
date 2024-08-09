@@ -20,7 +20,7 @@ namespace join_server {
     Response executeQuery(Request req);
     size_t openConnection();
     ~DBCluster();
-  public:
+  private:
     void addQuery(Request req);
     Response getAnswerQuery(std::size_t id);
     std::string query(Request req);

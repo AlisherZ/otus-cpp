@@ -75,6 +75,18 @@ namespace join_server {
         TruncateParams params(req.getParams());
         return get(params);
       }
+      case query_type::truncate: {
+        TruncateParams params(req.getParams());
+        return "OK";
+      }
+      case query_type::intersection: {
+        TruncateParams params(req.getParams());
+        return "OK";
+      }
+      case query_type::symmetric_difference: {
+        TruncateParams params(req.getParams());
+        return "OK";
+      }
     }
     return "Err incomplete operation";
   }

@@ -54,7 +54,10 @@ namespace join_server {
       }
       return cnt;
     }
-  public:
+    void clear() {
+      table.clear();
+    }
+  private:
     std::vector<T> table;
   };
 
