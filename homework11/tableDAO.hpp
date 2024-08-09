@@ -12,6 +12,7 @@ namespace join_server {
   {
   public:
     Table<T>() {};
+    Table<T>(std::vector<T> new_table) : table(new_table) {};
     auto get() {
       std::vector<T> result(table);
       return result;

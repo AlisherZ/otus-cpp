@@ -80,10 +80,10 @@ namespace join_server {
         return truncate(params);
       }
       case query_type::intersection: {
-        return "OK";
+        return intersect();
       }
       case query_type::symmetric_difference: {
-        return "OK";
+        return symmetricalDifference();
       }
     }
     return "Err incomplete operation";
@@ -128,6 +128,14 @@ namespace join_server {
       return "OK";
     }
     return "ERR no table " + params.getName();
+  }
+
+  std::string DBCluster::intersect() {
+    return rowsToString<UnionRow>(intersection(tableA.get(), tableB.get()));
+  }
+
+  std::string DBCluster::symmetricalDifference() {
+    return rowsToString<UnionRow>(symmDiff(tableA.get(), tableB.get()));
   }
 
 }

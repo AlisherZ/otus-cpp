@@ -29,7 +29,12 @@ namespace join_server {
     id = new_id;
     auto parts = split(request, ' ');
     type = getTypeFromString(parts[0]);
-    params = request.substr(parts[0].size() + 1);
+    if(parts.size() > 1) {
+      params = request.substr(parts[0].size() + 1);
+    }
+    else {
+      params = "";
+    }
   }
 
   std::size_t Request::getId() {

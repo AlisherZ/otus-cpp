@@ -10,7 +10,7 @@ namespace join_server {
   {
   public:
     RowBase() {};
-    RowBase(std::map<std::string, std::string> new_row) : row(new_row) {};
+    RowBase(std::map<std::string, std::string> new_row, std::vector<std::string> new_order) : row(new_row), order(new_order) {};
     std::string getTitles();
     std::string getLine();
     std::string getValues();
@@ -19,13 +19,14 @@ namespace join_server {
     void setValue(std::string key, std::string value);
   private:
     std::map<std::string, std::string> row;
+    std::vector<std::string> order;
   };
 
   class Row : public RowBase
   {
   public:
-    Row() : RowBase({{"id", "0"}, {"name", ""}}) {};
-    Row(int id, std::string name) : RowBase({{"id", std::to_string(id)}, {"name", name}}) {};
+    Row() : RowBase({{"id", "0"}, {"name", ""}}, {"id", "name"}) {};
+    Row(int id, std::string name) : RowBase({{"id", std::to_string(id)}, {"name", name}}, {"id", "name"}) {};
     int getId();
     void setId(int id);
     std::string getName();
@@ -36,8 +37,8 @@ namespace join_server {
   class UnionRow : public RowBase
   {
   public:
-    UnionRow() : RowBase({{"id", "0"}, {"A", ""}, {"B", ""}}) {};
-    UnionRow(int id, std::string nameA, std::string nameB) : RowBase({{"id", std::to_string(id)}, {"A", nameA}, {"B", nameB}}) {};
+    UnionRow() : RowBase({{"id", "0"}, {"A", ""}, {"B", ""}}, {"id", "A", "B"}) {};
+    UnionRow(int id, std::string nameA, std::string nameB) : RowBase({{"id", std::to_string(id)}, {"A", nameA}, {"B", nameB}}, {"id", "A", "B"}) {};
     int getId();
     void setId(int id);
     std::string getNameA();
@@ -47,8 +48,8 @@ namespace join_server {
     bool update(UnionRow row);
   };
   
-  std::string rowsToString(std::vector<Row> rows);
-  std::string rowsToString(std::vector<UnionRow> rows);
+  std::vector<UnionRow> intersection(std::vector<Row> rows1, std::vector<Row> rows2);
+  std::vector<UnionRow> symmDiff(std::vector<Row> rows1, std::vector<Row> rows2);
 
 }
 

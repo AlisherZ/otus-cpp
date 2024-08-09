@@ -1,23 +1,25 @@
 #include <algorithm>
 
+#include <iostream>
+
 #include "row.h"
 
 namespace join_server {
 
   std::string RowBase::getTitles() {
-    if(row.size() == 0) {
+    if(order.size() == 0) {
       return "";
     }
     std::string res = "";
     bool first = true;
-    for(auto it = row.begin();it != row.end();it++) {
+    for(auto key : order) {
       if(first) {
         first = false;
       }
       else {
         res+= " | ";
       }
-      res+= it->first;
+      res+= key;
     }
     return res;
   }
@@ -28,14 +30,14 @@ namespace join_server {
     }
     std::string res = "";
     bool first = true;
-    for(auto it = row.begin();it != row.end();it++) {
+    for(auto key : order) {
       if(first) {
         first = false;
       }
       else {
         res+= "+";
       }
-      res+= std::string((it->first).size() + 1, '-');
+      res+= std::string(key.size() + 1, '-');
     }
     return res;
   }
@@ -46,14 +48,14 @@ namespace join_server {
     }
     std::string res = "";
     bool first = true;
-    for(auto it = row.begin();it != row.end();it++) {
+    for(auto key : order) {
       if(first) {
         first = false;
       }
       else {
         res+= " | ";
       }
-      res+= it->second;
+      res+= row[key];
     }
     return res;
   }
@@ -123,4 +125,44 @@ namespace join_server {
     return false;
   }
 
+  std::vector<UnionRow> intersection(std::vector<Row> rows1, std::vector<Row> rows2) {
+    std::sort(rows1.begin(), rows1.end(), [](Row a, Row b) { return a.getId() < b.getId(); });
+    std::sort(rows2.begin(), rows2.end(), [](Row a, Row b) { return a.getId() < b.getId(); });
+    std::vector<UnionRow> result;
+    for(std::size_t i = 0, j = 0;i < rows1.size();i++) {
+      for(;(j < rows2.size()) && (rows1[i].getId() > rows2[j].getId());j++);
+      if((j < rows2.size()) && (rows1[i].getId() == rows2[j].getId())) {
+        result.emplace_back(rows1[i].getId(), rows1[i].getName(), rows2[j].getName());
+      }
+    }
+    return result;
+  }
+
+  std::vector<UnionRow> symmDiff(std::vector<Row> rows1, std::vector<Row> rows2) {
+    std::sort(rows1.begin(), rows1.end(), [](Row a, Row b) { return a.getId() < b.getId(); });
+    std::sort(rows2.begin(), rows2.end(), [](Row a, Row b) { return a.getId() < b.getId(); });
+    std::vector<UnionRow> result;
+    std::size_t i = 0, j = 0;
+    for(;(i < rows1.size()) && (j < rows2.size());) {
+      if(rows1[i].getId() < rows2[j].getId()) {
+        result.emplace_back(rows1[i].getId(), rows1[i].getName(), "");
+        i++;
+      }
+      else if(rows1[i].getId() > rows2[j].getId()) {
+        result.emplace_back(rows2[j].getId(), "", rows2[j].getName());
+        j++;
+      }
+      else {
+        i++;
+        j++;
+      }
+    }
+    for(;i < rows1.size();i++) {
+      result.emplace_back(rows1[i].getId(), rows1[i].getName(), "");
+    }
+    for(;j < rows2.size();j++) {
+      result.emplace_back(rows2[j].getId(), "", rows2[j].getName());
+    }
+    return result;
+  }
 }

@@ -28,6 +28,8 @@ namespace join_server {
     std::string insert(Table<Row>& table, InsertParams params);
     std::string get(TruncateParams params);
     std::string truncate(TruncateParams params);
+    std::string intersect();
+    std::string symmetricalDifference();
     DBCluster();
     WaitingQueue<Request> queries;
     WaitingQueue<Response> answers;
