@@ -27,6 +27,7 @@ namespace join_server {
     std::string insert(InsertParams params);
     std::string insert(Table<Row>& table, InsertParams params);
     std::string get(TruncateParams params);
+    std::string truncate(TruncateParams params);
     DBCluster();
     WaitingQueue<Request> queries;
     WaitingQueue<Response> answers;

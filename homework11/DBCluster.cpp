@@ -77,14 +77,12 @@ namespace join_server {
       }
       case query_type::truncate: {
         TruncateParams params(req.getParams());
-        return "OK";
+        return truncate(params);
       }
       case query_type::intersection: {
-        TruncateParams params(req.getParams());
         return "OK";
       }
       case query_type::symmetric_difference: {
-        TruncateParams params(req.getParams());
         return "OK";
       }
     }
@@ -116,6 +114,18 @@ namespace join_server {
     }
     if(params.getName() == "B") {
       return rowsToString<Row>(tableB.get());
+    }
+    return "ERR no table " + params.getName();
+  }
+
+  std::string DBCluster::truncate(TruncateParams params) {
+    if(params.getName() == "A") {
+      tableA.clear();
+      return "OK";
+    }
+    if(params.getName() == "B") {
+      tableB.clear();
+      return "OK";
     }
     return "ERR no table " + params.getName();
   }
