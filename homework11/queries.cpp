@@ -22,7 +22,7 @@ namespace join_server {
     if(op == "SYMMETRIC_DIFFERENCE") {
       return query_type::symmetric_difference;
     }
-    throw std::invalid_argument( "received non-existent type of query" );
+    throw std::invalid_argument("received non-existent type of query");
   }
 
   Request::Request(std::size_t new_id, std::string request) {
@@ -59,6 +59,9 @@ namespace join_server {
 
   InsertParams::InsertParams(std::string params) {
     auto parts = split(params, ' ');
+    if(parts.size() < 3) {
+      throw std::invalid_argument("format must be INSERT [table_name] [id] [name]");
+    }
     table = parts[0];
     row = Row(std::stoi(parts[1]), parts[2]);
   }

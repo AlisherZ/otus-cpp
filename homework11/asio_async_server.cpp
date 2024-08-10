@@ -23,9 +23,21 @@ namespace join_server {
               query.pop_back();
             }
             if(query != "") {
-              Request req(id, query);
-              Response resp = DBCluster::Instance().executeQuery(req);
-              result+= resp.getMessage();
+              try {
+                Request req(id, query);
+                Response resp = DBCluster::Instance().executeQuery(req);
+                result+= resp.getMessage() + "\n";
+              }
+              catch(const std::invalid_argument& err) {
+                std::string msg = err.what();
+                result+= "ERR " + msg + "\n";
+              }
+              catch(...) {
+                result+= "ERR Something went wrong\n";
+              }
+            }
+            else {
+              result+= "\n";
             }
           }
           std::size_t length1 = result.size();

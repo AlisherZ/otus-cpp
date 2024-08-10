@@ -45,19 +45,29 @@ namespace join_server {
     connectionDB.get();
   }
 
+  Response DBCluster::getResponse(Request req) {
+    try {
+      std::string res = query(req);
+      return Response(req.getId(), res);
+    }
+    catch(const std::invalid_argument& err) {
+      std::string msg = err.what();
+      return Response(req.getId(), "ERR " + msg);
+    }
+    catch(...) {
+      return Response(req.getId(), "ERR Something went wrong");
+    }
+  }
+
   DBCluster::DBCluster() {
     auto func = [this]() {
         Request value;
         // make a waiting pop from the queue
         while(queries.pop(value)) {
-          std::string res = query(value) + "\n";
-          Response rp(value.getId(), res);
-          answers.push(rp);
+          answers.push(getResponse(value));
         }
         while(queries.tryPop(value)) {
-          std::string res = query(value) + "\n";
-          Response rp(value.getId(), res);
-          answers.push(rp);
+          answers.push(getResponse(value));
         }
         answers.stop();
     };
@@ -86,7 +96,7 @@ namespace join_server {
         return symmetricalDifference();
       }
     }
-    return "Err incomplete operation";
+    throw std::exception("incomplete operation");
   }
 
   std::string DBCluster::insert(InsertParams params) {
@@ -96,29 +106,33 @@ namespace join_server {
     if(params.getName() == "B") {
       return insert(tableB, params);
     }
-    return "ERR no table " + params.getName();
+    throw std::invalid_argument("no table " + params.getName());
   }
 
   std::string DBCluster::insert(Table<Row>& table, InsertParams params) {
     if(table.insert(params.getRow()) == 1) {
       return "OK";
     }
-    else {
-      return "ERR duplicate " + std::to_string(params.getRow().getId());
-    }
+    throw std::invalid_argument("duplicate " + std::to_string(params.getRow().getId()));
   }
 
   std::string DBCluster::get(TruncateParams params) {
+    if(params.getName() == "") {
+      throw std::invalid_argument("format must be GET [table_name]");
+    }
     if(params.getName() == "A") {
       return rowsToString<Row>(tableA.get());
     }
     if(params.getName() == "B") {
       return rowsToString<Row>(tableB.get());
     }
-    return "ERR no table " + params.getName();
+    throw std::invalid_argument("no table " + params.getName());
   }
 
   std::string DBCluster::truncate(TruncateParams params) {
+    if(params.getName() == "") {
+      throw std::invalid_argument("format must be TRUNCATE [table_name]");
+    }
     if(params.getName() == "A") {
       tableA.clear();
       return "OK";
@@ -127,7 +141,7 @@ namespace join_server {
       tableB.clear();
       return "OK";
     }
-    return "ERR no table " + params.getName();
+    throw std::invalid_argument("no table " + params.getName());
   }
 
   std::string DBCluster::intersect() {

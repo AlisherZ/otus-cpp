@@ -23,6 +23,7 @@ namespace join_server {
   private:
     void addQuery(Request req);
     Response getAnswerQuery(std::size_t id);
+    Response getResponse(Request req);
     std::string query(Request req);
     std::string insert(InsertParams params);
     std::string insert(Table<Row>& table, InsertParams params);
