@@ -96,7 +96,7 @@ namespace join_server {
         return symmetricalDifference();
       }
     }
-    throw std::exception("incomplete operation");
+    throw std::invalid_argument("incomplete operation");
   }
 
   std::string DBCluster::insert(InsertParams params) {
