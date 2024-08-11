@@ -19,6 +19,8 @@ jobs:
         with:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
+      - name: Install Eigen3
+        uses: kupns-aka-kupa/setup-eigen3@v1
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
       - run: cmake --build .
       - run: cmake --build . --target test
