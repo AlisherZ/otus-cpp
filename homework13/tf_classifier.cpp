@@ -13,6 +13,8 @@
 
 using mnist::TfClassifier;
 
+#define UNUSED(expr) do { (void)(expr); } while (0)
+
 void TfClassifier::delete_tf_session(TF_Session *tf_session) {
     tf_status status{TF_NewStatus(), TF_DeleteStatus};
     TF_DeleteSession(tf_session, status.get());
@@ -25,7 +27,9 @@ void TfClassifier::delete_tf_session(TF_Session *tf_session) {
 }
 
 static void dummy_deleter(void* data, size_t length, void* arg) {
-
+    UNUSED(data);
+    UNUSED(length);
+    UNUSED(arg);
 }
 
 TfClassifier::TfClassifier(const std::string& modelpath,
@@ -40,6 +44,7 @@ TfClassifier::TfClassifier(const std::string& modelpath,
     TF_Buffer* RunOpts = NULL;
     const char *tags = "serve";
     int ntags = 1;
+    UNUSED(ntags);
 
     session_.reset(TF_LoadSessionFromSavedModel(session_opts_.get(), RunOpts, modelpath.c_str(), &tags, 1, graph_.get(), nullptr, status.get()));
     if (TF_GetCode(status.get()) != TF_OK) {
@@ -48,6 +53,7 @@ TfClassifier::TfClassifier(const std::string& modelpath,
         throw std::invalid_argument{ss.str()};
     }
     size_t pos = 0;
+    UNUSED(pos);
     input_op_ = TF_GraphOperationByName(graph_.get(), "serving_default_input");
     if (input_op_ == nullptr) {
         throw std::runtime_error{"Input not found"};
