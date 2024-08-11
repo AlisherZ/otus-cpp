@@ -77,7 +77,7 @@ size_t TfClassifier::predict(const features_t& feat) const {
 }
 
 TfClassifier::probas_t TfClassifier::predict_proba(const features_t& feat) const {
-    assert(width_ * height_ == feat.size());
+    assert(width_ * height_ == (int)feat.size());
 
     // Preprocess input features
     features_t preproc_features;
