@@ -24,10 +24,6 @@ void TfClassifier::delete_tf_session(TF_Session *tf_session) {
     }
 }
 
-static void delete_buffer(void* data, size_t size) {
-    delete[] reinterpret_cast<char*>(data);
-}
-
 static void dummy_deleter(void* data, size_t length, void* arg) {
 
 }
