@@ -8,6 +8,8 @@ project(fashio_mnist VERSION ${PROJECT_VERSION})
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+
 if (NOT EXISTS ${CMAKE_SOURCE_DIR}/tensorflow)
     make_directory(${CMAKE_SOURCE_DIR}/tensorflow)
 endif()
@@ -42,7 +44,7 @@ set_target_properties(fashio_mnist PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
-target_link_libraries(fashio_mnist tensorflow)
+target_link_libraries(fashio_mnist tensorflow Eigen3::Eigen)
 
 if(WITH_GOOGLE_TEST)
     include(FetchContent)
