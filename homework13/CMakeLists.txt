@@ -38,13 +38,13 @@ include_directories(src/3rdparty/scope_guard/include)
 link_directories(${CMAKE_SOURCE_DIR}/tensorflow/lib)
 
 add_executable(fashio_mnist mapper.cpp)
+add_library(helpers helpers.cpp)
+add_library(tf_classifier tf_classifier.cpp)
 
-set_target_properties(fashio_mnist PROPERTIES
+set_target_properties(fashio_mnist helpers tf_classifier PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
-
-target_link_libraries(fashio_mnist tensorflow Eigen3::Eigen)
 
 if(WITH_GOOGLE_TEST)
     include(FetchContent)
@@ -56,6 +56,29 @@ if(WITH_GOOGLE_TEST)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
 endif()
+
+target_include_directories(helpers
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+
+target_include_directories(tf_classifier
+    PRIVATE "${CMAKE_BINARY_DIR}"
+)
+
+target_link_libraries(fashio_mnist
+    helpers
+    tf_classifier
+    tensorflow
+    Eigen3::Eigen)
+
+target_link_libraries(helpers
+    tf_classifier
+    tensorflow
+    Eigen3::Eigen)
+
+    target_link_libraries(tf_classifier
+    tensorflow
+    Eigen3::Eigen)
 
 if(WITH_BOOST_TEST)
     find_package(Boost COMPONENTS unit_test_framework REQUIRED)
@@ -79,12 +102,22 @@ if(WITH_GOOGLE_TEST)
     )
     target_link_libraries(
         hello_test
+        helpers
+        tf_classifier
+        tensorflow
+        Eigen3::Eigen
         GTest::gtest_main
     )
 endif()
 
 if (MSVC)
     target_compile_options(fashio_mnist PRIVATE
+        /W4
+    )
+    target_compile_options(helpers PRIVATE
+        /W4
+    )
+    target_compile_options(tf_classifier PRIVATE
         /W4
     )
     if(WITH_BOOST_TEST)
@@ -99,6 +132,12 @@ if (MSVC)
     endif()
 else ()
     target_compile_options(fashio_mnist PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(helpers PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(tf_classifier PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(WITH_BOOST_TEST)
