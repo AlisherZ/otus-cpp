@@ -25,7 +25,7 @@ int main() {
     for (;;) {
         proba_true.clear();
         for (size_t i = 0; i < 1; ++i) {
-            float val;
+            //float val;
             //test_data >> val;
             //proba_true.push_back(val);
             test_data >> class_true;
