@@ -136,3 +136,16 @@ TfClassifier::probas_t TfClassifier::predict_proba(const features_t& feat) const
 
     return probas;
 }
+
+size_t TfClassifier::predict_class(const features_t& feat) const {
+    auto proba_pred = predict_proba(feat);
+    auto vmax = proba_pred[0];
+    size_t imax = 0;
+    for (size_t i = 1; i < num_classes(); ++i) {
+        if(proba_pred[i] > vmax) {
+            vmax = proba_pred[i];
+            imax = i;
+        }
+    }
+    return imax;
+}

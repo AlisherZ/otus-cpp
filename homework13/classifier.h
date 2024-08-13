@@ -17,6 +17,8 @@ public:
     virtual size_t predict(const features_t&) const = 0;
 
     virtual probas_t predict_proba(const features_t&) const = 0;
+
+    virtual size_t predict_class(const features_t&) const = 0;
 };
 
 

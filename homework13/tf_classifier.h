@@ -28,6 +28,8 @@ public:
 
     probas_t predict_proba(const features_t&) const override;
 
+    size_t predict_class(const features_t&) const override;
+
 protected:
     static void delete_tf_session(TF_Session*);
 
