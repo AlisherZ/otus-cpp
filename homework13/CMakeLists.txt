@@ -37,7 +37,7 @@ include_directories(tensorflow/include)
 include_directories(src/3rdparty/scope_guard/include)
 link_directories(${CMAKE_SOURCE_DIR}/tensorflow/lib)
 
-add_executable(fashio_mnist mapper.cpp)
+add_executable(fashio_mnist main.cpp)
 add_library(helpers helpers.cpp)
 add_library(tf_classifier tf_classifier.cpp)
 
