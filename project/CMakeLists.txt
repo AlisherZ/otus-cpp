@@ -55,7 +55,7 @@ include_directories(src/3rdparty/scope_guard/include)
 link_directories(${CMAKE_SOURCE_DIR}/tensorflow/lib)
 
 add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-target_link_libraries(bar ${Protobuf_LIBRARIES})
+target_link_libraries(ECG ${Protobuf_LIBRARIES})
 
 set_target_properties(ECG PROPERTIES
     CXX_STANDARD 17
