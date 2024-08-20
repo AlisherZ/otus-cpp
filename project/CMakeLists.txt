@@ -16,7 +16,7 @@ if (MSVC)
         message("protobuf not found")
         return()
     endif()
-else
+else ()
     find_package(Protobuf REQUIRED)
 endif()
 
