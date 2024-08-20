@@ -48,6 +48,7 @@ else ()
     cmake_print_variables(PROTO_HDRS)
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     target_link_libraries(ECG ${Protobuf_LIBRARIES})
+    target_link_libraries(ECG fftw3)
 endif()
 
 set_target_properties(ECG PROPERTIES
