@@ -11,7 +11,8 @@ int main(int argc, char* argv[])
     john.setName("John Doe");
     john.setEmail("jdoe@example.com");
     
-    std::ofstream output(args[0]);
-    john.SerializeToOstream(output);
+    std::ofstream output(argv[0]);
+    john.SerializeToOstream(&output);
+    output.close();
     return 0;
 }
