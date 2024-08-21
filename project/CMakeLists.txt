@@ -51,6 +51,19 @@ else ()
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     target_link_libraries(ECG fftw3 ${Protobuf_LIBRARIES})
 
+    # include(ExternalProject)
+    # ExternalProject_Add(project_fftw
+    #   #GIT_REPOSITORY  https://github.com/FFTW/fftw3
+    #   URL http://www.fftw.org/fftw-3.3.2.tar.gz
+    #   PREFIX ${CMAKE_CURRENT_BINARY_DIR}/fftw
+    #   CONFIGURE_COMMAND
+    #   ${CMAKE_CURRENT_BINARY_DIR}/fftw/src/project_fftw/configure
+    #   --prefix=${CMAKE_CURRENT_BINARY_DIR}/fftw/install
+    #   INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/fftw/install
+    # )
+    # INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/fftw/install/include)
+    # add_dependencies(ECG project_fftw)
+    # TARGET_LINK_LIBRARIES(ECG fftw)
 endif()
 
 set_target_properties(ECG PROPERTIES
