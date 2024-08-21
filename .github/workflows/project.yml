@@ -24,6 +24,8 @@ jobs:
       - name: Install Eigen3
         uses: kupns-aka-kupa/setup-eigen3@v1
       - run: ls -a
+      - run: ls -a /home/runner/work/otus-cpp/otus-cpp/project/wavelib
+      - run: ls -a/home/runner/work/otus-cpp/otus-cpp/project/wavelib/Testing
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
       - run: ls -a
       - run: ls /home/runner/work/otus-cpp/otus-cpp/project
