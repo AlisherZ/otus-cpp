@@ -36,7 +36,9 @@ include_directories(src/3rdparty/scope_guard/include)
 link_directories(${CMAKE_SOURCE_DIR}/tensorflow/lib)
 
 if (MSVC)
+    add_subdirectory(wavelib)
     add_executable(ECG main.cpp message.pb.cc message.pb.h)
+    target_link_libraries(ECG PRIVATE wauxlib ${Boost_LIBRARIES})
 else ()
     find_package(Protobuf REQUIRED)
     include_directories(${Protobuf_INCLUDE_DIRS})
@@ -47,21 +49,8 @@ else ()
     cmake_print_variables(PROTO_SRCS)
     cmake_print_variables(PROTO_HDRS)
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    target_link_libraries(ECG ${Protobuf_LIBRARIES})
+    target_link_libraries(ECG fftw3 ${Protobuf_LIBRARIES})
 
-    include(ExternalProject)
-    ExternalProject_Add(project_fftw
-      #GIT_REPOSITORY  https://github.com/FFTW/fftw3
-      URL http://www.fftw.org/fftw-3.3.2.tar.gz
-      PREFIX ${CMAKE_CURRENT_BINARY_DIR}/fftw
-      CONFIGURE_COMMAND
-      ${CMAKE_CURRENT_BINARY_DIR}/fftw/src/project_fftw/configure
-      --prefix=${CMAKE_CURRENT_BINARY_DIR}/fftw/install
-      INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/fftw/install
-    )
-    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/fftw/install/include)
-    add_dependencies(ECG project_fftw)
-    TARGET_LINK_LIBRARIES(ECG fftw)
 endif()
 
 set_target_properties(ECG PROPERTIES
@@ -79,9 +68,6 @@ if(WITH_GOOGLE_TEST)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
 endif()
-
-target_link_libraries(ECG
-    tensorflow)
 
 if(WITH_BOOST_TEST)
     find_package(Boost COMPONENTS unit_test_framework REQUIRED)
