@@ -20,6 +20,7 @@ jobs:
           submodules: true
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
       - run: sudo apt-get install protobuf-compiler libprotobuf-dev fftw3 fftw3-dev -y
+      - run: sudo git clone https://github.com/rafat/wavelib
       - name: Install Eigen3
         uses: kupns-aka-kupa/setup-eigen3@v1
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON

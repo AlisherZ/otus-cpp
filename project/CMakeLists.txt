@@ -48,8 +48,9 @@ else ()
     protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS proto/message.proto)
     cmake_print_variables(PROTO_SRCS)
     cmake_print_variables(PROTO_HDRS)
+    add_subdirectory(wavelib)
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    target_link_libraries(ECG fftw3 ${Protobuf_LIBRARIES})
+    target_link_libraries(ECG wauxlib fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
 
     # include(ExternalProject)
     # ExternalProject_Add(project_fftw
