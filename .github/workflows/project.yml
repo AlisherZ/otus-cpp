@@ -28,9 +28,9 @@ jobs:
       - run: sudo cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
       - run: ls -a
       - run: ls /home/runner/work/otus-cpp/otus-cpp/project
-      - run: cmake --build .
-      - run: cmake --build . --target test
-      - run: cmake --build . --target package
+      - run: sudo cmake --build .
+      - run: sudo cmake --build . --target test
+      - run: sudo cmake --build . --target package
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
