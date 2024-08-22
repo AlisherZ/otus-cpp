@@ -25,9 +25,9 @@ jobs:
       - run: cd wavelib
       - run: ls -a
       - run: cmake .
-        working-directory: ./wavelib
+        working-directory: ./project/wavelib
       - run: cmake --build .
-        working-directory: ./wavelib
+        working-directory: ./project/wavelib
       - run: ls -a
       - run: cd ../
       - name: Install Eigen3
