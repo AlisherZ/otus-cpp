@@ -3,9 +3,6 @@
 #include <complex.h>
 //#include <fftw3.h>
 #include "message.pb.h"
-extern "C" {
-#include "wdenoise/header/wdenoise.h"
-}
 
 using namespace std;
 
