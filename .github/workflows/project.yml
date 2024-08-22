@@ -23,9 +23,12 @@ jobs:
       - run: git clone https://github.com/rafat/wavelib
       - run: ls -a
       - run: cd wavelib
+        working-directory: ./wavelib
       - run: ls -a
-      - run: cmake wavelib
-      - run: cmake wavelib --build .
+      - run: cmake .
+        working-directory: ./wavelib
+      - run: cmake --build .
+        working-directory: ./wavelib
       - run: ls -a
       - run: cd ../
       - name: Install Eigen3
