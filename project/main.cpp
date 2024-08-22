@@ -4,7 +4,7 @@
 //#include <fftw3.h>
 #include "message.pb.h"
 extern "C" {
-#include "wavelib/header/wauxlib.h"
+#include "wdenoise/header/wdenoise.h"
 }
 
 using namespace std;
@@ -20,6 +20,8 @@ int main(int, char* argv[])
     john.SerializeToOstream(&output);
     output.close();
     const int N = 10;
+    
+    /*
     auto obj = denoise_init(N,4,"db5");
 	setDenoiseMethod(obj,"visushrink");// sureshrink is also the default. The other option with dwt and swt is visushrink.
 	// modwt works only with modwtshrink method
@@ -29,5 +31,6 @@ int main(int, char* argv[])
 	// Default for level is all. The other option is first
 
 	//denoise(obj,inp,oup);
+    */
     return 0;
 }
