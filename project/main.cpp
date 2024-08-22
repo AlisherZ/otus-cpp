@@ -3,6 +3,7 @@
 #include <complex.h>
 //#include <fftw3.h>
 #include "message.pb.h"
+#include "wavelet2s.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ int main(int, char* argv[])
     std::ofstream output(argv[0]);
     john.SerializeToOstream(&output);
     output.close();
-    const int N = 10;
+    //const int N = 10;
     
     /*
     auto obj = denoise_init(N,4,"db5");
