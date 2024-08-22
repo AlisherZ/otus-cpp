@@ -52,7 +52,7 @@ else ()
     cmake_print_variables(PROTO_SRCS)
     cmake_print_variables(PROTO_HDRS)
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    target_link_libraries(ECG wavelib/Bin/Debug/wauxlib wavelib/Bin/Debug/wavelib fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+    target_link_libraries(ECG wdenoise\Bin\wdenoiselib fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
 
     # include(ExternalProject)
     # ExternalProject_Add(project_fftw
