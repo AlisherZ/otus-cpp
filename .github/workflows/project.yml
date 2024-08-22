@@ -21,7 +21,9 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install libboost-test-dev -y
       - run: sudo apt-get install protobuf-compiler libprotobuf-dev fftw3 fftw3-dev -y
       - run: git clone https://github.com/rafat/wavelib
+      - run: ls -a
       - run: cd wavelib
+      - run: ls -a
       - run: cmake .
       - run: cmake --build .
       - run: ls -a
