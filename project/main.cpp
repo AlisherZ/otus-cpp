@@ -3,10 +3,12 @@
 #include <complex.h>
 #include <fftw3.h>
 #include "message.pb.h"
+extern "C" {
 #include "wavelib/header/wauxlib.h"
- 
+}
+
 using namespace std;
- 
+
 int main(int, char* argv[])
 {
     Person john;
