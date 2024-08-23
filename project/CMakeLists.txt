@@ -8,47 +8,22 @@ project(ECG VERSION ${PROJECT_VERSION})
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
-if (NOT EXISTS ${CMAKE_SOURCE_DIR}/tensorflow)
-    make_directory(${CMAKE_SOURCE_DIR}/tensorflow)
-endif()
-
-if (NOT EXISTS ${CMAKE_SOURCE_DIR}/tensorflow/lib/libtensorflow.so)
-    file(
-    DOWNLOAD
-        https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.7.0.tar.gz ${CMAKE_SOURCE_DIR}/tensorflow/linux.tar.gz
-    STATUS
-        status
-    LOG
-        log
-    )
-    list(GET status 0 status_code)
-    list(GET status 1 status_string)
-    if(NOT status_code EQUAL 0)
-        message(FATAL_ERROR "error downloading tensorflow lib: ${status_string}" "${log}")
-    endif()
-
-    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvzf ${CMAKE_SOURCE_DIR}/tensorflow/linux.tar.gz WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tensorflow)
-    file(REMOVE ${CMAKE_SOURCE_DIR}/tensorflow/linux.tar.gz)
-endif()
-
-include_directories(tensorflow/include)
-include_directories(src/3rdparty/scope_guard/include)
-link_directories(${CMAKE_SOURCE_DIR}/tensorflow/lib)
-
 if (MSVC)
-    add_subdirectory(wdenoise)
-    # add_library(Test1 SHARED wavelib)
+    # add_subdirectory(wdenoise)
+    # add_library(wdenoise SHARED wdenoise)
     # set_target_properties(Test1 PROPERTIES LINKER_LANGUAGE C)
-    add_library(wavelet SHARED wavelet_denoise.c)
-    add_library(wavelet_denoise IMPORTED)
-    set_property(TARGET wavelet_denoise PROPERTY IMPORTED_IMPLIB "../wdenoise/build/Bin/wdenoiselib.lib")
-    set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
+    add_library(wavelet PRIVATE wavelet_denoise.c)
+    # add_library(wdenoise SHARED IMPORTED)
+    # set_property(TARGET wdenoise PROPERTY IMPORTED_IMPLIB "../wdenoise/build/Bin/wdenoiselib.lib")
+    # set_target_properties(wdenoise PROPERTIES 
+    #     LINKER_LANGUAGE C
+    #     C_STANDARD 99
+    #     C_STANDARD_REQUIRED ON)
     add_executable(ECG main.cpp message.pb.cc message.pb.h)
     # add_library(wavelet2d SHARED IMPORTED)
     # set_property(TARGET wavelet2d PROPERTY IMPORTED_LOCATION "../wavelet2d.dll")
     # set_property(TARGET wavelet2d PROPERTY IMPORTED_IMPLIB "../wavelet2d.lib")
-    target_link_libraries(ECG PRIVATE wavelet wavelet_denoise ${Boost_LIBRARIES})
-    target_link_libraries(wavelet PRIVATE wavelet_denoise)
+    target_link_libraries(ECG PRIVATE wavelet ${Boost_LIBRARIES})
 else ()
     # add_subdirectory(wavelib)
     find_package(Protobuf REQUIRED)
@@ -60,26 +35,11 @@ else ()
     cmake_print_variables(PROTO_SRCS)
     cmake_print_variables(PROTO_HDRS)
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    add_library(wavelet SHARED wavelet_denoise.c)
-    add_library(wavelet_denoise SHARED IMPORTED)
-    set_property(TARGET wavelet_denoise PROPERTY IMPORTED_IMPLIB "wdenoise/Bin/libwdenoiselib.a")
-    set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
-    target_link_libraries(ECG PRIVATE wavelet wavelet_denoise fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
-    target_link_libraries(wavelet PRIVATE wavelet_denoise)
-
-    # include(ExternalProject)
-    # ExternalProject_Add(project_fftw
-    #   #GIT_REPOSITORY  https://github.com/FFTW/fftw3
-    #   URL http://www.fftw.org/fftw-3.3.2.tar.gz
-    #   PREFIX ${CMAKE_CURRENT_BINARY_DIR}/fftw
-    #   CONFIGURE_COMMAND
-    #   ${CMAKE_CURRENT_BINARY_DIR}/fftw/src/project_fftw/configure
-    #   --prefix=${CMAKE_CURRENT_BINARY_DIR}/fftw/install
-    #   INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/fftw/install
-    # )
-    # INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/fftw/install/include)
-    # add_dependencies(ECG project_fftw)
-    # TARGET_LINK_LIBRARIES(ECG fftw)
+    add_library(wavelet PRIVATE wavelet_denoise.c)
+#    add_library(wavelet_denoise SHARED IMPORTED)
+#    set_property(TARGET wavelet_denoise PROPERTY IMPORTED_IMPLIB "wdenoise/Bin/libwdenoiselib.a")
+#    set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
+    target_link_libraries(ECG PRIVATE wavelet fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
 endif()
 
 set_target_properties(ECG PROPERTIES
@@ -88,76 +48,19 @@ set_target_properties(ECG PROPERTIES
 )
 
 set_target_properties(wavelet PROPERTIES
+    LINKER_LANGUAGE C
     C_STANDARD 99
     C_STANDARD_REQUIRED ON
 )
-
-if(WITH_GOOGLE_TEST)
-    include(FetchContent)
-    FetchContent_Declare(
-        googletest
-        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-    )
-    # For Windows: Prevent overriding the parent project's compiler/linker settings
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    FetchContent_MakeAvailable(googletest)
-endif()
-
-if(WITH_BOOST_TEST)
-    find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-    add_executable(test_version test_version.cpp)
-
-    set_target_properties(test_version PROPERTIES
-        CXX_STANDARD 17
-        CXX_STANDARD_REQUIRED ON
-    )
-
-    set_target_properties(test_version PROPERTIES
-        COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
-        INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
-    )
-endif()
-
-if(WITH_GOOGLE_TEST)
-    add_executable(
-        hello_test
-        hello_test.cc
-    )
-    target_link_libraries(
-        hello_test
-        tensorflow
-        GTest::gtest_main
-    )
-endif()
 
 if (MSVC)
     target_compile_options(ECG PRIVATE
         /W4
     )
-    if(WITH_BOOST_TEST)
-        target_compile_options(test_version PRIVATE
-            /W4
-        )
-    endif()
-    if(WITH_GOOGLE_TEST)
-        target_compile_options(hello_test PRIVATE
-            /W4
-        )
-    endif()
 else ()
     target_compile_options(ECG PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    if(WITH_BOOST_TEST)
-        target_compile_options(test_version PRIVATE
-            -Wall -Wextra -pedantic -Werror
-        )
-    endif()
-    if(WITH_GOOGLE_TEST)
-        target_compile_options(hello_test PRIVATE
-            -Wall -Wextra -pedantic -Werror
-        )
-    endif()
 endif()
 
 install(TARGETS ECG RUNTIME DESTINATION bin)
@@ -168,14 +71,3 @@ set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_CONTACT example@example.com)
 include(CPack)
-
-if(WITH_BOOST_TEST)
-    enable_testing()
-    add_test(test_version test_version)
-endif()
-
-if(WITH_GOOGLE_TEST)
-    enable_testing()
-    include(GoogleTest)
-    gtest_discover_tests(hello_test)
-endif()
