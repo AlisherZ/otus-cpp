@@ -64,8 +64,8 @@ else ()
     add_library(wavelet_denoise SHARED IMPORTED)
     set_property(TARGET wavelet_denoise PROPERTY IMPORTED_IMPLIB "wdenoise/Bin/libwdenoiselib.a")
     set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
-    target_link_libraries(ECG PRIVATE wavelet wdenoise/Bin/libwdenoiselib fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
-    target_link_libraries(wavelet PRIVATE wdenoise/Bin/libwdenoiselib)
+    target_link_libraries(ECG PRIVATE wavelet wavelet_denoise fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+    target_link_libraries(wavelet PRIVATE wavelet_denoise)
 
     # include(ExternalProject)
     # ExternalProject_Add(project_fftw
