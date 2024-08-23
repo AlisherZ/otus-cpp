@@ -36,11 +36,17 @@ include_directories(src/3rdparty/scope_guard/include)
 link_directories(${CMAKE_SOURCE_DIR}/tensorflow/lib)
 
 if (MSVC)
-    # add_subdirectory(wavelib)
+    add_subdirectory(wdenoise)
     # add_library(Test1 SHARED wavelib)
     # set_target_properties(Test1 PROPERTIES LINKER_LANGUAGE C)
+    add_library(wavelet SHARED wavelet_denoise.c)
+    set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
     add_executable(ECG main.cpp message.pb.cc message.pb.h)
-    target_link_libraries(ECG PRIVATE ../wavelet2d ${Boost_LIBRARIES})
+    # add_library(wavelet2d SHARED IMPORTED)
+    # set_property(TARGET wavelet2d PROPERTY IMPORTED_LOCATION "../wavelet2d.dll")
+    # set_property(TARGET wavelet2d PROPERTY IMPORTED_IMPLIB "../wavelet2d.lib")
+    target_link_libraries(ECG PRIVATE wavelet wdenoise/build/Bin/wdenoiselib ${Boost_LIBRARIES})
+    target_link_libraries(wavelet PRIVATE wdenoise/build/Bin/wdenoiselib)
 else ()
     # add_subdirectory(wavelib)
     find_package(Protobuf REQUIRED)
@@ -52,7 +58,10 @@ else ()
     cmake_print_variables(PROTO_SRCS)
     cmake_print_variables(PROTO_HDRS)
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    target_link_libraries(ECG wavelet2d fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+    add_library(wavelet SHARED wavelet_denoise.c)
+    set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
+    target_link_libraries(ECG PRIVATE wavelet wdenoise/Bin/wdenoiselib fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+    target_link_libraries(wavelet PRIVATE wdenoise/Bin/wdenoiselib)
 
     # include(ExternalProject)
     # ExternalProject_Add(project_fftw
@@ -72,6 +81,11 @@ endif()
 set_target_properties(ECG PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
+)
+
+set_target_properties(wavelet PROPERTIES
+    C_STANDARD 99
+    C_STANDARD_REQUIRED ON
 )
 
 if(WITH_GOOGLE_TEST)
