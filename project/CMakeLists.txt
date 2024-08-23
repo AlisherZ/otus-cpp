@@ -62,8 +62,8 @@ else ()
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     add_library(wavelet SHARED wavelet_denoise.c)
     set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
-    target_link_libraries(ECG PRIVATE wavelet wdenoise/Bin/wdenoiselib fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
-    target_link_libraries(wavelet PRIVATE wdenoise/Bin/wdenoiselib)
+    target_link_libraries(ECG PRIVATE wavelet wdenoise/Bin/libwdenoiselib fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+    target_link_libraries(wavelet PRIVATE wdenoise/Bin/libwdenoiselib)
 
     # include(ExternalProject)
     # ExternalProject_Add(project_fftw
