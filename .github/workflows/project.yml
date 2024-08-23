@@ -35,6 +35,7 @@ jobs:
       - run: ls -a
       - run: ls -a /home/runner/work/otus-cpp/otus-cpp/project/wdenoise
       - run: ls -a /home/runner/work/otus-cpp/otus-cpp/project/wdenoise/Bin
+      - run: ls -a wdenoise/Bin
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
       - run: ls -a
       - run: ls /home/runner/work/otus-cpp/otus-cpp/project
