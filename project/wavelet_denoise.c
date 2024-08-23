@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "wavelet_denoise.h"
 #include "wdenoise/header/wdenoise.h"
 
