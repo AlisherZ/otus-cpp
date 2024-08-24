@@ -12,6 +12,11 @@ if (MSVC)
     # add_subdirectory(wdenoise)
     # add_library(wdenoise SHARED wdenoise)
     # set_target_properties(Test1 PROPERTIES LINKER_LANGUAGE C)
+    include(ExternalProject)
+    ExternalProject_Add(wavelet_denoise
+      GIT_REPOSITORY  https://github.com/rafat/wdenoise.git
+    )
+    # INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/fftw/install/include)
     add_library(wavelet wavelet_denoise.c wavelet_denoise.h)
     # add_library(wdenoise SHARED IMPORTED)
     # set_property(TARGET wdenoise PROPERTY IMPORTED_IMPLIB "../wdenoise/build/Bin/wdenoiselib.lib")
@@ -34,6 +39,10 @@ else ()
     protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS proto/message.proto)
     cmake_print_variables(PROTO_SRCS)
     cmake_print_variables(PROTO_HDRS)
+    include(ExternalProject)
+    ExternalProject_Add(wavelet_denoise
+      GIT_REPOSITORY  https://github.com/rafat/wdenoise.git
+    )
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     add_library(wavelet wavelet_denoise.c)
 #    add_library(wavelet_denoise SHARED IMPORTED)
