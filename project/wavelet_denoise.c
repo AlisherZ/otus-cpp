@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "wavelet_denoise.h"
-#include "wavelib/header/wauxlib.h"
+#include "header/wauxlib.h"
 
 #ifdef __cplusplus
 extern "C" {
