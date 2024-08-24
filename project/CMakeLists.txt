@@ -42,6 +42,7 @@ else ()
     include(ExternalProject)
     ExternalProject_Add(wavelet_denoise
       GIT_REPOSITORY  https://github.com/rafat/wdenoise.git
+      INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/wavelet_denoise/install
     )
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     add_library(wavelet wavelet_denoise.c)
