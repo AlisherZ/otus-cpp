@@ -14,10 +14,12 @@ if (MSVC)
     # set_target_properties(Test1 PROPERTIES LINKER_LANGUAGE C)
     include(ExternalProject)
     ExternalProject_Add(wavelet_denoise
-      GIT_REPOSITORY  https://github.com/rafat/wdenoise.git
+      GIT_REPOSITORY  https://github.com/rafat/wavelib.git
+      INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/wavelet_denoise1/install
     )
     # INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/fftw/install/include)
     add_library(wavelet wavelet_denoise.c wavelet_denoise.h)
+    add_dependencies(wavelet wavelet_denoise)
     # add_library(wdenoise SHARED IMPORTED)
     # set_property(TARGET wdenoise PROPERTY IMPORTED_IMPLIB "../wdenoise/build/Bin/wdenoiselib.lib")
     # set_target_properties(wdenoise PROPERTIES 
@@ -41,7 +43,7 @@ else ()
     cmake_print_variables(PROTO_HDRS)
     include(ExternalProject)
     ExternalProject_Add(wavelet_denoise
-      GIT_REPOSITORY  https://github.com/rafat/wdenoise.git
+      GIT_REPOSITORY  https://github.com/rafat/wavelib.git
       INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/wavelet_denoise/install
     )
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
