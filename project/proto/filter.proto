@@ -10,8 +10,8 @@ message Wavelet {
 
 message FFT {
     optional string name = 1;
-    optional low_threshold = 2;
-    optional high_threshold = 2;
+    optional double low_threshold = 2;
+    optional double high_threshold = 2;
 }
 
 message Filter {
