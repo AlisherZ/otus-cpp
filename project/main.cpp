@@ -33,13 +33,13 @@ int main(int, char* argv[])
 
     double *inp = (double*)malloc(sizeof(double)* N);
     double *out = (double*)malloc(sizeof(double)* N);
-    char *wname = "db5";
-	char *dmethod = "visushrink";
-	char *method = "dwt";
-	char *ext = "sym";
-	char *thresh = "soft";
-	char *level = "first";
-    wavelet_denoise(inp, out, N, 4, wname, dmethod, method, ext, thresh, level);
+    string wname = "db5";
+	string dmethod = "visushrink";
+	string method = "dwt";
+	string ext = "sym";
+	string thresh = "soft";
+	string level = "first";
+    wavelet_denoise(inp, out, N, 4, wname.c_str(), dmethod.c_str(), method.c_str(), ext.c_str(), thresh.c_str(), level.c_str());
     free(inp);
 	free(out);
     return 0;
