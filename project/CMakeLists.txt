@@ -13,26 +13,20 @@ if (MSVC)
     # add_library(wdenoise SHARED wdenoise)
     # set_target_properties(Test1 PROPERTIES LINKER_LANGUAGE C)
     include(ExternalProject)
+    set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
     ExternalProject_Add(wavelet_denoise
       GIT_REPOSITORY  https://github.com/rafat/wavelib.git
-      INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/wavelet_denoise1/install
+      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
     )
-    # INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/fftw/install/include)
+    include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
+    link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
     add_library(wavelet wavelet_denoise.c wavelet_denoise.h)
     add_dependencies(wavelet wavelet_denoise)
-    # add_library(wdenoise SHARED IMPORTED)
-    # set_property(TARGET wdenoise PROPERTY IMPORTED_IMPLIB "../wdenoise/build/Bin/wdenoiselib.lib")
-    # set_target_properties(wdenoise PROPERTIES 
-    #     LINKER_LANGUAGE C
-    #     C_STANDARD 99
-    #     C_STANDARD_REQUIRED ON)
+    target_link_libraries(wavelet PRIVATE wauxlib wavelib)
     add_executable(ECG main.cpp message.pb.cc message.pb.h)
-    # add_library(wavelet2d SHARED IMPORTED)
-    # set_property(TARGET wavelet2d PROPERTY IMPORTED_LOCATION "../wavelet2d.dll")
-    # set_property(TARGET wavelet2d PROPERTY IMPORTED_IMPLIB "../wavelet2d.lib")
-    target_link_libraries(ECG PRIVATE wavelet ${Boost_LIBRARIES})
+    add_dependencies(ECG wavelet_denoise)
+    target_link_libraries(ECG PRIVATE wavelet wauxlib wavelib ${Boost_LIBRARIES})
 else ()
-    # add_subdirectory(wavelib)
     find_package(Protobuf REQUIRED)
     include_directories(${Protobuf_INCLUDE_DIRS})
     include(CMakePrintHelpers)
@@ -41,19 +35,23 @@ else ()
     protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS proto/message.proto proto/filter.proto)
     cmake_print_variables(PROTO_SRCS)
     cmake_print_variables(PROTO_HDRS)
+    
     include(ExternalProject)
+    set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
     ExternalProject_Add(wavelet_denoise
       GIT_REPOSITORY  https://github.com/rafat/wavelib.git
-      INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/wavelet_denoise/install
+      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
     )
-    add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
+    link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
+    
     add_library(wavelet wavelet_denoise.c)
     add_dependencies(wavelet wavelet_denoise)
-#    add_library(wavelet_denoise SHARED IMPORTED)
-#    set_property(TARGET wavelet_denoise PROPERTY IMPORTED_IMPLIB "wdenoise/Bin/libwdenoiselib.a")
-#    set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
-    target_link_libraries(ECG wavelet fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
-    # target_link_libraries(wavelet wdenoiselib)
+    target_link_libraries(wavelet PRIVATE wauxlib wavelib)
+
+    add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    add_dependencies(ECG wavelet_denoise)
+    target_link_libraries(ECG PRIVATE fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
 endif()
 
 set_target_properties(ECG PROPERTIES
@@ -62,7 +60,7 @@ set_target_properties(ECG PROPERTIES
 )
 
 set_target_properties(wavelet PROPERTIES
-    LINKER_LANGUAGE C
+    LINKER_LANGUAGE CXX
     C_STANDARD 99
     C_STANDARD_REQUIRED ON
 )
@@ -100,7 +98,6 @@ if(WITH_GOOGLE_TEST)
     )
     target_link_libraries(
         hello_test
-        tensorflow
         GTest::gtest_main
     )
 endif()

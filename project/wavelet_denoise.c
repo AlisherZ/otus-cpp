@@ -2,13 +2,8 @@
 #include "wavelet_denoise.h"
 #include "header/wauxlib.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 void wavelet_denoise(double *inp, double *out, int N, int J, const char *wname, const char *dmethod, const char *method, const char *ext, const char *thresh, const char *level) {
-    struct denoise_set t;
+    //struct denoise_set t;
     //double *sig, *inp, *oup;
     //char *wname = "db5";
 	//char *method = "dwt";
@@ -28,7 +23,3 @@ void wavelet_denoise(double *inp, double *out, int N, int J, const char *wname, 
 	setDenoiseParameters(obj, thresh, level);
 	denoise(obj, inp, out);
 }
-
-#ifdef __cplusplus
-}
-#endif
