@@ -17,7 +17,7 @@ int main(int, char* argv[])
     std::ofstream output(argv[0]);
     john.SerializeToOstream(&output);
     output.close();
-    //const int N = 10;
+    const int N = 10;
     
     /*
     auto obj = denoise_init(N,4,"db5");
@@ -30,5 +30,11 @@ int main(int, char* argv[])
 
 	//denoise(obj,inp,oup);
     */
+
+    double *inp = (double*)malloc(sizeof(double)* N);
+    double *out = (double*)malloc(sizeof(double)* N);
+    wavelet_denoise(inp, out, N, 4, "db5", "visushrink", "dwt", "sym", "soft", "first");
+    free(inp);
+	free(out);
     return 0;
 }
