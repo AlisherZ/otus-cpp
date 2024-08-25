@@ -1,6 +1,6 @@
 message Wavelet {
   optional string name = 1;
-  optional int levels_decomposition = 2;
+  optional int32 levels_decomposition = 2;
   optional string decomposition_method = 3;
   optional string denoising_method = 4;
   optional string signal_extension = 5;
@@ -11,7 +11,7 @@ message Wavelet {
 message FFT {
     optional string name = 1;
     optional double low_threshold = 2;
-    optional double high_threshold = 2;
+    optional double high_threshold = 3;
 }
 
 message Filter {
