@@ -52,7 +52,7 @@ else ()
 #    add_library(wavelet_denoise SHARED IMPORTED)
 #    set_property(TARGET wavelet_denoise PROPERTY IMPORTED_IMPLIB "wdenoise/Bin/libwdenoiselib.a")
 #    set_target_properties(wavelet PROPERTIES LINKER_LANGUAGE C)
-    target_link_libraries(ECG PRIVATE wavelet fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+    target_link_libraries(ECG wavelet fftw3 ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
     # target_link_libraries(wavelet wdenoiselib)
 endif()
 
