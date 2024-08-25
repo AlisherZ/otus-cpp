@@ -1,0 +1,26 @@
+message Wavelet {
+  optional string name = 1;
+  optional int levels_decomposition = 2;
+  optional string decomposition_method = 3;
+  optional string denoising_method = 4;
+  optional string signal_extension = 5;
+  optional string thresholding = 6;
+  optional string estimation_level = 7;
+}
+
+message FFT {
+    optional string name = 1;
+    optional low_threshold = 2;
+    optional high_threshold = 2;
+}
+
+message Filter {
+    oneof test_oneof {
+        Wavelet wavelet = 1;
+        FFT fft = 2;
+    }
+}
+
+message Filters {
+    repeated Filter filters = 1;
+}
