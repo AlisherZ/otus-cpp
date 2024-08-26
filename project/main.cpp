@@ -1,4 +1,5 @@
 #include <boost/program_options.hpp>
+#include <google/protobuf/util/json_util.h>
 #include <sciplot/sciplot.hpp>
 #include <iostream>
 #include <fstream>
@@ -44,7 +45,7 @@ int main(int argc, char* argv[])
     ft->set_name("HighPass");
     ft->set_low_threshold(4);
     std::string current;
-    MessageToJsonString(filt, &current);
+    google::protobuf::util::MessageToJsonString(filt, &current);
     std::cout << current << std::endl;
 
     if (vm.count("config")) {
