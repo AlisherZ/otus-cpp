@@ -3,6 +3,7 @@
 #include <complex.h>
 //#include <fftw3.h>
 #include "message.pb.h"
+#include "filter.pb.h"
 #include "wavelet_denoise.h"
 
 using namespace std;

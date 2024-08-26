@@ -18,6 +18,10 @@ if (MSVC)
       GIT_REPOSITORY  https://github.com/rafat/wavelib.git
       CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
     )
+    ExternalProject_Add(protobuf_lib
+      GIT_REPOSITORY  https://github.com/protocolbuffers/protobuf.git
+      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/external1
+    )
     include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
     link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
     add_library(wavelet wavelet_denoise.c wavelet_denoise.h)
