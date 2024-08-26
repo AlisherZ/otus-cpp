@@ -1,0 +1,1 @@
+{"filters":[{"fft":{"name":"HighPass","lowThreshold":4}},{"wavelet":{"name":"db5","levelsDecomposition":4,"decompositionMethod":"dwt","denoisingMethod":"visushrink","signalExtension":"sym","thresholding":"soft","estimationLevel":"all"}}]}
