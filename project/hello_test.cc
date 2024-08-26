@@ -27,4 +27,7 @@ TEST(FiltersTest, EmptyAssertions) {
   auto out1 = fft_denoise_cpp(inp, filt);
 
   EXPECT_EQ(out.size(), out1.size());
+  for(std::size_t i = 0;i < (int)out.size();i++) {
+    EXPECT_DOUBLE_EQ(out[i], out1[i]);
+  }
 }
