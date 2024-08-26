@@ -25,7 +25,9 @@ jobs:
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
       - run: ls -a .
       - run: cmake --build .
-      - run: .\Debug\ECG -i test_input.txt
+      - run: ls -a .
+      - run: ls -a ./bin
+      - run: ./Debug/ECG -i test_input.txt
       - run: cmake --build . --target test
       - run: cmake --build . --target package
       - name: Create Release
