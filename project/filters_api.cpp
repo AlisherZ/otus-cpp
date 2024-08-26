@@ -5,7 +5,7 @@
 #include "fft_api.h"
 
 std::vector<double> fft_denoise_cpp(std::vector<double> inp, Filters filter) {
-    for(int i = 0;i < filter.filters_size()) {
+    for(int i = 0;i < filter.filters_size();i++) {
         std::vector<double> out;
         fft_denoise_cpp(inp, out, filter.filters(i));
         inp = out;
@@ -15,9 +15,9 @@ std::vector<double> fft_denoise_cpp(std::vector<double> inp, Filters filter) {
 
 void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, Filter filter) {
     if(filter.has_wavelet()) {
-        wavelet_denoise_cpp(inp, out, filter.get_wavelet());
+        wavelet_denoise_cpp(inp, out, filter.wavelet());
     }
     if(filter.has_fft()) {
-        fft_denoise_cpp(inp, out, filter.get_fft());
+        fft_denoise_cpp(inp, out, filter.fft());
     }
 }
