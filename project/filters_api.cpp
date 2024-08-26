@@ -1,5 +1,3 @@
-#pragma once
-
 #include "filters_api.h"
 #include "wavelet_cpp_api.h"
 #include "fft_api.h"
