@@ -4,9 +4,9 @@
 #include "fft_api.h"
 
 void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, FFT fft) {
-    std::shared_ptr<fftw_complex[]> oup = std::make_shared<fftw_complex[]>(out.size());
+    fftw_complex *oup = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * out.size());
     std::shared_ptr<double[]> in = std::make_shared<double[]>(inp.size());
-    fftw_plan p = fftw_plan_dft_r2c_1d(inp.size(), inp.data(), oup.get(), FFTW_ESTIMATE);
+    fftw_plan p = fftw_plan_dft_r2c_1d(inp.size(), inp.data(), oup, FFTW_ESTIMATE);
     fftw_execute(p);
     fftw_destroy_plan(p);
     if(fft.name() == "LowPass") {
@@ -37,9 +37,10 @@ void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, FFT fft) 
             oup[i][1] = 0;
         }
     }
-    p = fftw_plan_dft_c2r_1d(inp.size(), oup.get(), in.get(), FFTW_ESTIMATE);
+    p = fftw_plan_dft_c2r_1d(inp.size(), oup, in.get(), FFTW_ESTIMATE);
     fftw_execute(p);
     fftw_destroy_plan(p);
+    fftw_free(oup);
     for(int i = 0;i < (int)inp.size();i++) {
         out[i] = in[i];
     }
