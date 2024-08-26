@@ -39,6 +39,7 @@ int main(int argc, char* argv[])
     }
 
     Filters filt;
+    /*
     auto f = filt.add_filters();
     auto ft = f->mutable_fft();
     ft->set_name("HighPass");
@@ -48,6 +49,7 @@ int main(int argc, char* argv[])
     for(int i = 0;i < (int)current.size();i++) {
         std::cout << (int)current[i] << std::endl;
     }
+    */
 
     if (vm.count("config")) {
         std::ifstream input_config(vm["config"].as<std::string>());
