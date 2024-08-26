@@ -8,75 +8,44 @@ project(ECG VERSION ${PROJECT_VERSION})
 option(WITH_BOOST_TEST "Whether to build Boost test" OFF)
 option(WITH_GOOGLE_TEST "Whether to build Google test" ON)
 
-if (MSVC)
-    # add_subdirectory(wdenoise)
-    # add_library(wdenoise SHARED wdenoise)
-    # set_target_properties(Test1 PROPERTIES LINKER_LANGUAGE C)
-    include(ExternalProject)
-    set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
-    ExternalProject_Add(wavelet_denoise
-      GIT_REPOSITORY  https://github.com/rafat/wavelib.git
-      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
-    )
-    include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
-    link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
+find_package (Boost REQUIRED COMPONENTS program_options REQUIRED) 
+find_package(Protobuf REQUIRED)
+include_directories(${Protobuf_INCLUDE_DIRS})
+include(CMakePrintHelpers)
+cmake_print_variables(PROTO_SRCS)
+cmake_print_variables(PROTO_HDRS)
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS proto/filter.proto)
+cmake_print_variables(PROTO_SRCS)
+cmake_print_variables(PROTO_HDRS)
 
-    add_library(wavelet wavelet_denoise.c)
-    add_dependencies(wavelet wavelet_denoise)
-    target_link_libraries(wavelet PRIVATE wauxlib wavelib)
+include(ExternalProject)
+set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
+ExternalProject_Add(wavelet_denoise
+    GIT_REPOSITORY  https://github.com/rafat/wavelib.git
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+)
+include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
+link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
 
-    add_library(wavelet_api wavelet_cpp_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    add_dependencies(wavelet_api wavelet_denoise)
-    target_link_libraries(wavelet_api PRIVATE wavelet wauxlib wavelib)
+add_library(wavelet wavelet_denoise.c)
+add_dependencies(wavelet wavelet_denoise)
+target_link_libraries(wavelet PRIVATE wauxlib wavelib)
 
-    add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    target_link_libraries(fft_api PRIVATE fftw3)
+add_library(wavelet_api wavelet_cpp_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+add_dependencies(wavelet_api wavelet_denoise)
+target_link_libraries(wavelet_api PRIVATE wavelet wauxlib wavelib ${Protobuf_LIBRARIES})
 
-    add_library(filters_api filters_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    add_dependencies(filters_api wavelet_denoise)
-    target_link_libraries(filters_api PRIVATE fft_api wavelet_api fftw3 wavelet wauxlib wavelib)
-    
-    add_executable(ECG main.cpp message.pb.cc message.pb.h)
-    add_dependencies(ECG wavelet_denoise)
-    target_link_libraries(ECG PRIVATE wavelet wauxlib wavelib ${Boost_LIBRARIES})
-else ()
-    find_package(Protobuf REQUIRED)
-    include_directories(${Protobuf_INCLUDE_DIRS})
-    include(CMakePrintHelpers)
-    cmake_print_variables(PROTO_SRCS)
-    cmake_print_variables(PROTO_HDRS)
-    protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS proto/message.proto proto/filter.proto)
-    cmake_print_variables(PROTO_SRCS)
-    cmake_print_variables(PROTO_HDRS)
-    
-    include(ExternalProject)
-    set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
-    ExternalProject_Add(wavelet_denoise
-      GIT_REPOSITORY  https://github.com/rafat/wavelib.git
-      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
-    )
-    include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
-    link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
-    
-    add_library(wavelet wavelet_denoise.c)
-    add_dependencies(wavelet wavelet_denoise)
-    target_link_libraries(wavelet PRIVATE wauxlib wavelib)
+add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+target_link_libraries(fft_api PRIVATE fftw3 ${Protobuf_LIBRARIES})
 
-    add_library(wavelet_api wavelet_cpp_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    add_dependencies(wavelet_api wavelet_denoise)
-    target_link_libraries(wavelet_api PRIVATE wavelet wauxlib wavelib)
+add_library(filters_api filters_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+add_dependencies(filters_api wavelet_denoise)
+target_link_libraries(filters_api PRIVATE fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES})
 
-    add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    target_link_libraries(fft_api PRIVATE fftw3)
+add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+add_dependencies(ECG wavelet_denoise)
+target_link_libraries(ECG PRIVATE filters_api fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
 
-    add_library(filters_api filters_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    add_dependencies(filters_api wavelet_denoise)
-    target_link_libraries(filters_api PRIVATE fft_api wavelet_api fftw3 wavelet wauxlib wavelib)
-
-    add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-    add_dependencies(ECG wavelet_denoise)
-    target_link_libraries(ECG PRIVATE fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
-endif()
 
 set_target_properties(ECG PROPERTIES
     CXX_STANDARD 17

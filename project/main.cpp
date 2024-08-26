@@ -1,47 +1,59 @@
+#include <boost/program_options.hpp>
 #include <iostream>
 #include <fstream>
-#include <complex.h>
-//#include <fftw3.h>
-#include "message.pb.h"
 #include "filter.pb.h"
-#include "wavelet_denoise.h"
+#include "filters_api.h"
 
 using namespace std;
+namespace po = boost::program_options;
 
-int main(int, char* argv[])
+int main(int argc, char* argv[])
 {
-    Person john;
-    john.set_id(1234);
-    john.set_name("John Doe");
-    john.set_email("jdoe@example.com");
-    
-    std::ofstream output(argv[0]);
-    john.SerializeToOstream(&output);
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help,h", "produce help message")
+        ("input_file,i", po::value<std::string>(), "input signal file")
+        ("config,c", po::value<std::string>(), "filters config file. ")
+        ;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+ 
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        return 0;
+    }
+
+    if (vm.count("input_file") == 0) {
+        std::cout << "Must select input signal" << std::endl;
+        return 1;
+    }
+
+    Filters filt;
+
+    if (vm.count("config")) {
+        std::ifstream input_config(vm["config"].as<std::string>());
+        filt.ParseFromIstream(&input_config);
+        input_config.close();
+    }
+
+    std::vector<double> inp;
+
+    std::ifstream input(vm["input_file"].as<std::string>());
+    std::string line;
+    while (std::getline(input, line)) {
+        inp.push_back(std::stod(line));
+    }
+    input.close()
+
+    auto out = fft_denoise_cpp(inp, filt);
+
+    std::ofstream output("result.txt");
+    for(auto val : out) {
+        output << val << std::endl;
+    }
     output.close();
-    const int N = 100;
-    
-    /*
-    auto obj = denoise_init(N,4,"db5");
-	setDenoiseMethod(obj,"visushrink");// sureshrink is also the default. The other option with dwt and swt is visushrink.
-	// modwt works only with modwtshrink method
-	setDenoiseWTMethod(obj,"dwt");// Default is dwt. the other options are swt and modwt
-	setDenoiseWTExtension(obj,"sym");// Default is sym. the other option is per
-	setDenoiseParameters(obj,"soft","all");// Default for thresh is soft. Other option is hard
-	// Default for level is all. The other option is first
 
-	//denoise(obj,inp,oup);
-    */
-
-    double *inp = (double*)malloc(sizeof(double)* N);
-    double *out = (double*)malloc(sizeof(double)* N);
-    string wname = "db5";
-	string dmethod = "visushrink";
-	string method = "dwt";
-	string ext = "sym";
-	string thresh = "soft";
-	string level = "first";
-    wavelet_denoise(inp, out, N, 4, wname.c_str(), dmethod.c_str(), method.c_str(), ext.c_str(), thresh.c_str(), level.c_str());
-    free(inp);
-	free(out);
     return 0;
 }
