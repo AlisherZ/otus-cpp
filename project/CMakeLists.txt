@@ -71,11 +71,7 @@ endif()
 include_directories(${sciplot_content_SOURCE_DIR})
 add_executable(test_sciplot test.cpp)
 
-add_library(output output.cpp)
-set_target_properties(output PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-)
+# add_library(output output.cpp)
 
 add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 add_dependencies(ECG wavelet_denoise)
