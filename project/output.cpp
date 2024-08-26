@@ -5,10 +5,10 @@
 void outputInAllFormats(std::vector<double> values, std::vector<std::string> formats) {
     for(auto format : formats) {
         if(format == "txt") {
-            saveTxtFile(val);
+            saveTxtFile(values);
         }
         if(format == "svg") {
-            saveImgFile(val);
+            saveImgFile(values);
         }
     }
 }
