@@ -5,7 +5,7 @@
 
 void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, FFT fft) {
     fftw_complex *oup = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * out.size());
-    std::shared_ptr<double[]> in = std::make_shared<double[]>(inp.size());
+    std::shared_ptr<double[]> in(new double[inp.size()]);
     fftw_plan p = fftw_plan_dft_r2c_1d(inp.size(), inp.data(), oup, FFTW_ESTIMATE);
     fftw_execute(p);
     fftw_destroy_plan(p);
