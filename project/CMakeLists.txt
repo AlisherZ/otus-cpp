@@ -58,6 +58,19 @@ set_target_properties(filters_api PROPERTIES
     CXX_STANDARD_REQUIRED ON
 )
 
+include(FetchContent)
+FetchContent_Declare(sciplot_content
+  GIT_REPOSITORY https://github.com/sciplot/sciplot.git
+  GIT_TAG master)
+
+FetchContent_GetProperties(sciplot_content)
+if(NOT sciplot_content_POPULATED)
+  FetchContent_Populate(sciplot_content)
+endif()
+
+include_directories(${sciplot_content_SOURCE_DIR})
+add_executable(test test.cpp)
+
 add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 add_dependencies(ECG wavelet_denoise)
 target_link_libraries(ECG PRIVATE filters_api fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
@@ -68,7 +81,6 @@ set_target_properties(ECG PROPERTIES
 )
 
 if(WITH_GOOGLE_TEST)
-    include(FetchContent)
     FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
