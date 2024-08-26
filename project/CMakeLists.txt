@@ -31,31 +31,45 @@ add_library(wavelet wavelet_denoise.c)
 add_dependencies(wavelet wavelet_denoise)
 target_link_libraries(wavelet PRIVATE wauxlib wavelib)
 
+set_target_properties(wavelet PROPERTIES
+    LINKER_LANGUAGE CXX
+    C_STANDARD 99
+    C_STANDARD_REQUIRED ON
+)
+
 add_library(wavelet_api wavelet_cpp_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 add_dependencies(wavelet_api wavelet_denoise)
 target_link_libraries(wavelet_api PRIVATE wavelet wauxlib wavelib ${Protobuf_LIBRARIES})
 
+set_target_properties(wavelet_api PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+)
+
 add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 target_link_libraries(fft_api PRIVATE fftw3 ${Protobuf_LIBRARIES})
+
+set_target_properties(fft_api PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+)
 
 add_library(filters_api filters_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 add_dependencies(filters_api wavelet_denoise)
 target_link_libraries(filters_api PRIVATE fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES})
 
-add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
-add_dependencies(ECG wavelet_denoise)
-target_link_libraries(ECG PRIVATE filters_api fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
-
-
-set_target_properties(ECG PROPERTIES
+set_target_properties(filters_api PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
-set_target_properties(wavelet PROPERTIES
-    LINKER_LANGUAGE CXX
-    C_STANDARD 23
-    C_STANDARD_REQUIRED ON
+add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+add_dependencies(ECG wavelet_denoise)
+target_link_libraries(ECG PRIVATE filters_api fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+
+set_target_properties(ECG PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
 )
 
 if(WITH_GOOGLE_TEST)
@@ -128,9 +142,6 @@ else ()
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(wavelet_api PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
-    target_compile_options(wavelet PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(WITH_BOOST_TEST)
