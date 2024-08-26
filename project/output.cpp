@@ -22,8 +22,8 @@ void saveTxtFile(std::vector<double> values) {
 }
 
 void saveImgFile(std::vector<double> values) {
-    sciplot::Vec x = linspace(0.0, values.size(), values.size());
-    
+    sciplot::Vec x = sciplot::linspace(0.0, values.size(), values.size());
+    sciplot::Vec y = values;
     sciplot::Plot2D plot;
     plot.xlabel("x");
     plot.ylabel("y");
