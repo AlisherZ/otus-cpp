@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 
     auto out = denoise_cpp(inp, filt);
 
-    outputInAllFormats(out, vm["output"].as<std::vector<std::string> >())
+    outputInAllFormats(out, vm["output"].as<std::vector<std::string> >());
 
     return 0;
 }
