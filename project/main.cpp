@@ -4,6 +4,7 @@
 #include <fstream>
 #include "filter.pb.h"
 #include "filters_api.h"
+#include "output.h"
 
 using namespace std;
 namespace po = boost::program_options;
