@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
         ("help,h", "produce help message")
         ("input_file,i", po::value<std::string>(), "input signal file.")
         ("config,c", po::value<std::string>(), "filters config file.")
-        ("output,o", po::value<std::vector<std::string> >(), "Output types.")
+        ("output,o", po::value<std::vector<std::string> >(), "Output types(txt|svg).")
         ;
 
     po::variables_map vm;
@@ -37,8 +37,8 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    /*
     Filters filt;
+    /*
     auto f = filt.add_filters();
     auto ft = f->mutable_fft();
     ft->set_name("HighPass");
