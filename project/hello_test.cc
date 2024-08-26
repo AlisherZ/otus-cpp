@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <google/protobuf/util/json_util.h>
 #include <iostream>
 #include <fstream>
 
@@ -35,9 +36,9 @@ TEST(FiltersTest, EmptyAssertions) {
 TEST(FiltersTest, FFTAssertions) {
   Filters filt;
   std::ifstream input_config("only_fft.txt");
-  string config;
+  std::string config;
   input_config >> config;
-  JsonStringToMessage(config, &filt);
+  google::protobuf::util::JsonStringToMessage(config, &filt);
   input_config.close();
   
   std::vector<double> inp;
@@ -68,9 +69,9 @@ TEST(FiltersTest, FFTAssertions) {
 TEST(FiltersTest, WTAssertions) {
   Filters filt;
   std::ifstream input_config("only_wt.txt");
-  string config;
+  std::string config;
   input_config >> config;
-  JsonStringToMessage(config, &filt);
+  google::protobuf::util::JsonStringToMessage(config, &filt);
   input_config.close();
   
   std::vector<double> inp;

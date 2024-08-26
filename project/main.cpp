@@ -61,9 +61,9 @@ int main(int argc, char* argv[])
 
     if (vm.count("config")) {
         std::ifstream input_config(vm["config"].as<std::string>());
-        string config;
+        std::string config;
         input_config >> config;
-        JsonStringToMessage(config, &filt);
+        google::protobuf::util::JsonStringToMessage(config, &filt);
         input_config.close();
     }
 
