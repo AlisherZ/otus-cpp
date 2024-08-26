@@ -27,7 +27,8 @@ jobs:
       - run: cmake --build .
       - run: ls -a .
       - run: ls -a ./bin
-      - run: ./ECG -i test_input.txt
+      - run: ./ECG -i test_input.txt -c only_fft.txt
+      - run: cat result.txt
       - run: cmake --build . --target test
       - run: cmake --build . --target package
       - name: Create Release
