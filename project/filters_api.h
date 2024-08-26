@@ -2,5 +2,5 @@
 
 #include "filter.pb.h"
 
-std::vector<double> fft_denoise_cpp(std::vector<double> inp, Filters filter);
-void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, Filter filter);
+std::vector<double> denoise_cpp(std::vector<double> inp, Filters filter);
+void denoise_cpp(std::vector<double> inp, std::vector<double> &out, Filter filter);
