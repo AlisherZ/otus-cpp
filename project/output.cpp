@@ -22,9 +22,9 @@ void saveTxtFile(std::vector<double> values) {
 }
 
 void saveImgFile(std::vector<double> values) {
-    Vec x = linspace(0.0, values.size(), values.size());
+    sciplot::Vec x = linspace(0.0, values.size(), values.size());
     
-    Plot2D plot;
+    sciplot::Plot2D plot;
     plot.xlabel("x");
     plot.ylabel("y");
     plot.xrange(0.0, values.size());
@@ -34,8 +34,8 @@ void saveImgFile(std::vector<double> values) {
         .displayHorizontal()
         .displayExpandWidthBy(2);
     plot.drawCurve(x, values[x]).label("signal");
-    Figure fig = {{plot}};
-    Canvas canvas = {{fig}};
+    sciplot::Figure fig = {{plot}};
+    sciplot::Canvas canvas = {{fig}};
     //canvas.show();
     canvas.save("result.svg");
 }
