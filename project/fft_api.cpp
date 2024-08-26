@@ -37,6 +37,6 @@ void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, FFT fft) 
     fftw_one(p, oup, in);
     fftw_destroy_plan(p);
     for(int i = 0;i < inp.size();i++) {
-        out[i] = in[i];
+        out[i] = in[i][0];
     }
 }

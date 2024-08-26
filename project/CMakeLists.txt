@@ -18,13 +18,9 @@ if (MSVC)
       GIT_REPOSITORY  https://github.com/rafat/wavelib.git
       CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
     )
-    ExternalProject_Add(protobuf_lib
-      GIT_REPOSITORY  https://github.com/protocolbuffers/protobuf.git
-      CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/external1
-    )
     include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
     link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
-    add_library(wavelet wavelet_denoise.c wavelet_denoise.h)
+    add_library(wavelet wavelet_denoise.c)
     add_dependencies(wavelet wavelet_denoise)
     target_link_libraries(wavelet PRIVATE wauxlib wavelib)
     add_executable(ECG main.cpp message.pb.cc message.pb.h)
@@ -52,6 +48,12 @@ else ()
     add_library(wavelet wavelet_denoise.c)
     add_dependencies(wavelet wavelet_denoise)
     target_link_libraries(wavelet PRIVATE wauxlib wavelib)
+
+    add_library(wavelet_api wavelet_cpp_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    add_dependencies(wavelet_api wavelet_denoise)
+    target_link_libraries(wavelet_api PRIVATE wavelet wauxlib wavelib)
+
+    add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     add_dependencies(ECG wavelet_denoise)
