@@ -42,6 +42,6 @@ void fft_denoise_cpp(std::vector<double> inp, std::vector<double> &out, FFT fft)
     fftw_destroy_plan(p);
     fftw_free(oup);
     for(int i = 0;i < (int)inp.size();i++) {
-        out[i] = in[i] / N;
+        out[i] = in[i] / inp.size();
     }
 }
