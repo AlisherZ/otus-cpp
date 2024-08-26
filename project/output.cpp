@@ -1,6 +1,6 @@
 #include <sciplot/sciplot.hpp>
 
-#include "output.cpp"
+#include "output.h"
 
 void outputInAllFormats(std::vector<double> values, std::vector<std::string> formats) {
     for(auto format : formats) {
