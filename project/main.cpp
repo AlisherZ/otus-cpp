@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     ft->set_low_threshold(4);
     */
     auto w = filt.add_filters();
-    auto wt = w->mutable_wt();
+    auto wt = w->mutable_wavelet();
     wt->set_name("db5");
     wt->set_levels_decomposition(4);
     wt->set_decomposition_method("dwt");
