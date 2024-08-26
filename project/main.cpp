@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
         ("help,h", "produce help message")
         ("input_file,i", po::value<std::string>(), "input signal file.")
         ("config,c", po::value<std::string>(), "filters config file.")
-        ("output,o", po::value<std::vector<std::string> >(), "Output types(txt|svg).")
+        ("output,o", po::value<std::vector<std::string> >(), "Output types(txt|svg|cout).")
         ;
 
     po::variables_map vm;
@@ -40,10 +40,13 @@ int main(int argc, char* argv[])
     }
 
     Filters filt;
+    /*
     auto f = filt.add_filters();
     auto ft = f->mutable_fft();
     ft->set_name("HighPass");
     ft->set_low_threshold(4);
+    */
+    /*
     auto w = filt.add_filters();
     auto wt = w->mutable_wavelet();
     wt->set_name("db5");
@@ -56,6 +59,7 @@ int main(int argc, char* argv[])
     std::string current;
     google::protobuf::util::MessageToJsonString(filt, &current);
     std::cout << current << std::endl;
+    */
 
     if (vm.count("config")) {
         std::ifstream input_config(vm["config"].as<std::string>());

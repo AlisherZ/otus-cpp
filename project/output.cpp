@@ -1,4 +1,5 @@
 #include <sciplot/sciplot.hpp>
+#include <iostream>
 
 #include "output.h"
 
@@ -10,6 +11,15 @@ void outputInAllFormats(std::vector<double> values, std::vector<std::string> for
         if(format == "svg") {
             saveImgFile(values);
         }
+        if(format == "cout") {
+            saveConsole(values);
+        }
+    }
+}
+
+void saveConsole(std::vector<double> values) {
+    for(auto val : values) {
+        std::cout << val << std::endl;
     }
 }
 
