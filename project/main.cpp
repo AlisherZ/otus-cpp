@@ -40,12 +40,10 @@ int main(int argc, char* argv[])
     }
 
     Filters filt;
-    /*
     auto f = filt.add_filters();
     auto ft = f->mutable_fft();
     ft->set_name("HighPass");
     ft->set_low_threshold(4);
-    */
     auto w = filt.add_filters();
     auto wt = w->mutable_wavelet();
     wt->set_name("db5");

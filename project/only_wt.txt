@@ -1,13 +1,1 @@
-Filters {
-    Filter {
-        Wavelet {
-            name "db5"
-            levels_decomposition 4
-            decomposition_method "dwt"
-            denoising_method "visushrink"
-            signal_extension "sym"
-            thresholding "soft"
-            estimation_level "all"
-        }
-    }
-}
+{"filters":[{"wavelet":{"name":"db5","levelsDecomposition":4,"decompositionMethod":"dwt","denoisingMethod":"visushrink","signalExtension":"sym","thresholding":"soft","estimationLevel":"all"}}]}
