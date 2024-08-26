@@ -39,10 +39,9 @@ int main(int argc, char* argv[])
 
     Filters filt;
     auto f = filt.add_filters();
-    FFT ft;
-    ft.set_name("HighPass");
-    ft.set_low_threshold(4);
-    f->set_fft(ft);
+    auto ft = f->mutable_fft();
+    ft->set_name("HighPass");
+    ft->set_low_threshold(4);
     std::string current;
     filt.SerializeToString(&current);
     std::cout << current << std::endl;
@@ -64,11 +63,15 @@ int main(int argc, char* argv[])
 
     auto out = denoise_cpp(inp, filt);
 
-    std::ofstream output("result.txt");
-    for(auto val : out) {
-        output << val << std::endl;
+    for(auto format : vm["output"].as<std::vector<std::string> >()) {
+        if(format == "txt") {
+            std::ofstream output("result.txt");
+            for(auto val : out) {
+                output << val << std::endl;
+            }
+            output.close();
+        }
     }
-    output.close();
 
     return 0;
 }
