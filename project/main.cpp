@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     ft->set_low_threshold(4);
     std::string current;
     filt.SerializeToString(&current);
-    for(int i = 0;i < current.size();i++) {
+    for(int i = 0;i < (int)current.size();i++) {
         std::cout << (int)current[i] << std::endl;
     }
 
