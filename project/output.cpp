@@ -2,14 +2,25 @@
 
 #include "output.cpp"
 
-void outputInAllFormats(std::vector<double> val, std::vector<std::string> formats) {
-
+void outputInAllFormats(std::vector<double> values, std::vector<std::string> formats) {
+    for(auto format : formats) {
+        if(format == "txt") {
+            saveTxtFile(val);
+        }
+        if(format == "svg") {
+            saveImgFile(val);
+        }
+    }
 }
 
-void saveTxtFile(std::vector<double> val) {
-
+void saveTxtFile(std::vector<double> values) {
+    std::ofstream output("result.txt");
+    for(auto val : values) {
+        output << val << std::endl;
+    }
+    output.close();
 }
 
-void saveImgFile(std::vector<double> val) {
+void saveImgFile(std::vector<double> values) {
 
 }
