@@ -54,6 +54,7 @@ else ()
     target_link_libraries(wavelet_api PRIVATE wavelet wauxlib wavelib)
 
     add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    target_link_libraries(fft_api PRIVATE fftw3)
 
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     add_dependencies(ECG wavelet_denoise)

@@ -5,9 +5,9 @@
 #include "fft_api.h"
 
 std::vector<double> fft_denoise_cpp(std::vector<double> inp, Filters filter) {
-    for(auto filt : filter) {
+    for(int i = 0;i < filter.filters_size()) {
         std::vector<double> out;
-        fft_denoise_cpp(inp, out, filt);
+        fft_denoise_cpp(inp, out, filter.filters(i));
         inp = out;
     }
     return inp;
