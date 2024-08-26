@@ -28,17 +28,22 @@ int main(int argc, char* argv[])
     }
 
     if (vm.count("input_file") == 0) {
-        std::cout << "Must select input signal" << std::endl;
+        std::cout << "Must select input signal." << std::endl;
+        return 1;
+    }
+
+    if (vm.count("output") == 0) {
+        std::cout << "Must select at least 1 output format." << std::endl;
         return 1;
     }
 
     Filters filt;
-    auto f = filt.add_filter();
+    auto f = filt.add_filters();
     FFT ft;
     ft.set_name("HighPass");
-    ft.low_threshold(4);
+    ft.set_low_threshold(4);
     f->set_fft(ft);
-    string current;
+    std::string current;
     filt.SerializeToString(&current);
     std::cout << current << std::endl;
 
