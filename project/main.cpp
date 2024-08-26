@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     }
     input.close();
 
-    auto out = fft_denoise_cpp(inp, filt);
+    auto out = denoise_cpp(inp, filt);
 
     std::ofstream output("result.txt");
     for(auto val : out) {

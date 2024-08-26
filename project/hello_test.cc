@@ -24,7 +24,7 @@ TEST(FiltersTest, EmptyAssertions) {
   }
   input1.close();
 
-  auto out1 = fft_denoise_cpp(inp, filt);
+  auto out1 = denoise_cpp(inp, filt);
 
   EXPECT_EQ(out.size(), out1.size());
   for(std::size_t i = 0;i < out.size();i++) {
@@ -54,7 +54,7 @@ TEST(FiltersTest, FFTAssertions) {
   }
   input1.close();
 
-  auto out1 = fft_denoise_cpp(inp, filt);
+  auto out1 = denoise_cpp(inp, filt);
 
   EXPECT_EQ(out.size(), out1.size());
   for(std::size_t i = 0;i < out.size();i++) {
@@ -85,7 +85,7 @@ TEST(FiltersTest, WTAssertions) {
   }
   input1.close();
 
-  auto out1 = fft_denoise_cpp(inp, filt);
+  auto out1 = denoise_cpp(inp, filt);
 
   EXPECT_EQ(out.size(), out1.size());
   for(std::size_t i = 0;i < out.size();i++) {
