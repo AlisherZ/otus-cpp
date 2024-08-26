@@ -37,6 +37,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    /*
     Filters filt;
     auto f = filt.add_filters();
     auto ft = f->mutable_fft();
@@ -45,10 +46,11 @@ int main(int argc, char* argv[])
     std::string current;
     filt.SerializeToString(&current);
     std::cout << current << std::endl;
+    */
 
     if (vm.count("config")) {
         std::ifstream input_config(vm["config"].as<std::string>());
-        //filt.ParseFromIstream(&input_config);
+        filt.ParseFromIstream(&input_config);
         input_config.close();
     }
 
