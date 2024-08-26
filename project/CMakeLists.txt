@@ -20,9 +20,22 @@ if (MSVC)
     )
     include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
     link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
+
     add_library(wavelet wavelet_denoise.c)
     add_dependencies(wavelet wavelet_denoise)
     target_link_libraries(wavelet PRIVATE wauxlib wavelib)
+
+    add_library(wavelet_api wavelet_cpp_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    add_dependencies(wavelet_api wavelet_denoise)
+    target_link_libraries(wavelet_api PRIVATE wavelet wauxlib wavelib)
+
+    add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    target_link_libraries(fft_api PRIVATE fftw3)
+
+    add_library(filters_api filters_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    add_dependencies(filters_api wavelet_denoise)
+    target_link_libraries(filters_api PRIVATE fft_api wavelet_api fftw3 wavelet wauxlib wavelib)
+    
     add_executable(ECG main.cpp message.pb.cc message.pb.h)
     add_dependencies(ECG wavelet_denoise)
     target_link_libraries(ECG PRIVATE wavelet wauxlib wavelib ${Boost_LIBRARIES})
@@ -55,6 +68,10 @@ else ()
 
     add_library(fft_api fft_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     target_link_libraries(fft_api PRIVATE fftw3)
+
+    add_library(filters_api filters_api.cpp ${PROTO_SRCS} ${PROTO_HDRS})
+    add_dependencies(filters_api wavelet_denoise)
+    target_link_libraries(filters_api PRIVATE fft_api wavelet_api fftw3 wavelet wauxlib wavelib)
 
     add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
     add_dependencies(ECG wavelet_denoise)
