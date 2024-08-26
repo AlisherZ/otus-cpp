@@ -71,9 +71,11 @@ endif()
 include_directories(${sciplot_content_SOURCE_DIR})
 add_executable(test_sciplot test.cpp)
 
+add_library(output output.cpp)
+
 add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 add_dependencies(ECG wavelet_denoise)
-target_link_libraries(ECG PRIVATE filters_api fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(ECG PRIVATE output filters_api fft_api wavelet_api fftw3 wavelet wauxlib wavelib ${Protobuf_LIBRARIES} ${Boost_LIBRARIES})
 
 set_target_properties(ECG PROPERTIES
     CXX_STANDARD 17
