@@ -68,15 +68,7 @@ int main(int argc, char* argv[])
 
     auto out = denoise_cpp(inp, filt);
 
-    for(auto format : vm["output"].as<std::vector<std::string> >()) {
-        if(format == "txt") {
-            std::ofstream output("result.txt");
-            for(auto val : out) {
-                output << val << std::endl;
-            }
-            output.close();
-        }
-    }
+    outputInAllFormats(out, vm["output"].as<std::vector<std::string> >())
 
     return 0;
 }
