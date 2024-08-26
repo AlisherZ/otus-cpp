@@ -1,7 +1,7 @@
-Filters: {
-    Filter: {
-        FFT: {
-            name: "HighPass",
+Filters {
+    Filter {
+        FFT {
+            name: "HighPass"
             low_threshold: 4
         }
     }
