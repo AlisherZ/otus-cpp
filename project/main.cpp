@@ -1,4 +1,5 @@
 #include <boost/program_options.hpp>
+#include <sciplot/sciplot.hpp>
 #include <iostream>
 #include <fstream>
 #include "filter.pb.h"
@@ -12,8 +13,9 @@ int main(int argc, char* argv[])
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
-        ("input_file,i", po::value<std::string>(), "input signal file")
-        ("config,c", po::value<std::string>(), "filters config file. ")
+        ("input_file,i", po::value<std::string>(), "input signal file.")
+        ("config,c", po::value<std::string>(), "filters config file.")
+        ("output,o", po::value<std::vector<std::string> >(), "Output types.")
         ;
 
     po::variables_map vm;
@@ -31,10 +33,18 @@ int main(int argc, char* argv[])
     }
 
     Filters filt;
+    auto f = filt.add_filter();
+    FFT ft;
+    ft.set_name("HighPass");
+    ft.low_threshold(4);
+    f->set_fft(ft);
+    string current;
+    filt.SerializeToString(&current);
+    std::cout << current << std::endl;
 
     if (vm.count("config")) {
         std::ifstream input_config(vm["config"].as<std::string>());
-        filt.ParseFromIstream(&input_config);
+        //filt.ParseFromIstream(&input_config);
         input_config.close();
     }
 
