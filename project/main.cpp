@@ -38,15 +38,15 @@ int main(int argc, char* argv[])
     }
 
     Filters filt;
-    /*
     auto f = filt.add_filters();
     auto ft = f->mutable_fft();
     ft->set_name("HighPass");
     ft->set_low_threshold(4);
     std::string current;
     filt.SerializeToString(&current);
-    std::cout << current << std::endl;
-    */
+    for(int i = 0;i < current.size();i++) {
+        std::cout << (int)current[i] << std::endl;
+    }
 
     if (vm.count("config")) {
         std::ifstream input_config(vm["config"].as<std::string>());
