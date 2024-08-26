@@ -91,6 +91,14 @@ if(WITH_GOOGLE_TEST)
     )
     target_link_libraries(
         hello_test
+        filters_api
+        fft_api
+        wavelet_api
+        fftw3
+        wavelet
+        wauxlib
+        wavelib
+        ${Protobuf_LIBRARIES}
         GTest::gtest_main
     )
 endif()
@@ -111,6 +119,18 @@ if (MSVC)
     endif()
 else ()
     target_compile_options(ECG PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(filters_api PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(fft_api PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(wavelet_api PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
+    target_compile_options(wavelet PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     if(WITH_BOOST_TEST)
