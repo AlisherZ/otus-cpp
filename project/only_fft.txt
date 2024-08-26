@@ -1,13 +1,8 @@
 Filters: {
     Filter: {
-        Wavelet: {
-            name: "",
-            levels_decomposition: 4,
-            decomposition_method: "",
-            denoising_method: "",
-            signal_extension: "",
-            thresholding: "",
-            estimation_level: ""
+        FFT: {
+            name: "HighPass",
+            low_threshold: 4
         }
     }
 }
