@@ -2,8 +2,11 @@
 #include "wavelet_cpp_api.h"
 #include "fft_api.h"
 
+#include <iostream>
+
 std::vector<double> denoise_cpp(std::vector<double> inp, Filters filter) {
     std::vector<double> out(inp.size(), 0);
+    std::cout << filter.filters_size() << std::endl;
     for(int i = 0;i < filter.filters_size();i++) {
         denoise_cpp(inp, out, filter.filters(i));
         inp = out;
