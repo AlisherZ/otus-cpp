@@ -33,7 +33,7 @@ void saveImgFile(std::vector<double> values) {
         .atOutsideBottom()
         .displayHorizontal()
         .displayExpandWidthBy(2);
-    plot.drawCurve(x, values[x]).label("signal");
+    plot.drawCurve(x, values).label("signal");
     sciplot::Figure fig = {{plot}};
     sciplot::Canvas canvas = {{fig}};
     //canvas.show();
