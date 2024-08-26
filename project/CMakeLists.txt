@@ -54,7 +54,7 @@ set_target_properties(ECG PROPERTIES
 
 set_target_properties(wavelet PROPERTIES
     LINKER_LANGUAGE CXX
-    C_STANDARD 11
+    C_STANDARD 23
     C_STANDARD_REQUIRED ON
 )
 
