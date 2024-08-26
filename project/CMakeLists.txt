@@ -69,7 +69,7 @@ if(NOT sciplot_content_POPULATED)
 endif()
 
 include_directories(${sciplot_content_SOURCE_DIR})
-add_executable(test test.cpp)
+add_executable(test_sciplot test.cpp)
 
 add_executable(ECG main.cpp ${PROTO_SRCS} ${PROTO_HDRS})
 add_dependencies(ECG wavelet_denoise)
