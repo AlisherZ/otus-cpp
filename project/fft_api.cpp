@@ -5,7 +5,7 @@
 
 void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, FFT fft) {
     std::shared_ptr<fftw_complex[]> oup = std::make_shared<fftw_complex[]>(out.size());
-    std::shared_ptr<double[]> in = std::make_shared<float[]>(inp.size());
+    std::shared_ptr<double[]> in = std::make_shared<double[]>(inp.size());
     fftw_plan p = fftw_plan_dft_r2c_1d(inp.size(), inp.data(), oup.get(), FFTW_ESTIMATE);
     fftw_execute(p);
     fftw_destroy_plan(p);
@@ -40,7 +40,7 @@ void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, FFT fft) 
     p = fftw_plan_dft_c2r_1d(inp.size(), oup.get(), in.get(), FFTW_ESTIMATE);
     fftw_execute(p);
     fftw_destroy_plan(p);
-    for(int i = 0;i < inp.size();i++) {
+    for(int i = 0;i < (int)inp.size();i++) {
         out[i] = in[i];
     }
 }
