@@ -35,7 +35,9 @@ TEST(FiltersTest, EmptyAssertions) {
 TEST(FiltersTest, FFTAssertions) {
   Filters filt;
   std::ifstream input_config("only_fft.txt");
-  filt.ParseFromIstream(&input_config);
+  string config;
+  input_config >> config;
+  JsonStringToMessage(config, &filt);
   input_config.close();
   
   std::vector<double> inp;
@@ -66,7 +68,9 @@ TEST(FiltersTest, FFTAssertions) {
 TEST(FiltersTest, WTAssertions) {
   Filters filt;
   std::ifstream input_config("only_wt.txt");
-  filt.ParseFromIstream(&input_config);
+  string config;
+  input_config >> config;
+  JsonStringToMessage(config, &filt);
   input_config.close();
   
   std::vector<double> inp;
