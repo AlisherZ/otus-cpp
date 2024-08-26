@@ -61,8 +61,7 @@ TEST(FiltersTest, FFTAssertions) {
 
   EXPECT_EQ(out.size(), out1.size());
   for(std::size_t i = 0;i < out.size();i++) {
-    std::cout << std::setprecision (3) << out1[i] << std::endl;
-    //EXPECT_NEAR(out[i], out1[i], 0.1);
+    EXPECT_NEAR(out[i], out1[i], 0.1);
   }
 }
 
