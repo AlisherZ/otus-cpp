@@ -18,7 +18,7 @@ int main(int, char* argv[])
     std::ofstream output(argv[0]);
     john.SerializeToOstream(&output);
     output.close();
-    const int N = 10;
+    const int N = 100;
     
     /*
     auto obj = denoise_init(N,4,"db5");

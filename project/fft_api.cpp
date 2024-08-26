@@ -1,6 +1,6 @@
 #include <fftw.h>
 
-#include "fft.h"
+#include "fft_api.h"
 
 void fft_denoise_cpp(std::vector<double> inp, std::vector<double> out, FFT fft) {
     fftw_complex in[inp.size()], oup[out.size()];
