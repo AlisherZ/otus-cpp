@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     while (std::getline(input, line)) {
         inp.push_back(std::stod(line));
     }
-    input.close()
+    input.close();
 
     auto out = fft_denoise_cpp(inp, filt);
 
