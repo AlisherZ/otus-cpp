@@ -28,6 +28,9 @@ jobs:
       - run: ls -a .
       - run: ls -a ./bin
       - run: ./ECG -i test_input.txt -c only_wt.txt -o cout -o txt
+      - run: ./ECG -i test_input.txt -c only_wt2.txt -o cout -o txt
+      - run: ./ECG -i test_input.txt -c only_wt3.txt -o cout -o txt
+      - run: ./ECG -i test_input.txt -c only_wt4.txt -o cout -o txt
       - run: cat result.txt
       - run: cmake --build . --target test
       - run: cmake --build . --target package
