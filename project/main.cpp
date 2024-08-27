@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     auto out = denoise_cpp(inp, filt);
     std::vector<double> diff;
 
-    std::ifstream input1("test_wt_output.txt");
+    std::ifstream input1("test_fft_wt_output.txt");
     std::string line1;
     int i = 0;
     while (std::getline(input1, line1)) {
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
     }
     input1.close();
 
-    outputInAllFormats(diff, vm["output"].as<std::vector<std::string> >());
+    outputInAllFormats(out, vm["output"].as<std::vector<std::string> >());
 
     return 0;
 }
