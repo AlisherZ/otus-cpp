@@ -1,1 +1,0 @@
-{"filters":[{"wavelet":{"name":"db5","levelsDecomposition":2,"decompositionMethod":"dwt","denoisingMethod":"visushrink","signalExtension":"sym","thresholding":"hard","estimationLevel":"all"}}]}
