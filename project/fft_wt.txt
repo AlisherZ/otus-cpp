@@ -1,1 +1,1 @@
-{"filters":[{"fft":{"name":"HighPass","lowThreshold":4}},{"wavelet":{"name":"db5","levelsDecomposition":2,"decompositionMethod":"dwt","denoisingMethod":"visushrink","signalExtension":"hard","thresholding":"soft","estimationLevel":"first"}}]}
+{"filters":[{"fft":{"name":"HighPass","lowThreshold":4}},{"wavelet":{"name":"db5","levelsDecomposition":2,"decompositionMethod":"dwt","denoisingMethod":"visushrink","signalExtension":"sym","thresholding":"hard","estimationLevel":"first"}}]}
