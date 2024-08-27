@@ -39,26 +39,6 @@ int main(int argc, char* argv[])
     }
 
     Filters filt;
-    /*
-    auto f = filt.add_filters();
-    auto ft = f->mutable_fft();
-    ft->set_name("HighPass");
-    ft->set_low_threshold(4);
-    */
-    /*
-    auto w = filt.add_filters();
-    auto wt = w->mutable_wavelet();
-    wt->set_name("db5");
-    wt->set_levels_decomposition(4);
-    wt->set_decomposition_method("dwt");
-    wt->set_denoising_method("visushrink");
-    wt->set_signal_extension("sym");
-    wt->set_thresholding("soft");
-    wt->set_estimation_level("all");
-    std::string current;
-    google::protobuf::util::MessageToJsonString(filt, &current);
-    std::cout << current << std::endl;
-    */
 
     if (vm.count("config")) {
         std::ifstream input_config(vm["config"].as<std::string>());
@@ -78,18 +58,6 @@ int main(int argc, char* argv[])
     input.close();
 
     auto out = denoise_cpp(inp, filt);
-    std::vector<double> diff;
-
-    std::ifstream input1("test_fft_wt_output.txt");
-    std::string line1;
-    int i = 0;
-    while (std::getline(input1, line1)) {
-        double d = std::stod(line1);
-        diff.push_back(out[i] - d);
-        std::cout << out[i] << " - " << d << " = " << diff[i] << std::endl;
-        i++;
-    }
-    input1.close();
 
     outputInAllFormats(out, vm["output"].as<std::vector<std::string> >());
 

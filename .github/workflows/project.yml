@@ -23,12 +23,7 @@ jobs:
       - name: Install Eigen3
         uses: kupns-aka-kupa/setup-eigen3@v1
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DWITH_GOOGLE_TEST=ON
-      - run: ls -a .
       - run: cmake --build .
-      - run: ls -a .
-      - run: ls -a ./bin
-      - run: ./ECG -i test_input.txt -c fft_wt.txt -o cout -o txt
-      - run: cat result.txt
       - run: cmake --build . --target test
       - run: cmake --build . --target package
       - name: Create Release
