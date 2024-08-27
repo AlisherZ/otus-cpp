@@ -69,7 +69,6 @@ if(NOT sciplot_content_POPULATED)
 endif()
 
 include_directories(${sciplot_content_SOURCE_DIR})
-add_executable(test_sciplot test.cpp)
 
 add_library(output output.cpp)
 set_target_properties(output PROPERTIES

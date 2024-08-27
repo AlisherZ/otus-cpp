@@ -33,7 +33,6 @@ void saveTxtFile(std::vector<double> values) {
 
 void saveImgFile(std::vector<double> values) {
     sciplot::Vec x = sciplot::linspace(0.0, values.size(), values.size());
-    //sciplot::Vec y = values;
     sciplot::Plot2D plot;
     plot.xlabel("x");
     plot.ylabel("y");
@@ -46,6 +45,5 @@ void saveImgFile(std::vector<double> values) {
     plot.drawCurve(x, values).label("signal");
     sciplot::Figure fig = {{plot}};
     sciplot::Canvas canvas = {{fig}};
-    //canvas.show();
     canvas.save("result.svg");
 }
