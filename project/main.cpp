@@ -1,6 +1,5 @@
 #include <boost/program_options.hpp>
 #include <google/protobuf/util/json_util.h>
-#include <sciplot/sciplot.hpp>
 #include <iostream>
 #include <fstream>
 #include "filter.pb.h"
@@ -79,8 +78,18 @@ int main(int argc, char* argv[])
     input.close();
 
     auto out = denoise_cpp(inp, filt);
+    std::vector<double> diff;
 
-    outputInAllFormats(out, vm["output"].as<std::vector<std::string> >());
+    std::ifstream input1("test_wt_output.txt");
+    std::string line1;
+    int i = 0;
+    while (std::getline(input1, line1)) {
+        double d = std::stod(line1);
+        diff.push_back(out[i] - d);
+    }
+    input1.close();
+
+    outputInAllFormats(diff, vm["output"].as<std::vector<std::string> >());
 
     return 0;
 }
