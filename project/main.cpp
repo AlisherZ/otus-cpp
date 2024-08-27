@@ -87,6 +87,7 @@ int main(int argc, char* argv[])
         double d = std::stod(line1);
         diff.push_back(out[i] - d);
         std::cout << out[i] << " - " << d << " = " << diff[i] << std::endl;
+        i++;
     }
     input1.close();
 
